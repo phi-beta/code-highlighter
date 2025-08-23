@@ -30,16 +30,17 @@ const custom = highlight('HELLO', { language: 'dum', output: 'html' });
 ```
 
 ## Usage (CLI)
+Before using the CLI you must have generated (and thus auto-registrable) lexers.
+
 ```
-code-highlight file.js                         # ANSI (auto js)
-code-highlight --html file.js                  # HTML (legacy flag)
-code-highlight --output html file.js           # HTML via handler
-code-highlight --output html --full file.js    # Full HTML document
-code-highlight --output html --no-block file.js# Inline spans only
-code-highlight --lang python script.py         # Python
-code-highlight --theme my-theme.json file.js   # Custom theme
+npm run generate:antlr -- --jar /path/to/antlr.jar
+code-highlight --list-languages                 # Show available languages
+code-highlight --lang javascript file.js        # ANSI (javascript)
+code-highlight --output html file.js            # HTML block
+code-highlight --output html --full file.js     # Full HTML document
+code-highlight --output html --no-block file.js # Inline spans only
+code-highlight --theme my-theme.json file.js    # Custom theme
 code-highlight --handler-config html.json file.js # Provide handler config JSON
-code-highlight --list-languages                # List registered languages
 ```
 
 ## Theming

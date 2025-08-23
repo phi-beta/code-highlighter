@@ -87,7 +87,8 @@ export interface OutputHandler {
   render(tokens: Token[], theme: ThemeDefinition, context: { language: string; config: Record<string, any> }): string;
   defaultConfig?: Record<string, any>;
 }
-const outputHandlers: Map<string, OutputHandler> = new Map();
+// Use var to ensure no temporal dead zone issues if registration is triggered very early by a cyclic import.
+var outputHandlers: Map<string, OutputHandler> = new Map();
 export function registerOutputHandler(handler: OutputHandler) { outputHandlers.set(handler.id, handler); }
 export function getOutputHandler(id: string): OutputHandler | undefined { return outputHandlers.get(id); }
 export function listOutputHandlers(): string[] { return [...outputHandlers.keys()].sort(); }

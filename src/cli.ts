@@ -9,6 +9,8 @@
  */
 import { readFileSync } from 'fs';
 import { highlight, listLanguages } from './index.js';
+// Try to auto-register any generated ANTLR lexers silently.
+try { (await import('./register-antlr.js')).attemptAutoRegisterGeneratedAntlrLanguages?.({ verbose: false }); } catch { /* ignore */ }
 
 function parseArgs(argv: string[]) {
   const opts: { file?: string; html?: boolean; lang?: string; themePath?: string; list?: boolean; noBlock?: boolean; full?: boolean; title?: string; output?: string; handlerConfigPath?: string } = {};
@@ -31,7 +33,12 @@ function parseArgs(argv: string[]) {
 async function main() {
   const args = parseArgs(process.argv);
   if (args.list) {
-    console.log(listLanguages().join('\n'));
+    const langs = listLanguages();
+    if (!langs.length) {
+      console.error('No languages registered. Generate lexers (npm run generate:antlr) then rerun, or manually register a tokenizer.');
+      process.exit(2);
+    }
+    console.log(langs.join('\n'));
     return;
   }
   if (!args.file) {

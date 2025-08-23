@@ -71,4 +71,15 @@ export async function registerGeneratedAntlrLanguages(opts: AutoRegisterOptions 
   }
 }
 
+/**
+ * Attempts to auto-register generated lexers but never throws; returns the list
+ * of languages registered before & after for diagnostic use.
+ */
+export async function attemptAutoRegisterGeneratedAntlrLanguages(opts: AutoRegisterOptions = {}) {
+  const before = (await import('./index.js')).listLanguages();
+  try { await registerGeneratedAntlrLanguages(opts); } catch { /* swallow */ }
+  const after = (await import('./index.js')).listLanguages();
+  return { before, after };
+}
+
 export default { registerGeneratedAntlrLanguages };
