@@ -46,6 +46,8 @@ const languages: Map<string, Tokenizer> = new Map();
 export function registerLanguage(name: string, tokenizer: Tokenizer) { languages.set(name.toLowerCase(), tokenizer); }
 export function getLanguage(name: string): Tokenizer | undefined { return languages.get(name.toLowerCase()); }
 export function listLanguages(): string[] { return [...languages.keys()].sort(); }
+// Test/maintenance helper: allow removal in case a test needs a clean slate.
+export function unregisterLanguage(name: string) { languages.delete(name.toLowerCase()); }
 
 // ANSI helpers (theme already stores ANSI escape codes in color field)
 function applyAnsi(style: ThemeStyle, text: string): string {
@@ -87,55 +89,60 @@ export interface OutputHandler {
   render(tokens: Token[], theme: ThemeDefinition, context: { language: string; config: Record<string, any> }): string;
   defaultConfig?: Record<string, any>;
 }
-// Use var to ensure no temporal dead zone issues if registration is triggered very early by a cyclic import.
-var outputHandlers: Map<string, OutputHandler> = new Map();
-export function registerOutputHandler(handler: OutputHandler) { outputHandlers.set(handler.id, handler); }
-export function getOutputHandler(id: string): OutputHandler | undefined { return outputHandlers.get(id); }
-export function listOutputHandlers(): string[] { return [...outputHandlers.keys()].sort(); }
+// Lazily initialized map to avoid any temporal dead zone or cyclic-import timing issues.
+let _outputHandlers: Map<string, OutputHandler> | undefined;
+function ensureOutputHandlers() { if (!_outputHandlers) _outputHandlers = new Map(); return _outputHandlers; }
+export function registerOutputHandler(handler: OutputHandler) { ensureOutputHandlers().set(handler.id, handler); }
+export function getOutputHandler(id: string): OutputHandler | undefined { return ensureOutputHandlers().get(id); }
+export function listOutputHandlers(): string[] { return [...ensureOutputHandlers().keys()].sort(); }
 
-// Built-in ANSI handler
-registerOutputHandler({
-  id: 'ansi',
-  defaultConfig: ansiDefault as any,
-  render(tokens, theme) {
-    return tokens.map(t => {
-      if (t.type === 'whitespace') return t.value;
-      const style = theme[t.type] || {};
-      return applyAnsi(style, t.value);
-    }).join('');
-  }
-});
-
-// Built-in HTML handler
-registerOutputHandler({
-  id: 'html',
-  defaultConfig: htmlDefault as any,
-  render(tokens, theme, ctx) {
-    const { config, language } = ctx;
-    const body = tokens.map(t => {
-      if (t.type === 'whitespace') return escapeHtml(t.value);
-      const style = theme[t.type] || {};
-      const css: string[] = [];
-      if (style.color) css.push(`color: ${style.color}`);
-      if (style.fontStyle === 'bold') css.push('font-weight:600');
-      if (style.fontStyle === 'italic') css.push('font-style:italic');
-      if (style.fontStyle === 'underline') css.push('text-decoration:underline');
-      if (style.fontStyle === 'dim') css.push('opacity:0.75');
-      return `<span class=\"tok-${t.type}\" style=\"${css.join(';')}\">${escapeHtml(t.value)}</span>`;
-    }).join('');
-    const block = config.block !== false; // default true
-    if (config.fullDocument) {
-      const cssTheme = themeToCss(theme);
-      const title = escapeHtml(config.title || `Code (${language})`);
-      const content = block ? `<pre class=\"ch-pre\"><code class=\"ch-code lang-${language}\">${body}</code></pre>` : body;
-      return `<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\"/><title>${title}</title><style>body{background:#fff;color:#000;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.4;padding:1rem}.ch-pre{margin:0;white-space:pre;overflow:auto;background:#fafafa;padding:1rem;border:1px solid #e1e4e8;border-radius:6px}.ch-code{white-space:pre}span[class^=tok-]{white-space:pre-wrap}${cssTheme}</style></head><body>${content}</body></html>`;
+// Defer built-in handler registration until first access to avoid TDZ/cycle timing.
+let handlersRegistered = false;
+function ensureBuiltInHandlers() {
+  if (handlersRegistered) return;
+  handlersRegistered = true;
+  registerOutputHandler({
+    id: 'ansi',
+    defaultConfig: ansiDefault as any,
+    render(tokens, theme) {
+      return tokens.map(t => {
+        if (t.type === 'whitespace') return t.value;
+        const style = theme[t.type] || {};
+        return applyAnsi(style, t.value);
+      }).join('');
     }
-    if (block) return `<pre class=\"ch-pre\"><code class=\"ch-code lang-${language}\">${body}</code></pre>`;
-    return body;
-  }
-});
+  });
+  registerOutputHandler({
+    id: 'html',
+    defaultConfig: htmlDefault as any,
+    render(tokens, theme, ctx) {
+      const { config, language } = ctx;
+      const body = tokens.map(t => {
+        if (t.type === 'whitespace') return escapeHtml(t.value);
+        const style = theme[t.type] || {};
+        const css: string[] = [];
+        if (style.color) css.push(`color: ${style.color}`);
+        if (style.fontStyle === 'bold') css.push('font-weight:600');
+        if (style.fontStyle === 'italic') css.push('font-style:italic');
+        if (style.fontStyle === 'underline') css.push('text-decoration:underline');
+        if (style.fontStyle === 'dim') css.push('opacity:0.75');
+        return `<span class=\"tok-${t.type}\" style=\"${css.join(';')}\">${escapeHtml(t.value)}</span>`;
+      }).join('');
+      const block = config.block !== false; // default true
+      if (config.fullDocument) {
+        const cssTheme = themeToCss(theme);
+        const title = escapeHtml(config.title || `Code (${language})`);
+        const content = block ? `<pre class=\"ch-pre\"><code class=\"ch-code lang-${language}\">${body}</code></pre>` : body;
+        return `<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\"/><title>${title}</title><style>body{background:#fff;color:#000;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.4;padding:1rem}.ch-pre{margin:0;white-space:pre;overflow:auto;background:#fafafa;padding:1rem;border:1px solid #e1e4e8;border-radius:6px}.ch-code{white-space:pre}span[class^=tok-]{white-space:pre-wrap}${cssTheme}</style></head><body>${content}</body></html>`;
+      }
+      if (block) return `<pre class=\"ch-pre\"><code class=\"ch-code lang-${language}\">${body}</code></pre>`;
+      return body;
+    }
+  });
+}
 
 export function highlight(code: string, options: HighlightOptions = {}): string {
+  ensureBuiltInHandlers();
   const langName = options.language || 'javascript';
   const tokenizer = getLanguage(langName);
   if (!tokenizer) {
@@ -159,4 +166,4 @@ export function highlight(code: string, options: HighlightOptions = {}): string 
   return handler.render(tokens, theme, { language: langName, config });
 }
 
-export default { highlight, registerLanguage, listLanguages, registerOutputHandler, listOutputHandlers };
+export default { highlight, registerLanguage, unregisterLanguage, listLanguages, registerOutputHandler, listOutputHandlers };

@@ -6,6 +6,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL, fileURLToPath } from 'node:url';
 import { CharStreams } from 'antlr4ts';
 import { registerAntlrLanguage } from './adapters/antlr.js';
 
@@ -32,39 +33,49 @@ export interface AutoRegisterOptions {
 }
 
 export async function registerGeneratedAntlrLanguages(opts: AutoRegisterOptions = {}) {
-  const baseDir = opts.dir || path.join(path.dirname(new URL(import.meta.url).pathname), 'generated', 'antlr');
+  const here = path.dirname(fileURLToPath(import.meta.url));
+  const baseDir = opts.dir || path.join(here, 'generated', 'antlr');
   if (!fs.existsSync(baseDir)) {
     if (opts.verbose) console.warn('[register-antlr] No generated ANTLR directory found at', baseDir);
     return;
   }
-  const files = fs.readdirSync(baseDir).filter(f => /Lexer\.js$/.test(f));
+  // Accept either .js (built) or .ts (stub/ts-node) files
+  const files = fs.readdirSync(baseDir).filter(f => /Lexer\.(js|ts)$/.test(f));
+  if (opts.verbose) console.log('[register-antlr] Found lexer candidates:', files);
   for (const file of files) {
-    const langBase = file.replace(/Lexer\.js$/, '');
+    const langBase = file.replace(/Lexer\.(js|ts)$/, '');
     const langName = langBase.replace(/Mini$/,'').toLowerCase();
     try {
-      const mod = await import(path.join(baseDir, file));
+      const filePath = path.join(baseDir, file);
+      // Use file URL to ensure Windows path compatibility for dynamic import of .ts during tests.
+      const mod = await import(pathToFileURL(filePath).href);
       const LexerClass = (mod as any)[langBase + 'Lexer'] || (mod as any)[langBase];
       if (!LexerClass) continue;
       const explicitMap = opts.tokenMaps?.[langName];
       const tokenMap: Record<string,string> = explicitMap || {};
-      if (!explicitMap && Array.isArray(LexerClass.symbolicNames)) {
-        for (const name of LexerClass.symbolicNames) {
+      const symNames = LexerClass.symbolicNames || [];
+      if (!explicitMap && Array.isArray(symNames)) {
+        for (const name of symNames) {
           if (!name) continue;
             const mapped = mapSymbolicToType(name);
             if (mapped) tokenMap[name] = mapped;
         }
       }
+      const makeCreator = () => (code: string) => {
+        // Try stub style (string ctor) first; fall back to CharStreams for real ANTLR lexers.
+        try { return new LexerClass(code); } catch { return new LexerClass(CharStreams.fromString(code)); }
+      };
       await registerAntlrLanguage({
         name: langName,
-        createLexer: (code: string) => new LexerClass(CharStreams.fromString(code)),
+        createLexer: makeCreator(),
         tokenMap,
         defaultType: 'identifier'
       });
-      if (langName === 'javascript') await registerAntlrLanguage({ name: 'js', createLexer: (c)=> new LexerClass(CharStreams.fromString(c)), tokenMap });
-      if (langName === 'python') await registerAntlrLanguage({ name: 'py', createLexer: (c)=> new LexerClass(CharStreams.fromString(c)), tokenMap });
-      if (langName === 'bash') await registerAntlrLanguage({ name: 'sh', createLexer: (c)=> new LexerClass(CharStreams.fromString(c)), tokenMap });
-      if (langName === 'markdown') await registerAntlrLanguage({ name: 'md', createLexer: (c)=> new LexerClass(CharStreams.fromString(c)), tokenMap });
-      if (opts.verbose) console.log(`[register-antlr] Registered ${langName}`);
+      if (langName === 'javascript') await registerAntlrLanguage({ name: 'js', createLexer: makeCreator(), tokenMap });
+      if (langName === 'python') await registerAntlrLanguage({ name: 'py', createLexer: makeCreator(), tokenMap });
+      if (langName === 'bash') await registerAntlrLanguage({ name: 'sh', createLexer: makeCreator(), tokenMap });
+      if (langName === 'markdown') await registerAntlrLanguage({ name: 'md', createLexer: makeCreator(), tokenMap });
+  if (opts.verbose) console.log(`[register-antlr] Registered ${langName}`);
     } catch (e) {
       if (opts.verbose) console.warn('[register-antlr] Failed for', file, e);
     }

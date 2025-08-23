@@ -25,8 +25,12 @@
   "scripts": {
   "build": "tsc -p tsconfig.json",
   "generate:antlr": "node scripts/generate-antlr.js",
+  "setup:antlr": "node scripts/fetch-antlr.js",
+  "generate:samples": "ts-node samples/generate-samples.ts",
     "clean": "rimraf dist",
+    "clean:cache": "rimraf dist node_modules/.vitest",
     "test": "vitest run",
+    "test:fresh": "npm run clean:cache && npm run build && vitest run --clearCache",
     "dev": "vitest",
     "prepare": "npm run build"
   },
@@ -37,7 +41,8 @@
     "@types/node": "^20.11.30",
     "typescript": "^5.4.0",
     "vitest": "^1.6.0",
-    "rimraf": "^5.0.5",
-    "antlr4ts": "^0.5.0-alpha.4"
+  "rimraf": "^5.0.5",
+  "antlr4ts": "^0.5.0-alpha.4",
+  "ts-node": "^10.9.2"
   }
 }

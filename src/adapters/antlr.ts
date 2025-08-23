@@ -28,7 +28,8 @@ export function tokenizeWithAntlr(createLexer: (code: string) => AntlrLexerLike,
   const tokens: HLToken[] = [];
   const map = opts.tokenMap || {};
   const hidden = new Set(opts.hiddenChannels || ['HIDDEN']);
-  const symbolic = lexer.symbolicNames || [];
+  // Support both actual ANTLR lexers (symbolicNames on instance) and our stub lexers (static property only)
+  const symbolic = (lexer as any).symbolicNames || (lexer as any).constructor?.symbolicNames || [];
   const max = opts.maxTokens || 200000;
   for (let i = 0; i < max; i++) {
     const t = lexer.nextToken();

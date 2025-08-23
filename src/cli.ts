@@ -9,11 +9,13 @@
  */
 import { readFileSync } from 'fs';
 import { highlight, listLanguages } from './index.js';
-// Try to auto-register any generated ANTLR lexers silently.
-try { (await import('./register-antlr.js')).attemptAutoRegisterGeneratedAntlrLanguages?.({ verbose: false }); } catch { /* ignore */ }
+
+async function autoRegister() {
+  try { await (await import('./register-antlr.js')).attemptAutoRegisterGeneratedAntlrLanguages?.({ verbose: false }); } catch { /* ignore */ }
+}
 
 function parseArgs(argv: string[]) {
-  const opts: { file?: string; html?: boolean; lang?: string; themePath?: string; list?: boolean; noBlock?: boolean; full?: boolean; title?: string; output?: string; handlerConfigPath?: string } = {};
+  const opts: { file?: string; html?: boolean; lang?: string; themePath?: string; list?: boolean; noBlock?: boolean; full?: boolean; title?: string; output?: string; handlerConfigPath?: string; generateSamples?: boolean } = {};
   for (let i = 2; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--html') opts.html = true;
@@ -25,6 +27,7 @@ function parseArgs(argv: string[]) {
     else if (a === '--title') opts.title = argv[++i];
     else if (a === '--output') opts.output = argv[++i];
     else if (a === '--handler-config') opts.handlerConfigPath = argv[++i];
+    else if (a === '--generate-samples') opts.generateSamples = true;
     else if (!opts.file) opts.file = a;
   }
   return opts;
@@ -32,6 +35,23 @@ function parseArgs(argv: string[]) {
 
 async function main() {
   const args = parseArgs(process.argv);
+  await autoRegister();
+  if (args.generateSamples) {
+    try {
+      const mod = await import('../samples/generate-samples.js');
+      if (typeof (mod as any).generateAll === 'function') {
+        await (mod as any).generateAll();
+      } else if (typeof (mod as any).default === 'function') {
+        await (mod as any).default();
+      } else if (typeof (mod as any).main === 'function') {
+        await (mod as any).main();
+      }
+    } catch (e) {
+      console.error('Failed to generate samples:', e);
+      process.exit(1);
+    }
+    return;
+  }
   if (args.list) {
     const langs = listLanguages();
     if (!langs.length) {

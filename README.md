@@ -33,7 +33,8 @@ const custom = highlight('HELLO', { language: 'dum', output: 'html' });
 Before using the CLI you must have generated (and thus auto-registrable) lexers.
 
 ```
-npm run generate:antlr -- --jar /path/to/antlr.jar
+npm run setup:antlr            # downloads jar to vendor/antlr
+npm run generate:antlr         # generates lexers (auto-detects jar)
 code-highlight --list-languages                 # Show available languages
 code-highlight --lang javascript file.js        # ANSI (javascript)
 code-highlight --output html file.js            # HTML block
@@ -116,6 +117,15 @@ You can integrate ANTLR grammars (using `antlr4ts`) for precise lexing/parsing.
 
 ### Ad‑hoc tokenizers
 For quick experiments you can still manually register a simple tokenizer instead of a grammar.
+
+## Sample Inputs & Generated Outputs
+Sample source files live in `samples/inputs` (one per supported grammar). After generating and registering lexers you can produce HTML + ANSI outputs:
+
+```
+npm run generate:samples
+```
+
+Outputs are written to `samples/outputs` (gitignored) with extensions `.ansi.txt` and `.html`.
 
 ## License
 MIT

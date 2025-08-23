@@ -16,6 +16,11 @@ fs.mkdirSync(OUT_DIR, { recursive: true });
 const args = process.argv.slice(2);
 const jarFlagIndex = args.indexOf('--jar');
 let JAR = process.env.ANTLR_JAR || 'antlr-4.13.1-complete.jar';
+// Auto-detect downloaded jar in vendor/antlr if present
+const vendorJar = path.join(ROOT, 'vendor', 'antlr', JAR.startsWith('antlr-') ? JAR : `antlr-4.13.1-complete.jar`);
+if (fs.existsSync(vendorJar)) {
+	JAR = vendorJar;
+}
 if (jarFlagIndex >= 0 && args[jarFlagIndex + 1]) JAR = args[jarFlagIndex + 1];
 
 function run(cmd) {
