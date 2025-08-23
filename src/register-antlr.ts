@@ -13,6 +13,14 @@ import { registerAntlrLanguage } from './adapters/antlr.js';
 // Basic heuristic mapping from token symbolic names to highlight categories.
 function mapSymbolicToType(symbolic: string): string | undefined {
   const s = symbolic.toLowerCase();
+  // Direct exact name handling for stub & generated lexers
+  if (s === 'keyword') return 'keyword';
+  if (s === 'string') return 'string';
+  if (s === 'number') return 'number';
+  if (s === 'comment') return 'comment';
+  if (s === 'punct' || s === 'punctuation') return 'punctuation';
+  if (s === 'identifier' || s === 'id') return 'identifier';
+  if (s === 'ws' || s === 'whitespace') return 'whitespace';
   if (s.includes('comment')) return 'comment';
   if (s.includes('string') || s.includes('template')) return 'string';
   if (s === 'number' || /num|int|float|double|digit/.test(s)) return 'number';
@@ -34,22 +42,41 @@ export interface AutoRegisterOptions {
 
 export async function registerGeneratedAntlrLanguages(opts: AutoRegisterOptions = {}) {
   const here = path.dirname(fileURLToPath(import.meta.url));
-  const baseDir = opts.dir || path.join(here, 'generated', 'antlr');
+  let baseDir = opts.dir || path.join(here, 'generated', 'antlr');
+  // If antlr4ts CLI nested structure is present, descend into it
+  const nested = path.join(baseDir, 'src', 'grammars', 'antlr');
+  if (fs.existsSync(nested)) baseDir = nested;
   if (!fs.existsSync(baseDir)) {
     if (opts.verbose) console.warn('[register-antlr] No generated ANTLR directory found at', baseDir);
     return;
   }
   // Accept either .js (built) or .ts (stub/ts-node) files
-  const files = fs.readdirSync(baseDir).filter(f => /Lexer\.(js|ts)$/.test(f));
+  const all = fs.readdirSync(baseDir).filter(f => /\.(js|ts)$/.test(f) && !/\.d\.ts$/.test(f));
+  // Classify candidates
+  const stubLexerFiles = new Set(all.filter(f => /Lexer\.(js|ts)$/.test(f)));
+  const realGeneratedFiles = new Set(all.filter(f => /Mini\.(js|ts)$/.test(f) && !/Lexer\.(js|ts)$/.test(f)));
+  // If both a real generated *Mini and a stub *MiniLexer exist, drop the stub.
+  for (const real of realGeneratedFiles) {
+    const base = real.replace(/\.(js|ts)$/,'');
+    const stub = base + 'Lexer.ts';
+    const stubJs = base + 'Lexer.js';
+    stubLexerFiles.delete(stub);
+    stubLexerFiles.delete(stubJs);
+  }
+  // Final list: real generated first (deterministic order) then any remaining stubs.
+  const files = [ ...Array.from(realGeneratedFiles).sort(), ...Array.from(stubLexerFiles).sort() ];
   if (opts.verbose) console.log('[register-antlr] Found lexer candidates:', files);
   for (const file of files) {
-    const langBase = file.replace(/Lexer\.(js|ts)$/, '');
+    const isStub = /Lexer\.(js|ts)$/.test(file);
+    const langBase = isStub ? file.replace(/Lexer\.(js|ts)$/, '') : file.replace(/\.(js|ts)$/,'');
     const langName = langBase.replace(/Mini$/,'').toLowerCase();
     try {
       const filePath = path.join(baseDir, file);
       // Use file URL to ensure Windows path compatibility for dynamic import of .ts during tests.
       const mod = await import(pathToFileURL(filePath).href);
-      const LexerClass = (mod as any)[langBase + 'Lexer'] || (mod as any)[langBase];
+      const LexerClass = isStub
+        ? ( (mod as any)[langBase + 'Lexer'] || (mod as any)[langBase] )
+        : ( (mod as any).default || (mod as any)[langBase] );
       if (!LexerClass) continue;
       const explicitMap = opts.tokenMaps?.[langName];
       const tokenMap: Record<string,string> = explicitMap || {};
@@ -61,20 +88,23 @@ export async function registerGeneratedAntlrLanguages(opts: AutoRegisterOptions 
             if (mapped) tokenMap[name] = mapped;
         }
       }
-      const makeCreator = () => (code: string) => {
-        // Try stub style (string ctor) first; fall back to CharStreams for real ANTLR lexers.
-        try { return new LexerClass(code); } catch { return new LexerClass(CharStreams.fromString(code)); }
-      };
+      // Distinguish between real antlr4ts generated lexers and stub "Mini" lexers.
+      // Real generated lexers expose serializedATN/ruleNames and require a CharStream.
+      // Stubs expect a plain source string; passing a CharStream caused empty token output intermittently.
+  const isRealAntlr = !isStub && ('serializedATN' in LexerClass || 'ruleNames' in (LexerClass.prototype || {}));
+      const createLexer = (code: string) => isRealAntlr
+        ? new LexerClass(CharStreams.fromString(code))
+        : new LexerClass(code);
       await registerAntlrLanguage({
         name: langName,
-        createLexer: makeCreator(),
+        createLexer,
         tokenMap,
         defaultType: 'identifier'
       });
-      if (langName === 'javascript') await registerAntlrLanguage({ name: 'js', createLexer: makeCreator(), tokenMap });
-      if (langName === 'python') await registerAntlrLanguage({ name: 'py', createLexer: makeCreator(), tokenMap });
-      if (langName === 'bash') await registerAntlrLanguage({ name: 'sh', createLexer: makeCreator(), tokenMap });
-      if (langName === 'markdown') await registerAntlrLanguage({ name: 'md', createLexer: makeCreator(), tokenMap });
+      if (langName === 'javascript') await registerAntlrLanguage({ name: 'js', createLexer, tokenMap });
+      if (langName === 'python') await registerAntlrLanguage({ name: 'py', createLexer, tokenMap });
+      if (langName === 'bash') await registerAntlrLanguage({ name: 'sh', createLexer, tokenMap });
+      if (langName === 'markdown') await registerAntlrLanguage({ name: 'md', createLexer, tokenMap });
   if (opts.verbose) console.log(`[register-antlr] Registered ${langName}`);
     } catch (e) {
       if (opts.verbose) console.warn('[register-antlr] Failed for', file, e);

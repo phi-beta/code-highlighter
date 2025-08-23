@@ -8,7 +8,8 @@ STRING_SINGLE: '\'' (~['\r\n])* '\'';
 VAR: '$' [A-Za-z_][A-Za-z0-9_]*;
 NUMBER: DIGIT+;
 IDENTIFIER: [A-Za-z_][A-Za-z0-9_]*;
-PUNCT: [{}()\[\].,;:+\-*/%&|^!?=<>];
+// Punctuation tokens (grouped as one). Using explicit alternatives to avoid char class escaping issues.
+PUNCT: ('{'|'}'|'(' |')'|'['|']'|'.'|','|';'|':'|'+'|'-'|'*'|'/'|'%'|'&'|'|'|'^'|'!'|'?'|'='|'<'|'>');
 WS: [ \t\r\n]+;
 fragment DIGIT: [0-9];
 fragment ESC: '\\' . ;

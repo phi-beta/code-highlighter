@@ -7,8 +7,11 @@
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
+// Normalize Windows file URL path (strip leading slash before drive letter)
+let scriptPath = fileURLToPath(import.meta.url);
+const ROOT = path.resolve(path.dirname(scriptPath), '..');
 const GRAMMAR_SRC = path.join(ROOT, 'src', 'grammars', 'antlr');
 const OUT_DIR = path.join(ROOT, 'src', 'generated', 'antlr');
 fs.mkdirSync(OUT_DIR, { recursive: true });

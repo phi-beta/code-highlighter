@@ -29,12 +29,20 @@ export function tokenizeWithAntlr(createLexer: (code: string) => AntlrLexerLike,
   const map = opts.tokenMap || {};
   const hidden = new Set(opts.hiddenChannels || ['HIDDEN']);
   // Support both actual ANTLR lexers (symbolicNames on instance) and our stub lexers (static property only)
-  const symbolic = (lexer as any).symbolicNames || (lexer as any).constructor?.symbolicNames || [];
+  // Try various locations for symbolic names depending on generator/runtime version.
+  let symbolic: string[] = (lexer as any).symbolicNames || (lexer as any).constructor?.symbolicNames || [];
+  if ((!symbolic || symbolic.length === 0) && (lexer as any).constructor?._SYMBOLIC_NAMES) {
+    symbolic = (lexer as any).constructor._SYMBOLIC_NAMES as string[];
+  }
+  const vocabulary = (lexer as any).vocabulary || (lexer as any).constructor?.VOCABULARY;
   const max = opts.maxTokens || 200000;
   for (let i = 0; i < max; i++) {
     const t = lexer.nextToken();
     if (!t || t.type <= 0) break; // EOF
-    const name = symbolic[t.type] || '';
+    let name = symbolic[t.type] || '';
+    if (!name && vocabulary && typeof vocabulary.getSymbolicName === 'function') {
+      name = vocabulary.getSymbolicName(t.type) || '';
+    }
     if (name && hidden.has(name)) continue;
     const value = t.text ?? '';
     const hlType = map[name] || guessTokenType(name, value) || opts.defaultType || 'identifier';
@@ -52,7 +60,7 @@ function guessTokenType(name: string, value: string): string | undefined {
   if (/kw|keyword|if|for|while|return|class/i.test(lower)) return 'keyword';
   if (/punct|brace|bracket|paren|operator/i.test(lower)) return 'punctuation';
   if (/identifier|id|name/i.test(lower)) return 'identifier';
-  if (/whitespace|ws/i.test(lower)) return 'punctuation';
+  if (/whitespace|ws/i.test(lower)) return 'whitespace';
   return undefined;
 }
 

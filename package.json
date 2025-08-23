@@ -24,12 +24,15 @@
   },
   "scripts": {
   "build": "tsc -p tsconfig.json",
-  "generate:antlr": "node scripts/generate-antlr.js",
+  "generate:antlr": "antlr4ts -o src/generated/antlr src/grammars/antlr/*.g4",
   "setup:antlr": "node scripts/fetch-antlr.js",
   "generate:samples": "ts-node samples/generate-samples.ts",
-    "clean": "rimraf dist",
-    "clean:cache": "rimraf dist node_modules/.vitest",
-    "test": "vitest run",
+  "clean": "rimraf dist",
+  "clean:cache": "rimraf dist node_modules/.vitest",
+  "clean:artifacts": "rimraf dist node_modules/.vitest tsconfig.tsbuildinfo",
+  "test": "vitest run",
+  "pretest": "npm run clean:cache",
+  "test:full": "npm run clean:artifacts && npm run build && vitest run --clearCache",
     "test:fresh": "npm run clean:cache && npm run build && vitest run --clearCache",
     "dev": "vitest",
     "prepare": "npm run build"
@@ -43,6 +46,7 @@
     "vitest": "^1.6.0",
   "rimraf": "^5.0.5",
   "antlr4ts": "^0.5.0-alpha.4",
+  "antlr4ts-cli": "^0.5.0-alpha.4",
   "ts-node": "^10.9.2"
   }
 }

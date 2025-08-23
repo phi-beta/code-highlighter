@@ -12,7 +12,8 @@ TEMPLATE: '`' (ESC | ~[`\\])* '`';
 
 NUMBER: DIGIT+ ('.' DIGIT+)?;
 IDENTIFIER: [_$A-Za-z] [_$A-Za-z0-9]*;
-PUNCT: [{}()\[\].,;:+\-*/%&|^!?=<>];
+// Punctuation and operators simplified as one token
+PUNCT: ('{'|'}'|'('|')'|'['|']'|'.'|','|';'|':'|'+'|'-'|'*'|'/'|'%'|'&'|'|'|'^'|'!'|'?'|'='|'<'|'>');
 WS: [ \t\r\n]+; // keep as token (not skipping) so spacing preserved
 
 fragment DIGIT: [0-9];
