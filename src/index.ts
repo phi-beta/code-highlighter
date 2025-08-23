@@ -5,10 +5,15 @@
  * - Real language support is expected to come from generated ANTLR lexers
  *   (see register-antlr.ts). Legacy inline regex tokenizers have been removed.
  */
-import ansiDefault from './handlers/ansi.config.json' with { type: 'json' };
-import htmlDefault from './handlers/html.config.json' with { type: 'json' };
-import htmlTheme from './themes/html.theme.json' with { type: 'json' };
-import ansiTheme from './themes/ansi.theme.json' with { type: 'json' };
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const ansiDefault = JSON.parse(fs.readFileSync(path.join(__dirname, './handlers/ansi.config.json'), 'utf-8'));
+const htmlDefault = JSON.parse(fs.readFileSync(path.join(__dirname, './handlers/html.config.json'), 'utf-8'));
+const htmlTheme = JSON.parse(fs.readFileSync(path.join(__dirname, './themes/html.theme.json'), 'utf-8'));
+const ansiTheme = JSON.parse(fs.readFileSync(path.join(__dirname, './themes/ansi.theme.json'), 'utf-8'));
 // (File system utilities no longer needed here after removing regex grammar loader.)
 
 export interface Token {
