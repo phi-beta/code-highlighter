@@ -1,0 +1,39 @@
+{
+  "name": "code-highlighter",
+  "version": "0.1.0",
+  "description": "Lightweight TypeScript syntax highlighting library + CLI (initial JS support) with HTML and ANSI output and theming.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "code-highlight": "dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./adapters/antlr": {
+      "import": "./dist/adapters/antlr.js",
+      "types": "./dist/adapters/antlr.d.ts"
+    }
+  },
+  "scripts": {
+  "build": "tsc -p tsconfig.json",
+  "generate:antlr": "node scripts/generate-antlr.js",
+    "clean": "rimraf dist",
+    "test": "vitest run",
+    "dev": "vitest",
+    "prepare": "npm run build"
+  },
+  "keywords": ["syntax", "highlight", "ansi", "html", "cli", "javascript", "typescript"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0",
+    "rimraf": "^5.0.5",
+    "antlr4ts": "^0.5.0-alpha.4"
+  }
+}

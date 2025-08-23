@@ -1,0 +1,8 @@
+{
+  "keyword": { "color": "#d73a49", "fontStyle": "bold" },
+  "string": { "color": "#032f62" },
+  "number": { "color": "#005cc5" },
+  "punctuation": { "color": "#24292e" },
+  "comment": { "color": "#6a737d", "fontStyle": "italic" },
+  "identifier": { "color": "#24292e" }
+}

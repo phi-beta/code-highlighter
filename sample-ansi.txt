@@ -1,0 +1,138 @@
+[1m[31mexport[0m [1m[31minterface[0m [37mToken[0m [37m{[0m
+  [37mtype[0m[37m:[0m [37mstring[0m[37m;[0m
+  [37mvalue[0m[37m:[0m [37mstring[0m[37m;[0m
+[37m}[0m
+
+[1m[31mexport[0m [1m[31minterface[0m [37mThemeStyle[0m [37m{[0m
+  [37mcolor[0m[37m?[0m[37m:[0m [37mstring[0m[37m;[0m [3m[90m// hex or ansi name (we'll map)[0m
+  [37mfontStyle[0m[37m?[0m[37m:[0m [34m'bold'[0m [37m|[0m [34m'italic'[0m [37m|[0m [34m'underline'[0m [37m|[0m [34m'dim'[0m[37m;[0m
+[37m}[0m
+
+[1m[31mexport[0m [1m[31minterface[0m [37mThemeDefinition[0m [37m{[0m
+  [37m[[0m[37mtokenType[0m[37m:[0m [37mstring[0m[37m][0m[37m:[0m [37mThemeStyle[0m[37m;[0m
+[37m}[0m
+
+[1m[31mexport[0m [1m[31minterface[0m [37mHighlightOptions[0m [37m{[0m
+  [37mtheme[0m[37m?[0m[37m:[0m [37mThemeDefinition[0m[37m;[0m
+  [37mhtml[0m[37m?[0m[37m:[0m [37mboolean[0m[37m;[0m [3m[90m// output HTML instead of ANSI if true[0m
+  [37mlanguage[0m[37m?[0m[37m:[0m [37mstring[0m[37m;[0m [3m[90m// specify the language for tokenization[0m
+[37m}[0m
+
+[1m[31mconst[0m [37mdefaultTheme[0m[37m:[0m [37mThemeDefinition[0m [37m=[0m [37m{[0m
+  [37mkeyword[0m[37m:[0m [37m{[0m [37mcolor[0m[37m:[0m [34m'#d73a49'[0m[37m,[0m [37mfontStyle[0m[37m:[0m [34m'bold'[0m [37m}[0m[37m,[0m
+  [37mstring[0m[37m:[0m [37m{[0m [37mcolor[0m[37m:[0m [34m'#032f62'[0m [37m}[0m[37m,[0m
+  [37mnumber[0m[37m:[0m [37m{[0m [37mcolor[0m[37m:[0m [34m'#005cc5'[0m [37m}[0m[37m,[0m
+  [37mpunctuation[0m[37m:[0m [37m{[0m [37mcolor[0m[37m:[0m [34m'#24292e'[0m [37m}[0m[37m,[0m
+  [37mcomment[0m[37m:[0m [37m{[0m [37mcolor[0m[37m:[0m [34m'#6a737d'[0m[37m,[0m [37mfontStyle[0m[37m:[0m [34m'italic'[0m [37m}[0m[37m,[0m
+  [37midentifier[0m[37m:[0m [37m{[0m [37mcolor[0m[37m:[0m [34m'#24292e'[0m [37m}[0m
+[37m}[0m[37m;[0m
+
+[3m[90m// --- Language registry ----------------------------------------------------[0m
+[1m[31mexport[0m [37mtype[0m [37mTokenizer[0m [37m=[0m [37m([0m[37mcode[0m[37m:[0m [37mstring[0m[37m)[0m [37m=[0m[37m>[0m [37mToken[0m[37m[[0m[37m][0m[37m;[0m
+[1m[31mconst[0m [37mlanguages[0m[37m:[0m [37mMap[0m[37m<[0m[37mstring[0m[37m,[0m [37mTokenizer[0m[37m>[0m [37m=[0m [1m[31mnew[0m [37mMap[0m[37m([0m[37m)[0m[37m;[0m
+[1m[31mexport[0m [1m[31mfunction[0m [37mregisterLanguage[0m[37m([0m[37mname[0m[37m:[0m [37mstring[0m[37m,[0m [37mtokenizer[0m[37m:[0m [37mTokenizer[0m[37m)[0m [37m{[0m [37mlanguages[0m[37m.[0m[37mset[0m[37m([0m[37mname[0m[37m.[0m[37mtoLowerCase[0m[37m([0m[37m)[0m[37m,[0m [37mtokenizer[0m[37m)[0m[37m;[0m [37m}[0m
+[1m[31mexport[0m [1m[31mfunction[0m [37mgetLanguage[0m[37m([0m[37mname[0m[37m:[0m [37mstring[0m[37m)[0m[37m:[0m [37mTokenizer[0m [37m|[0m [37mundefined[0m [37m{[0m [1m[31mreturn[0m [37mlanguages[0m[37m.[0m[37mget[0m[37m([0m[37mname[0m[37m.[0m[37mtoLowerCase[0m[37m([0m[37m)[0m[37m)[0m[37m;[0m [37m}[0m
+[1m[31mexport[0m [1m[31mfunction[0m [37mlistLanguages[0m[37m([0m[37m)[0m[37m:[0m [37mstring[0m[37m[[0m[37m][0m [37m{[0m [1m[31mreturn[0m [37m[[0m[37m.[0m[37m.[0m[37m.[0m[37mlanguages[0m[37m.[0m[37mkeys[0m[37m([0m[37m)[0m[37m][0m[37m.[0m[37msort[0m[37m([0m[37m)[0m[37m;[0m [37m}[0m
+
+[3m[90m// JavaScript tokenizer (baseline)[0m
+[1m[31mconst[0m [37mjsKeywordSet[0m [37m=[0m [1m[31mnew[0m [37mSet[0m[37m([0m[37m[[0m[34m'break'[0m[37m,[0m[34m'case'[0m[37m,[0m[34m'catch'[0m[37m,[0m[34m'class'[0m[37m,[0m[34m'const'[0m[37m,[0m[34m'continue'[0m[37m,[0m[34m'debugger'[0m[37m,[0m[34m'default'[0m[37m,[0m[34m'delete'[0m[37m,[0m[34m'do'[0m[37m,[0m[34m'else'[0m[37m,[0m[34m'export'[0m[37m,[0m[34m'extends'[0m[37m,[0m[34m'finally'[0m[37m,[0m[34m'for'[0m[37m,[0m[34m'function'[0m[37m,[0m[34m'if'[0m[37m,[0m[34m'import'[0m[37m,[0m[34m'in'[0m[37m,[0m[34m'instanceof'[0m[37m,[0m[34m'let'[0m[37m,[0m[34m'new'[0m[37m,[0m[34m'return'[0m[37m,[0m[34m'super'[0m[37m,[0m[34m'switch'[0m[37m,[0m[34m'this'[0m[37m,[0m[34m'throw'[0m[37m,[0m[34m'try'[0m[37m,[0m[34m'typeof'[0m[37m,[0m[34m'var'[0m[37m,[0m[34m'void'[0m[37m,[0m[34m'while'[0m[37m,[0m[34m'with'[0m[37m,[0m[34m'yield'[0m[37m,[0m[34m'enum'[0m[37m,[0m[34m'await'[0m[37m,[0m[34m'implements'[0m[37m,[0m[34m'package'[0m[37m,[0m[34m'protected'[0m[37m,[0m[34m'static'[0m[37m,[0m[34m'interface'[0m[37m,[0m[34m'private'[0m[37m,[0m[34m'public'[0m[37m][0m[37m)[0m[37m;[0m
+[1m[31mexport[0m [1m[31mfunction[0m [37mtokenizeJavaScript[0m[37m([0m[37mcode[0m[37m:[0m [37mstring[0m[37m)[0m[37m:[0m [37mToken[0m[37m[[0m[37m][0m [37m{[0m
+  [1m[31mconst[0m [37mtokens[0m[37m:[0m [37mToken[0m[37m[[0m[37m][0m [37m=[0m [37m[[0m[37m][0m[37m;[0m
+  [1m[31mconst[0m [37mregex[0m [37m=[0m [37m/[0m[37m/[0m[37m/[0m[37m.[0m[37m*[0m[37m?[0m[37m$[0m[37m|[0m[37m/[0m[37m*[0m[37m[[0m[37ms[0m[37mS[0m[37m][0m[37m*[0m[37m?[0m[37m*[0m[37m/[0m[37m|[0m[34m"(?:\\.|[^\"\\])*\"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`|\b\d+(?:\.\d+)?\b|[A-Za-z_$][A-Za-z0-9_$]*|[{}()[\].,;:+\-*/%&|^!?=<>]|\s+/gm;
+  let match: RegExpExecArray | null;
+  while ((match = regex.exec(code)) !== null) {
+    const value = match[0];
+    let type: string;
+    if (/^\/\//.test(value) || /^\/\*/.test(value)) type = 'comment';
+    else if (/^[`'\"]/.test(value)) type = 'string';
+    else if (/^\d/.test(value)) type = 'number';
+    else if (jsKeywordSet.has(value)) type = 'keyword';
+    else if (/^[A-Za-z_$]/.test(value)) type = 'identifier';
+    else if (/^\s+$/.test(value)) type = 'whitespace';
+    else type = 'punctuation';
+    tokens.push({ type, value });
+  }
+  return tokens;
+}
+
+// ANSI helpers
+const ansiColors: Record<string, string> = {
+  '#d73a49': '\u001b[31m',
+  '#032f62': '\u001b[34m',
+  '#005cc5': '\u001b[36m',
+  '#24292e': '\u001b[37m',
+  '#6a737d': '\u001b[90m'
+};
+
+function applyAnsi(style: ThemeStyle, text: string): string {
+  let out = text;
+  if (style.color && ansiColors[style.color]) out = ansiColors[style.color] + out;
+  if (style.fontStyle) {
+    const map: Record<string,string> = {
+      bold: '\u001b[1m', italic: '\u001b[3m', underline: '\u001b[4m', dim: '\u001b[2m'
+    };
+    out = map[style.fontStyle] + out;
+  }
+  return out + '\u001b[0m';
+}
+// Python tokenizer (very small subset)
+const pyKeywordSet = new Set(['def','return','if','elif','else','for','while','import','from','as','class','try','except','finally','with','yield','lambda','pass','break','continue','and','or','not','in','is','None','True','False']);
+export function tokenizePython(code: string): Token[] {
+  const tokens: Token[] = [];
+  const regex = /#.*$|"[0m[34m""[0m[37m[[0m[37ms[0m[37mS[0m[37m][0m[37m*[0m[37m?[0m[34m""[0m[34m"|'''[\s\S]*?'''|\"(?:\\.|[^\"\\])*\"|'(?:\\.|[^'\\])*'|\b\d+(?:\.\d+)?\b|[A-Za-z_][A-Za-z0-9_]*|[{}()[\].,;:+\-*/%&|^!?=<>]|\s+/gm;
+  let match: RegExpExecArray | null;
+  while ((match = regex.exec(code)) !== null) {
+    const value = match[0];
+    let type: string;
+    if (/^#/.test(value) || /^"[0m[34m""[0m[37m/[0m[37m.[0m[37mtest[0m[37m([0m[37mvalue[0m[37m)[0m [37m|[0m[37m|[0m [37m/[0m[37m^[0m[34m''[0m[34m'/.test(value)) type = '[0m[37mcomment[0m[34m';
+    else if (/^["'[0m[37m][0m[37m/[0m[37m.[0m[37mtest[0m[37m([0m[37mvalue[0m[37m)[0m[37m)[0m [37mtype[0m [37m=[0m [34m'string'[0m[37m;[0m
+    [1m[31melse[0m [1m[31mif[0m [37m([0m[37m/[0m[37m^[0m[37md[0m[37m/[0m[37m.[0m[37mtest[0m[37m([0m[37mvalue[0m[37m)[0m[37m)[0m [37mtype[0m [37m=[0m [34m'number'[0m[37m;[0m
+    [1m[31melse[0m [1m[31mif[0m [37m([0m[37mpyKeywordSet[0m[37m.[0m[37mhas[0m[37m([0m[37mvalue[0m[37m)[0m[37m)[0m [37mtype[0m [37m=[0m [34m'keyword'[0m[37m;[0m
+    [1m[31melse[0m [1m[31mif[0m [37m([0m[37m/[0m[37m^[0m[37m[[0m[37mA[0m[37m-[0m[37mZa[0m[37m-[0m[37mz_[0m[37m][0m[37m/[0m[37m.[0m[37mtest[0m[37m([0m[37mvalue[0m[37m)[0m[37m)[0m [37mtype[0m [37m=[0m [34m'identifier'[0m[37m;[0m
+    [1m[31melse[0m [1m[31mif[0m [37m([0m[37m/[0m[37m^[0m[37ms[0m[37m+[0m[37m$[0m[37m/[0m[37m.[0m[37mtest[0m[37m([0m[37mvalue[0m[37m)[0m[37m)[0m [37mtype[0m [37m=[0m [34m'whitespace'[0m[37m;[0m
+    [1m[31melse[0m [37mtype[0m [37m=[0m [34m'punctuation'[0m[37m;[0m
+    [37mtokens[0m[37m.[0m[37mpush[0m[37m([0m[37m{[0m [37mtype[0m[37m,[0m [37mvalue[0m [37m}[0m[37m)[0m[37m;[0m
+  [37m}[0m
+  [1m[31mreturn[0m [37mtokens[0m[37m;[0m
+[37m}[0m
+
+[3m[90m// Register built-ins[0m
+[37mregisterLanguage[0m[37m([0m[34m'javascript'[0m[37m,[0m [37mtokenizeJavaScript[0m[37m)[0m[37m;[0m
+[37mregisterLanguage[0m[37m([0m[34m'js'[0m[37m,[0m [37mtokenizeJavaScript[0m[37m)[0m[37m;[0m
+[37mregisterLanguage[0m[37m([0m[34m'python'[0m[37m,[0m [37mtokenizePython[0m[37m)[0m[37m;[0m
+[37mregisterLanguage[0m[37m([0m[34m'py'[0m[37m,[0m [37mtokenizePython[0m[37m)[0m[37m;[0m
+
+[1m[31mfunction[0m [37mescapeHtml[0m[37m([0m[37mstr[0m[37m:[0m [37mstring[0m[37m)[0m[37m:[0m [37mstring[0m [37m{[0m
+  [1m[31mreturn[0m [37mstr[0m[37m.[0m[37mreplace[0m[37m([0m[37m/[0m[37m[[0m[37m&[0m[37m<[0m[37m>[0m[34m']/g, c => ({'[0m[37m&[0m[34m':'[0m[37m&[0m[37mamp[0m[37m;[0m[34m','[0m[37m<[0m[34m':'[0m[37m&[0m[37mlt[0m[37m;[0m[34m','[0m[37m>[0m[34m':'[0m[37m&[0m[37mgt[0m[37m;[0m[34m','[0m[34m':'[0m[37m&[0m[37mquot[0m[37m;[0m[34m','[0m[34m''[0m[37m:[0m[34m'&#39;'[0m[37m}[0m[37m[[0m[37mc[0m[37m][0m[37m![0m[37m)[0m[37m)[0m[37m;[0m
+[37m}[0m
+
+[1m[31mexport[0m [1m[31mfunction[0m [37mhighlight[0m[37m([0m[37mcode[0m[37m:[0m [37mstring[0m[37m,[0m [37moptions[0m[37m:[0m [37mHighlightOptions[0m [37m=[0m [37m{[0m[37m}[0m[37m)[0m[37m:[0m [37mstring[0m [37m{[0m
+  [1m[31mconst[0m [37mtheme[0m [37m=[0m [37m{[0m [37m.[0m[37m.[0m[37m.[0m[37mdefaultTheme[0m[37m,[0m [37m.[0m[37m.[0m[37m.[0m[37m([0m[37moptions[0m[37m.[0m[37mtheme[0m[37m|[0m[37m|[0m[37m{[0m[37m}[0m[37m)[0m [37m}[0m[37m;[0m
+  [1m[31mconst[0m [37mlangName[0m [37m=[0m [37moptions[0m[37m.[0m[37mlanguage[0m [37m|[0m[37m|[0m [34m'javascript'[0m[37m;[0m
+  [1m[31mconst[0m [37mtokenizer[0m [37m=[0m [37mgetLanguage[0m[37m([0m[37mlangName[0m[37m)[0m [37m|[0m[37m|[0m [37mtokenizeJavaScript[0m[37m;[0m
+  [1m[31mconst[0m [37mtokens[0m [37m=[0m [37mtokenizer[0m[37m([0m[37mcode[0m[37m)[0m[37m;[0m
+  [1m[31mif[0m [37m([0m[37moptions[0m[37m.[0m[37mhtml[0m[37m)[0m [37m{[0m
+    [1m[31mreturn[0m [37mtokens[0m[37m.[0m[37mmap[0m[37m([0m[37mt[0m [37m=[0m[37m>[0m [37m{[0m
+      [1m[31mif[0m [37m([0m[37mt[0m[37m.[0m[37mtype[0m [37m=[0m[37m=[0m[37m=[0m [34m'whitespace'[0m[37m)[0m [37m{[0m
+        [3m[90m// Preserve whitespace minimally; spaces collapse unless user wraps in <pre>.[0m
+        [1m[31mreturn[0m [37mescapeHtml[0m[37m([0m[37mt[0m[37m.[0m[37mvalue[0m[37m)[0m[37m;[0m
+      [37m}[0m
+      [1m[31mconst[0m [37mstyle[0m [37m=[0m [37mtheme[0m[37m[[0m[37mt[0m[37m.[0m[37mtype[0m[37m][0m [37m|[0m[37m|[0m [37m{[0m[37m}[0m[37m;[0m
+      [1m[31mconst[0m [37mcss[0m[37m:[0m [37mstring[0m[37m[[0m[37m][0m [37m=[0m [37m[[0m[37m][0m[37m;[0m
+      [1m[31mif[0m [37m([0m[37mstyle[0m[37m.[0m[37mcolor[0m[37m)[0m [37mcss[0m[37m.[0m[37mpush[0m[37m([0m[34m`color: ${style.color}`[0m[37m)[0m[37m;[0m
+      [1m[31mif[0m [37m([0m[37mstyle[0m[37m.[0m[37mfontStyle[0m [37m=[0m[37m=[0m[37m=[0m [34m'bold'[0m[37m)[0m [37mcss[0m[37m.[0m[37mpush[0m[37m([0m[34m'font-weight:600'[0m[37m)[0m[37m;[0m
+      [1m[31mif[0m [37m([0m[37mstyle[0m[37m.[0m[37mfontStyle[0m [37m=[0m[37m=[0m[37m=[0m [34m'italic'[0m[37m)[0m [37mcss[0m[37m.[0m[37mpush[0m[37m([0m[34m'font-style:italic'[0m[37m)[0m[37m;[0m
+      [1m[31mif[0m [37m([0m[37mstyle[0m[37m.[0m[37mfontStyle[0m [37m=[0m[37m=[0m[37m=[0m [34m'underline'[0m[37m)[0m [37mcss[0m[37m.[0m[37mpush[0m[37m([0m[34m'text-decoration:underline'[0m[37m)[0m[37m;[0m
+      [1m[31mif[0m [37m([0m[37mstyle[0m[37m.[0m[37mfontStyle[0m [37m=[0m[37m=[0m[37m=[0m [34m'dim'[0m[37m)[0m [37mcss[0m[37m.[0m[37mpush[0m[37m([0m[34m'opacity:0.75'[0m[37m)[0m[37m;[0m
+      [1m[31mreturn[0m [34m`<span class=\"tok-${t.type}\" style=\"${css.join(';')}\">${escapeHtml(t.value)}</span>`[0m[37m;[0m
+    [37m}[0m[37m)[0m[37m.[0m[37mjoin[0m[37m([0m[34m''[0m[37m)[0m[37m;[0m
+  [37m}[0m
+  [1m[31mreturn[0m [37mtokens[0m[37m.[0m[37mmap[0m[37m([0m[37mt[0m [37m=[0m[37m>[0m [37m{[0m
+    [1m[31mif[0m [37m([0m[37mt[0m[37m.[0m[37mtype[0m [37m=[0m[37m=[0m[37m=[0m [34m'whitespace'[0m[37m)[0m [1m[31mreturn[0m [37mt[0m[37m.[0m[37mvalue[0m[37m;[0m [3m[90m// no styling[0m
+    [1m[31mconst[0m [37mstyle[0m [37m=[0m [37mtheme[0m[37m[[0m[37mt[0m[37m.[0m[37mtype[0m[37m][0m [37m|[0m[37m|[0m [37m{[0m[37m}[0m[37m;[0m
+    [1m[31mreturn[0m [37mapplyAnsi[0m[37m([0m[37mstyle[0m[37m,[0m [37mt[0m[37m.[0m[37mvalue[0m[37m)[0m[37m;[0m
+  [37m}[0m[37m)[0m[37m.[0m[37mjoin[0m[37m([0m[34m''[0m[37m)[0m[37m;[0m
+[37m}[0m
+
+[1m[31mexport[0m [1m[31mdefault[0m [37m{[0m [37mhighlight[0m[37m,[0m [37mtokenizeJavaScript[0m[37m,[0m [37mtokenizePython[0m[37m,[0m [37mregisterLanguage[0m[37m,[0m [37mlistLanguages[0m [37m}[0m[37m;[0m
+

@@ -1,0 +1,8 @@
+{
+  "keyword": { "color": "\u001b[31m", "fontStyle": "bold" },
+  "string": { "color": "\u001b[34m" },
+  "number": { "color": "\u001b[36m" },
+  "punctuation": { "color": "\u001b[37m" },
+  "comment": { "color": "\u001b[90m", "fontStyle": "italic" },
+  "identifier": { "color": "\u001b[37m" }
+}
