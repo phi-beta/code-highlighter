@@ -24,7 +24,7 @@
   },
   "scripts": {
   "build": "tsc -p tsconfig.json",
-  "generate:antlr": "antlr4ts -o src/generated/antlr src/grammars/antlr/*.g4",
+  "generate:antlr": "antlr4ts -o src/generated/antlr src/grammars/antlr/*.g4 && node scripts/flatten-antlr.js",
   "setup:antlr": "node scripts/fetch-antlr.js",
   "generate:samples": "ts-node samples/generate-samples.ts",
   "clean": "rimraf dist",

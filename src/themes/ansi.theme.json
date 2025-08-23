@@ -4,5 +4,28 @@
   "number": { "color": "\u001b[36m" },
   "punctuation": { "color": "\u001b[37m" },
   "comment": { "color": "\u001b[90m", "fontStyle": "italic" },
-  "identifier": { "color": "\u001b[37m" }
+  "identifier": { "color": "\u001b[37m" },
+  "bracket-depth-0": { "color": "\u001b[31m" },
+  "bracket-depth-1": { "color": "\u001b[32m" },
+  "bracket-depth-2": { "color": "\u001b[35m" },
+  "bracket-depth-3": { "color": "\u001b[34m" },
+  "bracket-depth-4": { "color": "\u001b[33m" },
+  "bracket-depth-5": { "color": "\u001b[36m" },
+  "bracket-unmatched": { "color": "\u001b[31m", "fontStyle": "bold" }
+  ,"property": { "color": "\u001b[35m", "fontStyle": "bold" }
+  ,"heading": { "color": "\u001b[34m", "fontStyle": "bold" }
+  ,"strong": { "color": "\u001b[31m", "fontStyle": "bold" }
+  ,"emphasis": { "color": "\u001b[33m", "fontStyle": "italic" }
+  ,"code-inline": { "color": "\u001b[35m" }
+  ,"code-block": { "color": "\u001b[35m" }
+  ,"link": { "color": "\u001b[32m", "fontStyle": "underline" }
+  ,"image": { "color": "\u001b[32m" }
+  ,"blockquote": { "color": "\u001b[90m", "fontStyle": "italic" }
+  ,"list-bullet": { "color": "\u001b[34m" }
+  ,"list-enum": { "color": "\u001b[34m" }
+  ,"rule": { "color": "\u001b[31m" }
+  ,"strike": { "color": "\u001b[90m" }
+  ,"code-fence-start": { "color": "\u001b[35m" }
+  ,"code-fence-end": { "color": "\u001b[35m" }
+  ,"code-fence-content": { "color": "\u001b[35m" }
 }

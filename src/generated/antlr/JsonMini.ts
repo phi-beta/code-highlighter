@@ -1,17 +1,21 @@
-// Generated from E:/GitHub/code-highlighter/src/grammars/antlr/JsonMini.g4 by ANTLR 4.13.1
-// noinspection ES6UnusedImports,JSUnusedGlobalSymbols,JSUnusedLocalSymbols
-import {
-	ATN,
-	ATNDeserializer,
-	CharStream,
-	DecisionState, DFA,
-	Lexer,
-	LexerATNSimulator,
-	RuleContext,
-	PredictionContextCache,
-	Token
-} from "antlr4";
-export default class JsonMini extends Lexer {
+// Generated from src\grammars\antlr\JsonMini.g4 by ANTLR 4.9.0-SNAPSHOT
+
+
+import { ATN } from "antlr4ts/atn/ATN";
+import { ATNDeserializer } from "antlr4ts/atn/ATNDeserializer";
+import { CharStream } from "antlr4ts/CharStream";
+import { Lexer } from "antlr4ts/Lexer";
+import { LexerATNSimulator } from "antlr4ts/atn/LexerATNSimulator";
+import { NotNull } from "antlr4ts/Decorators";
+import { Override } from "antlr4ts/Decorators";
+import { RuleContext } from "antlr4ts/RuleContext";
+import { Vocabulary } from "antlr4ts/Vocabulary";
+import { VocabularyImpl } from "antlr4ts/VocabularyImpl";
+
+import * as Utils from "antlr4ts/misc/Utils";
+
+
+export class JsonMini extends Lexer {
 	public static readonly LCURLY = 1;
 	public static readonly RCURLY = 2;
 	public static readonly LBRACK = 3;
@@ -24,94 +28,126 @@ export default class JsonMini extends Lexer {
 	public static readonly NUMBER = 10;
 	public static readonly STRING = 11;
 	public static readonly WS = 12;
-	public static readonly EOF = Token.EOF;
 
-	public static readonly channelNames: string[] = [ "DEFAULT_TOKEN_CHANNEL", "HIDDEN" ];
-	public static readonly literalNames: (string | null)[] = [ null, "'{'", 
-                                                            "'}'", "'['", 
-                                                            "']'", "':'", 
-                                                            "','", "'true'", 
-                                                            "'false'", "'null'" ];
-	public static readonly symbolicNames: (string | null)[] = [ null, "LCURLY", 
-                                                             "RCURLY", "LBRACK", 
-                                                             "RBRACK", "COLON", 
-                                                             "COMMA", "TRUE", 
-                                                             "FALSE", "NULL", 
-                                                             "NUMBER", "STRING", 
-                                                             "WS" ];
-	public static readonly modeNames: string[] = [ "DEFAULT_MODE", ];
+	// tslint:disable:no-trailing-whitespace
+	public static readonly channelNames: string[] = [
+		"DEFAULT_TOKEN_CHANNEL", "HIDDEN",
+	];
+
+	// tslint:disable:no-trailing-whitespace
+	public static readonly modeNames: string[] = [
+		"DEFAULT_MODE",
+	];
 
 	public static readonly ruleNames: string[] = [
 		"LCURLY", "RCURLY", "LBRACK", "RBRACK", "COLON", "COMMA", "TRUE", "FALSE", 
-		"NULL", "NUMBER", "STRING", "WS", "DIGIT", "ESC", "HEX",
+		"NULL", "NUMBER", "STRING", "WS", "MINUS", "INT", "DIGITS", "DIGIT", "FRACTION", 
+		"EXPONENT", "ESC", "UNICODE", "HEX",
 	];
+
+	private static readonly _LITERAL_NAMES: Array<string | undefined> = [
+		undefined, "'{'", "'}'", "'['", "']'", "':'", "','", "'true'", "'false'", 
+		"'null'",
+	];
+	private static readonly _SYMBOLIC_NAMES: Array<string | undefined> = [
+		undefined, "LCURLY", "RCURLY", "LBRACK", "RBRACK", "COLON", "COMMA", "TRUE", 
+		"FALSE", "NULL", "NUMBER", "STRING", "WS",
+	];
+	public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(JsonMini._LITERAL_NAMES, JsonMini._SYMBOLIC_NAMES, []);
+
+	// @Override
+	// @NotNull
+	public get vocabulary(): Vocabulary {
+		return JsonMini.VOCABULARY;
+	}
+	// tslint:enable:no-trailing-whitespace
 
 
 	constructor(input: CharStream) {
 		super(input);
-		this._interp = new LexerATNSimulator(this, JsonMini._ATN, JsonMini.DecisionsToDFA, new PredictionContextCache());
+		this._interp = new LexerATNSimulator(JsonMini._ATN, this);
 	}
 
+	// @Override
 	public get grammarFileName(): string { return "JsonMini.g4"; }
 
-	public get literalNames(): (string | null)[] { return JsonMini.literalNames; }
-	public get symbolicNames(): (string | null)[] { return JsonMini.symbolicNames; }
+	// @Override
 	public get ruleNames(): string[] { return JsonMini.ruleNames; }
 
-	public get serializedATN(): number[] { return JsonMini._serializedATN; }
+	// @Override
+	public get serializedATN(): string { return JsonMini._serializedATN; }
 
+	// @Override
 	public get channelNames(): string[] { return JsonMini.channelNames; }
 
+	// @Override
 	public get modeNames(): string[] { return JsonMini.modeNames; }
 
-	public static readonly _serializedATN: number[] = [4,0,12,116,6,-1,2,0,
-	7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,7,7,2,8,7,8,2,9,
-	7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,14,1,0,1,0,1,1,1,1,1,
-	2,1,2,1,3,1,3,1,4,1,4,1,5,1,5,1,6,1,6,1,6,1,6,1,6,1,7,1,7,1,7,1,7,1,7,1,
-	7,1,8,1,8,1,8,1,8,1,8,1,9,3,9,61,8,9,1,9,4,9,64,8,9,11,9,12,9,65,1,9,1,
-	9,4,9,70,8,9,11,9,12,9,71,3,9,74,8,9,1,9,1,9,3,9,78,8,9,1,9,4,9,81,8,9,
-	11,9,12,9,82,3,9,85,8,9,1,10,1,10,1,10,5,10,90,8,10,10,10,12,10,93,9,10,
-	1,10,1,10,1,11,4,11,98,8,11,11,11,12,11,99,1,12,1,12,1,13,1,13,1,13,1,13,
-	1,13,1,13,1,13,1,13,1,13,3,13,113,8,13,1,14,1,14,0,0,15,1,1,3,2,5,3,7,4,
-	9,5,11,6,13,7,15,8,17,9,19,10,21,11,23,12,25,0,27,0,29,0,1,0,7,2,0,69,69,
-	101,101,2,0,43,43,45,45,4,0,10,10,13,13,34,34,92,92,3,0,9,10,13,13,32,32,
-	1,0,48,57,8,0,34,34,47,47,92,92,98,98,102,102,110,110,114,114,116,116,3,
-	0,48,57,65,70,97,102,123,0,1,1,0,0,0,0,3,1,0,0,0,0,5,1,0,0,0,0,7,1,0,0,
-	0,0,9,1,0,0,0,0,11,1,0,0,0,0,13,1,0,0,0,0,15,1,0,0,0,0,17,1,0,0,0,0,19,
-	1,0,0,0,0,21,1,0,0,0,0,23,1,0,0,0,1,31,1,0,0,0,3,33,1,0,0,0,5,35,1,0,0,
-	0,7,37,1,0,0,0,9,39,1,0,0,0,11,41,1,0,0,0,13,43,1,0,0,0,15,48,1,0,0,0,17,
-	54,1,0,0,0,19,60,1,0,0,0,21,86,1,0,0,0,23,97,1,0,0,0,25,101,1,0,0,0,27,
-	112,1,0,0,0,29,114,1,0,0,0,31,32,5,123,0,0,32,2,1,0,0,0,33,34,5,125,0,0,
-	34,4,1,0,0,0,35,36,5,91,0,0,36,6,1,0,0,0,37,38,5,93,0,0,38,8,1,0,0,0,39,
-	40,5,58,0,0,40,10,1,0,0,0,41,42,5,44,0,0,42,12,1,0,0,0,43,44,5,116,0,0,
-	44,45,5,114,0,0,45,46,5,117,0,0,46,47,5,101,0,0,47,14,1,0,0,0,48,49,5,102,
-	0,0,49,50,5,97,0,0,50,51,5,108,0,0,51,52,5,115,0,0,52,53,5,101,0,0,53,16,
-	1,0,0,0,54,55,5,110,0,0,55,56,5,117,0,0,56,57,5,108,0,0,57,58,5,108,0,0,
-	58,18,1,0,0,0,59,61,5,45,0,0,60,59,1,0,0,0,60,61,1,0,0,0,61,63,1,0,0,0,
-	62,64,3,25,12,0,63,62,1,0,0,0,64,65,1,0,0,0,65,63,1,0,0,0,65,66,1,0,0,0,
-	66,73,1,0,0,0,67,69,5,46,0,0,68,70,3,25,12,0,69,68,1,0,0,0,70,71,1,0,0,
-	0,71,69,1,0,0,0,71,72,1,0,0,0,72,74,1,0,0,0,73,67,1,0,0,0,73,74,1,0,0,0,
-	74,84,1,0,0,0,75,77,7,0,0,0,76,78,7,1,0,0,77,76,1,0,0,0,77,78,1,0,0,0,78,
-	80,1,0,0,0,79,81,3,25,12,0,80,79,1,0,0,0,81,82,1,0,0,0,82,80,1,0,0,0,82,
-	83,1,0,0,0,83,85,1,0,0,0,84,75,1,0,0,0,84,85,1,0,0,0,85,20,1,0,0,0,86,91,
-	5,34,0,0,87,90,3,27,13,0,88,90,8,2,0,0,89,87,1,0,0,0,89,88,1,0,0,0,90,93,
-	1,0,0,0,91,89,1,0,0,0,91,92,1,0,0,0,92,94,1,0,0,0,93,91,1,0,0,0,94,95,5,
-	34,0,0,95,22,1,0,0,0,96,98,7,3,0,0,97,96,1,0,0,0,98,99,1,0,0,0,99,97,1,
-	0,0,0,99,100,1,0,0,0,100,24,1,0,0,0,101,102,7,4,0,0,102,26,1,0,0,0,103,
-	104,5,92,0,0,104,113,7,5,0,0,105,106,5,92,0,0,106,107,5,117,0,0,107,108,
-	3,29,14,0,108,109,3,29,14,0,109,110,3,29,14,0,110,111,3,29,14,0,111,113,
-	1,0,0,0,112,103,1,0,0,0,112,105,1,0,0,0,113,28,1,0,0,0,114,115,7,6,0,0,
-	115,30,1,0,0,0,12,0,60,65,71,73,77,82,84,89,91,99,112,0];
-
-	private static __ATN: ATN;
+	public static readonly _serializedATN: string =
+		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x02\x0E\x89\b\x01" +
+		"\x04\x02\t\x02\x04\x03\t\x03\x04\x04\t\x04\x04\x05\t\x05\x04\x06\t\x06" +
+		"\x04\x07\t\x07\x04\b\t\b\x04\t\t\t\x04\n\t\n\x04\v\t\v\x04\f\t\f\x04\r" +
+		"\t\r\x04\x0E\t\x0E\x04\x0F\t\x0F\x04\x10\t\x10\x04\x11\t\x11\x04\x12\t" +
+		"\x12\x04\x13\t\x13\x04\x14\t\x14\x04\x15\t\x15\x04\x16\t\x16\x03\x02\x03" +
+		"\x02\x03\x03\x03\x03\x03\x04\x03\x04\x03\x05\x03\x05\x03\x06\x03\x06\x03" +
+		"\x07\x03\x07\x03\b\x03\b\x03\b\x03\b\x03\b\x03\t\x03\t\x03\t\x03\t\x03" +
+		"\t\x03\t\x03\n\x03\n\x03\n\x03\n\x03\n\x03\v\x05\vK\n\v\x03\v\x03\v\x05" +
+		"\vO\n\v\x03\v\x05\vR\n\v\x03\f\x03\f\x03\f\x07\fW\n\f\f\f\x0E\fZ\v\f\x03" +
+		"\f\x03\f\x03\r\x06\r_\n\r\r\r\x0E\r`\x03\x0E\x03\x0E\x03\x0F\x03\x0F\x03" +
+		"\x0F\x05\x0Fh\n\x0F\x05\x0Fj\n\x0F\x03\x10\x06\x10m\n\x10\r\x10\x0E\x10" +
+		"n\x03\x11\x03\x11\x03\x12\x03\x12\x03\x12\x03\x13\x03\x13\x05\x13x\n\x13" +
+		"\x03\x13\x03\x13\x03\x14\x03\x14\x03\x14\x05\x14\x7F\n\x14\x03\x15\x03" +
+		"\x15\x03\x15\x03\x15\x03\x15\x03\x15\x03\x15\x03\x16\x03\x16\x02\x02\x02" +
+		"\x17\x03\x02\x03\x05\x02\x04\x07\x02\x05\t\x02\x06\v\x02\x07\r\x02\b\x0F" +
+		"\x02\t\x11\x02\n\x13\x02\v\x15\x02\f\x17\x02\r\x19\x02\x0E\x1B\x02\x02" +
+		"\x1D\x02\x02\x1F\x02\x02!\x02\x02#\x02\x02%\x02\x02\'\x02\x02)\x02\x02" +
+		"+\x02\x02\x03\x02\n\x06\x02\f\f\x0F\x0F$$^^\x05\x02\v\f\x0F\x0F\"\"\x03" +
+		"\x023;\x03\x022;\x04\x02GGgg\x04\x02--//\n\x02$$11^^ddhhppttvv\x05\x02" +
+		"2;CHch\x02\x8A\x02\x03\x03\x02\x02\x02\x02\x05\x03\x02\x02\x02\x02\x07" +
+		"\x03\x02\x02\x02\x02\t\x03\x02\x02\x02\x02\v\x03\x02\x02\x02\x02\r\x03" +
+		"\x02\x02\x02\x02\x0F\x03\x02\x02\x02\x02\x11\x03\x02\x02\x02\x02\x13\x03" +
+		"\x02\x02\x02\x02\x15\x03\x02\x02\x02\x02\x17\x03\x02\x02\x02\x02\x19\x03" +
+		"\x02\x02\x02\x03-\x03\x02\x02\x02\x05/\x03\x02\x02\x02\x071\x03\x02\x02" +
+		"\x02\t3\x03\x02\x02\x02\v5\x03\x02\x02\x02\r7\x03\x02\x02\x02\x0F9\x03" +
+		"\x02\x02\x02\x11>\x03\x02\x02\x02\x13D\x03\x02\x02\x02\x15J\x03\x02\x02" +
+		"\x02\x17S\x03\x02\x02\x02\x19^\x03\x02\x02\x02\x1Bb\x03\x02\x02\x02\x1D" +
+		"i\x03\x02\x02\x02\x1Fl\x03\x02\x02\x02!p\x03\x02\x02\x02#r\x03\x02\x02" +
+		"\x02%u\x03\x02\x02\x02\'~\x03\x02\x02\x02)\x80\x03\x02\x02\x02+\x87\x03" +
+		"\x02\x02\x02-.\x07}\x02\x02.\x04\x03\x02\x02\x02/0\x07\x7F\x02\x020\x06" +
+		"\x03\x02\x02\x0212\x07]\x02\x022\b\x03\x02\x02\x0234\x07_\x02\x024\n\x03" +
+		"\x02\x02\x0256\x07<\x02\x026\f\x03\x02\x02\x0278\x07.\x02\x028\x0E\x03" +
+		"\x02\x02\x029:\x07v\x02\x02:;\x07t\x02\x02;<\x07w\x02\x02<=\x07g\x02\x02" +
+		"=\x10\x03\x02\x02\x02>?\x07h\x02\x02?@\x07c\x02\x02@A\x07n\x02\x02AB\x07" +
+		"u\x02\x02BC\x07g\x02\x02C\x12\x03\x02\x02\x02DE\x07p\x02\x02EF\x07w\x02" +
+		"\x02FG\x07n\x02\x02GH\x07n\x02\x02H\x14\x03\x02\x02\x02IK\x05\x1B\x0E" +
+		"\x02JI\x03\x02\x02\x02JK\x03\x02\x02\x02KL\x03\x02\x02\x02LN\x05\x1D\x0F" +
+		"\x02MO\x05#\x12\x02NM\x03\x02\x02\x02NO\x03\x02\x02\x02OQ\x03\x02\x02" +
+		"\x02PR\x05%\x13\x02QP\x03\x02\x02\x02QR\x03\x02\x02\x02R\x16\x03\x02\x02" +
+		"\x02SX\x07$\x02\x02TW\x05\'\x14\x02UW\n\x02\x02\x02VT\x03\x02\x02\x02" +
+		"VU\x03\x02\x02\x02WZ\x03\x02\x02\x02XV\x03\x02\x02\x02XY\x03\x02\x02\x02" +
+		"Y[\x03\x02\x02\x02ZX\x03\x02\x02\x02[\\\x07$\x02\x02\\\x18\x03\x02\x02" +
+		"\x02]_\t\x03\x02\x02^]\x03\x02\x02\x02_`\x03\x02\x02\x02`^\x03\x02\x02" +
+		"\x02`a\x03\x02\x02\x02a\x1A\x03\x02\x02\x02bc\x07/\x02\x02c\x1C\x03\x02" +
+		"\x02\x02dj\x072\x02\x02eg\t\x04\x02\x02fh\x05\x1F\x10\x02gf\x03\x02\x02" +
+		"\x02gh\x03\x02\x02\x02hj\x03\x02\x02\x02id\x03\x02\x02\x02ie\x03\x02\x02" +
+		"\x02j\x1E\x03\x02\x02\x02km\x05!\x11\x02lk\x03\x02\x02\x02mn\x03\x02\x02" +
+		"\x02nl\x03\x02\x02\x02no\x03\x02\x02\x02o \x03\x02\x02\x02pq\t\x05\x02" +
+		"\x02q\"\x03\x02\x02\x02rs\x070\x02\x02st\x05\x1F\x10\x02t$\x03\x02\x02" +
+		"\x02uw\t\x06\x02\x02vx\t\x07\x02\x02wv\x03\x02\x02\x02wx\x03\x02\x02\x02" +
+		"xy\x03\x02\x02\x02yz\x05\x1F\x10\x02z&\x03\x02\x02\x02{|\x07^\x02\x02" +
+		"|\x7F\t\b\x02\x02}\x7F\x05)\x15\x02~{\x03\x02\x02\x02~}\x03\x02\x02\x02" +
+		"\x7F(\x03\x02\x02\x02\x80\x81\x07^\x02\x02\x81\x82\x07w\x02\x02\x82\x83" +
+		"\x05+\x16\x02\x83\x84\x05+\x16\x02\x84\x85\x05+\x16\x02\x85\x86\x05+\x16" +
+		"\x02\x86*\x03\x02\x02\x02\x87\x88\t\t\x02\x02\x88,\x03\x02\x02\x02\x0E" +
+		"\x02JNQVX`ginw~\x02";
+	public static __ATN: ATN;
 	public static get _ATN(): ATN {
 		if (!JsonMini.__ATN) {
-			JsonMini.__ATN = new ATNDeserializer().deserialize(JsonMini._serializedATN);
+			JsonMini.__ATN = new ATNDeserializer().deserialize(Utils.toCharArray(JsonMini._serializedATN));
 		}
 
 		return JsonMini.__ATN;
 	}
 
-
-	static DecisionsToDFA = JsonMini._ATN.decisionToState.map( (ds: DecisionState, index: number) => new DFA(ds, index) );
 }
+

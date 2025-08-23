@@ -1,17 +1,21 @@
-// Generated from E:/GitHub/code-highlighter/src/grammars/antlr/PythonMini.g4 by ANTLR 4.13.1
-// noinspection ES6UnusedImports,JSUnusedGlobalSymbols,JSUnusedLocalSymbols
-import {
-	ATN,
-	ATNDeserializer,
-	CharStream,
-	DecisionState, DFA,
-	Lexer,
-	LexerATNSimulator,
-	RuleContext,
-	PredictionContextCache,
-	Token
-} from "antlr4";
-export default class PythonMini extends Lexer {
+// Generated from src\grammars\antlr\PythonMini.g4 by ANTLR 4.9.0-SNAPSHOT
+
+
+import { ATN } from "antlr4ts/atn/ATN";
+import { ATNDeserializer } from "antlr4ts/atn/ATNDeserializer";
+import { CharStream } from "antlr4ts/CharStream";
+import { Lexer } from "antlr4ts/Lexer";
+import { LexerATNSimulator } from "antlr4ts/atn/LexerATNSimulator";
+import { NotNull } from "antlr4ts/Decorators";
+import { Override } from "antlr4ts/Decorators";
+import { RuleContext } from "antlr4ts/RuleContext";
+import { Vocabulary } from "antlr4ts/Vocabulary";
+import { VocabularyImpl } from "antlr4ts/VocabularyImpl";
+
+import * as Utils from "antlr4ts/misc/Utils";
+
+
+export class PythonMini extends Lexer {
 	public static readonly KEYWORD = 1;
 	public static readonly COMMENT = 2;
 	public static readonly TRIPLE_STRING = 3;
@@ -21,132 +25,174 @@ export default class PythonMini extends Lexer {
 	public static readonly IDENTIFIER = 7;
 	public static readonly PUNCT = 8;
 	public static readonly WS = 9;
-	public static readonly EOF = Token.EOF;
 
-	public static readonly channelNames: string[] = [ "DEFAULT_TOKEN_CHANNEL", "HIDDEN" ];
-	public static readonly literalNames: (string | null)[] = [  ];
-	public static readonly symbolicNames: (string | null)[] = [ null, "KEYWORD", 
-                                                             "COMMENT", 
-                                                             "TRIPLE_STRING", 
-                                                             "STRING_DOUBLE", 
-                                                             "STRING_SINGLE", 
-                                                             "NUMBER", "IDENTIFIER", 
-                                                             "PUNCT", "WS" ];
-	public static readonly modeNames: string[] = [ "DEFAULT_MODE", ];
+	// tslint:disable:no-trailing-whitespace
+	public static readonly channelNames: string[] = [
+		"DEFAULT_TOKEN_CHANNEL", "HIDDEN",
+	];
+
+	// tslint:disable:no-trailing-whitespace
+	public static readonly modeNames: string[] = [
+		"DEFAULT_MODE",
+	];
 
 	public static readonly ruleNames: string[] = [
 		"KEYWORD", "COMMENT", "TRIPLE_STRING", "STRING_DOUBLE", "STRING_SINGLE", 
 		"NUMBER", "IDENTIFIER", "PUNCT", "WS", "DIGIT", "ESC",
 	];
 
+	private static readonly _LITERAL_NAMES: Array<string | undefined> = [
+	];
+	private static readonly _SYMBOLIC_NAMES: Array<string | undefined> = [
+		undefined, "KEYWORD", "COMMENT", "TRIPLE_STRING", "STRING_DOUBLE", "STRING_SINGLE", 
+		"NUMBER", "IDENTIFIER", "PUNCT", "WS",
+	];
+	public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(PythonMini._LITERAL_NAMES, PythonMini._SYMBOLIC_NAMES, []);
+
+	// @Override
+	// @NotNull
+	public get vocabulary(): Vocabulary {
+		return PythonMini.VOCABULARY;
+	}
+	// tslint:enable:no-trailing-whitespace
+
 
 	constructor(input: CharStream) {
 		super(input);
-		this._interp = new LexerATNSimulator(this, PythonMini._ATN, PythonMini.DecisionsToDFA, new PredictionContextCache());
+		this._interp = new LexerATNSimulator(PythonMini._ATN, this);
 	}
 
+	// @Override
 	public get grammarFileName(): string { return "PythonMini.g4"; }
 
-	public get literalNames(): (string | null)[] { return PythonMini.literalNames; }
-	public get symbolicNames(): (string | null)[] { return PythonMini.symbolicNames; }
+	// @Override
 	public get ruleNames(): string[] { return PythonMini.ruleNames; }
 
-	public get serializedATN(): number[] { return PythonMini._serializedATN; }
+	// @Override
+	public get serializedATN(): string { return PythonMini._serializedATN; }
 
+	// @Override
 	public get channelNames(): string[] { return PythonMini.channelNames; }
 
+	// @Override
 	public get modeNames(): string[] { return PythonMini.modeNames; }
 
-	public static readonly _serializedATN: number[] = [4,0,9,229,6,-1,2,0,7,
-	0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,7,7,2,8,7,8,2,9,7,
-	9,2,10,7,10,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,
-	1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,
-	1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,
-	1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,
-	1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,
-	1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,
-	1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,3,0,141,8,0,1,1,1,1,5,1,
-	145,8,1,10,1,12,1,148,9,1,1,2,1,2,1,2,1,2,1,2,5,2,155,8,2,10,2,12,2,158,
-	9,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,5,2,168,8,2,10,2,12,2,171,9,2,1,2,1,
-	2,1,2,3,2,176,8,2,1,3,1,3,1,3,5,3,181,8,3,10,3,12,3,184,9,3,1,3,1,3,1,4,
-	1,4,1,4,5,4,191,8,4,10,4,12,4,194,9,4,1,4,1,4,1,5,4,5,199,8,5,11,5,12,5,
-	200,1,5,1,5,4,5,205,8,5,11,5,12,5,206,3,5,209,8,5,1,6,1,6,5,6,213,8,6,10,
-	6,12,6,216,9,6,1,7,1,7,1,8,4,8,221,8,8,11,8,12,8,222,1,9,1,9,1,10,1,10,
-	1,10,2,156,169,0,11,1,1,3,2,5,3,7,4,9,5,11,6,13,7,15,8,17,9,19,0,21,0,1,
-	0,8,2,0,10,10,13,13,4,0,10,10,13,13,34,34,92,92,4,0,10,10,13,13,39,39,92,
-	92,3,0,65,90,95,95,97,122,4,0,48,57,65,90,95,95,97,122,7,0,33,33,37,38,
-	40,47,58,63,91,91,93,94,123,125,3,0,9,10,13,13,32,32,1,0,48,57,266,0,1,
-	1,0,0,0,0,3,1,0,0,0,0,5,1,0,0,0,0,7,1,0,0,0,0,9,1,0,0,0,0,11,1,0,0,0,0,
-	13,1,0,0,0,0,15,1,0,0,0,0,17,1,0,0,0,1,140,1,0,0,0,3,142,1,0,0,0,5,175,
-	1,0,0,0,7,177,1,0,0,0,9,187,1,0,0,0,11,198,1,0,0,0,13,210,1,0,0,0,15,217,
-	1,0,0,0,17,220,1,0,0,0,19,224,1,0,0,0,21,226,1,0,0,0,23,24,5,100,0,0,24,
-	25,5,101,0,0,25,141,5,102,0,0,26,27,5,114,0,0,27,28,5,101,0,0,28,29,5,116,
-	0,0,29,30,5,117,0,0,30,31,5,114,0,0,31,141,5,110,0,0,32,33,5,105,0,0,33,
-	141,5,102,0,0,34,35,5,101,0,0,35,36,5,108,0,0,36,37,5,105,0,0,37,141,5,
-	102,0,0,38,39,5,101,0,0,39,40,5,108,0,0,40,41,5,115,0,0,41,141,5,101,0,
-	0,42,43,5,102,0,0,43,44,5,111,0,0,44,141,5,114,0,0,45,46,5,119,0,0,46,47,
-	5,104,0,0,47,48,5,105,0,0,48,49,5,108,0,0,49,141,5,101,0,0,50,51,5,105,
-	0,0,51,52,5,109,0,0,52,53,5,112,0,0,53,54,5,111,0,0,54,55,5,114,0,0,55,
-	141,5,116,0,0,56,57,5,102,0,0,57,58,5,114,0,0,58,59,5,111,0,0,59,141,5,
-	109,0,0,60,61,5,97,0,0,61,141,5,115,0,0,62,63,5,99,0,0,63,64,5,108,0,0,
-	64,65,5,97,0,0,65,66,5,115,0,0,66,141,5,115,0,0,67,68,5,116,0,0,68,69,5,
-	114,0,0,69,141,5,121,0,0,70,71,5,101,0,0,71,72,5,120,0,0,72,73,5,99,0,0,
-	73,74,5,101,0,0,74,75,5,112,0,0,75,141,5,116,0,0,76,77,5,102,0,0,77,78,
-	5,105,0,0,78,79,5,110,0,0,79,80,5,97,0,0,80,81,5,108,0,0,81,82,5,108,0,
-	0,82,141,5,121,0,0,83,84,5,119,0,0,84,85,5,105,0,0,85,86,5,116,0,0,86,141,
-	5,104,0,0,87,88,5,121,0,0,88,89,5,105,0,0,89,90,5,101,0,0,90,91,5,108,0,
-	0,91,141,5,100,0,0,92,93,5,108,0,0,93,94,5,97,0,0,94,95,5,109,0,0,95,96,
-	5,98,0,0,96,97,5,100,0,0,97,141,5,97,0,0,98,99,5,112,0,0,99,100,5,97,0,
-	0,100,101,5,115,0,0,101,141,5,115,0,0,102,103,5,98,0,0,103,104,5,114,0,
-	0,104,105,5,101,0,0,105,106,5,97,0,0,106,141,5,107,0,0,107,108,5,99,0,0,
-	108,109,5,111,0,0,109,110,5,110,0,0,110,111,5,116,0,0,111,112,5,105,0,0,
-	112,113,5,110,0,0,113,114,5,117,0,0,114,141,5,101,0,0,115,116,5,97,0,0,
-	116,117,5,110,0,0,117,141,5,100,0,0,118,119,5,111,0,0,119,141,5,114,0,0,
-	120,121,5,110,0,0,121,122,5,111,0,0,122,141,5,116,0,0,123,124,5,105,0,0,
-	124,141,5,110,0,0,125,126,5,105,0,0,126,141,5,115,0,0,127,128,5,78,0,0,
-	128,129,5,111,0,0,129,130,5,110,0,0,130,141,5,101,0,0,131,132,5,84,0,0,
-	132,133,5,114,0,0,133,134,5,117,0,0,134,141,5,101,0,0,135,136,5,70,0,0,
-	136,137,5,97,0,0,137,138,5,108,0,0,138,139,5,115,0,0,139,141,5,101,0,0,
-	140,23,1,0,0,0,140,26,1,0,0,0,140,32,1,0,0,0,140,34,1,0,0,0,140,38,1,0,
-	0,0,140,42,1,0,0,0,140,45,1,0,0,0,140,50,1,0,0,0,140,56,1,0,0,0,140,60,
-	1,0,0,0,140,62,1,0,0,0,140,67,1,0,0,0,140,70,1,0,0,0,140,76,1,0,0,0,140,
-	83,1,0,0,0,140,87,1,0,0,0,140,92,1,0,0,0,140,98,1,0,0,0,140,102,1,0,0,0,
-	140,107,1,0,0,0,140,115,1,0,0,0,140,118,1,0,0,0,140,120,1,0,0,0,140,123,
-	1,0,0,0,140,125,1,0,0,0,140,127,1,0,0,0,140,131,1,0,0,0,140,135,1,0,0,0,
-	141,2,1,0,0,0,142,146,5,35,0,0,143,145,8,0,0,0,144,143,1,0,0,0,145,148,
-	1,0,0,0,146,144,1,0,0,0,146,147,1,0,0,0,147,4,1,0,0,0,148,146,1,0,0,0,149,
-	150,5,34,0,0,150,151,5,34,0,0,151,152,5,34,0,0,152,156,1,0,0,0,153,155,
-	9,0,0,0,154,153,1,0,0,0,155,158,1,0,0,0,156,157,1,0,0,0,156,154,1,0,0,0,
-	157,159,1,0,0,0,158,156,1,0,0,0,159,160,5,34,0,0,160,161,5,34,0,0,161,176,
-	5,34,0,0,162,163,5,39,0,0,163,164,5,39,0,0,164,165,5,39,0,0,165,169,1,0,
-	0,0,166,168,9,0,0,0,167,166,1,0,0,0,168,171,1,0,0,0,169,170,1,0,0,0,169,
-	167,1,0,0,0,170,172,1,0,0,0,171,169,1,0,0,0,172,173,5,39,0,0,173,174,5,
-	39,0,0,174,176,5,39,0,0,175,149,1,0,0,0,175,162,1,0,0,0,176,6,1,0,0,0,177,
-	182,5,34,0,0,178,181,3,21,10,0,179,181,8,1,0,0,180,178,1,0,0,0,180,179,
-	1,0,0,0,181,184,1,0,0,0,182,180,1,0,0,0,182,183,1,0,0,0,183,185,1,0,0,0,
-	184,182,1,0,0,0,185,186,5,34,0,0,186,8,1,0,0,0,187,192,5,39,0,0,188,191,
-	3,21,10,0,189,191,8,2,0,0,190,188,1,0,0,0,190,189,1,0,0,0,191,194,1,0,0,
-	0,192,190,1,0,0,0,192,193,1,0,0,0,193,195,1,0,0,0,194,192,1,0,0,0,195,196,
-	5,39,0,0,196,10,1,0,0,0,197,199,3,19,9,0,198,197,1,0,0,0,199,200,1,0,0,
-	0,200,198,1,0,0,0,200,201,1,0,0,0,201,208,1,0,0,0,202,204,5,46,0,0,203,
-	205,3,19,9,0,204,203,1,0,0,0,205,206,1,0,0,0,206,204,1,0,0,0,206,207,1,
-	0,0,0,207,209,1,0,0,0,208,202,1,0,0,0,208,209,1,0,0,0,209,12,1,0,0,0,210,
-	214,7,3,0,0,211,213,7,4,0,0,212,211,1,0,0,0,213,216,1,0,0,0,214,212,1,0,
-	0,0,214,215,1,0,0,0,215,14,1,0,0,0,216,214,1,0,0,0,217,218,7,5,0,0,218,
-	16,1,0,0,0,219,221,7,6,0,0,220,219,1,0,0,0,221,222,1,0,0,0,222,220,1,0,
-	0,0,222,223,1,0,0,0,223,18,1,0,0,0,224,225,7,7,0,0,225,20,1,0,0,0,226,227,
-	5,92,0,0,227,228,9,0,0,0,228,22,1,0,0,0,15,0,140,146,156,169,175,180,182,
-	190,192,200,206,208,214,222,0];
-
-	private static __ATN: ATN;
+	public static readonly _serializedATN: string =
+		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x02\v\xE7\b\x01\x04" +
+		"\x02\t\x02\x04\x03\t\x03\x04\x04\t\x04\x04\x05\t\x05\x04\x06\t\x06\x04" +
+		"\x07\t\x07\x04\b\t\b\x04\t\t\t\x04\n\t\n\x04\v\t\v\x04\f\t\f\x03\x02\x03" +
+		"\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03" +
+		"\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03" +
+		"\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03" +
+		"\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03" +
+		"\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03" +
+		"\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03" +
+		"\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03" +
+		"\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03" +
+		"\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03" +
+		"\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03" +
+		"\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03" +
+		"\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03" +
+		"\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x05\x02\x8F" +
+		"\n\x02\x03\x03\x03\x03\x07\x03\x93\n\x03\f\x03\x0E\x03\x96\v\x03\x03\x04" +
+		"\x03\x04\x03\x04\x03\x04\x03\x04\x07\x04\x9D\n\x04\f\x04\x0E\x04\xA0\v" +
+		"\x04\x03\x04\x03\x04\x03\x04\x03\x04\x03\x04\x03\x04\x03\x04\x03\x04\x07" +
+		"\x04\xAA\n\x04\f\x04\x0E\x04\xAD\v\x04\x03\x04\x03\x04\x03\x04\x05\x04" +
+		"\xB2\n\x04\x03\x05\x03\x05\x03\x05\x07\x05\xB7\n\x05\f\x05\x0E\x05\xBA" +
+		"\v\x05\x03\x05\x03\x05\x03\x06\x03\x06\x03\x06\x07\x06\xC1\n\x06\f\x06" +
+		"\x0E\x06\xC4\v\x06\x03\x06\x03\x06\x03\x07\x06\x07\xC9\n\x07\r\x07\x0E" +
+		"\x07\xCA\x03\x07\x03\x07\x06\x07\xCF\n\x07\r\x07\x0E\x07\xD0\x05\x07\xD3" +
+		"\n\x07\x03\b\x03\b\x07\b\xD7\n\b\f\b\x0E\b\xDA\v\b\x03\t\x03\t\x03\n\x06" +
+		"\n\xDF\n\n\r\n\x0E\n\xE0\x03\v\x03\v\x03\f\x03\f\x03\f\x04\x9E\xAB\x02" +
+		"\x02\r\x03\x02\x03\x05\x02\x04\x07\x02\x05\t\x02\x06\v\x02\x07\r\x02\b" +
+		"\x0F\x02\t\x11\x02\n\x13\x02\v\x15\x02\x02\x17\x02\x02\x03\x02\n\x04\x02" +
+		"\f\f\x0F\x0F\x06\x02\f\f\x0F\x0F$$^^\x06\x02\f\f\x0F\x0F))^^\x05\x02C" +
+		"\\aac|\x06\x022;C\\aac|\t\x02##\'(*1<A]]_`}\x7F\x05\x02\v\f\x0F\x0F\"" +
+		"\"\x03\x022;\x02\u010C\x02\x03\x03\x02\x02\x02\x02\x05\x03\x02\x02\x02" +
+		"\x02\x07\x03\x02\x02\x02\x02\t\x03\x02\x02\x02\x02\v\x03\x02\x02\x02\x02" +
+		"\r\x03\x02\x02\x02\x02\x0F\x03\x02\x02\x02\x02\x11\x03\x02\x02\x02\x02" +
+		"\x13\x03\x02\x02\x02\x03\x8E\x03\x02\x02\x02\x05\x90\x03\x02\x02\x02\x07" +
+		"\xB1\x03\x02\x02\x02\t\xB3\x03\x02\x02\x02\v\xBD\x03\x02\x02\x02\r\xC8" +
+		"\x03\x02\x02\x02\x0F\xD4\x03\x02\x02\x02\x11\xDB\x03\x02\x02\x02\x13\xDE" +
+		"\x03\x02\x02\x02\x15\xE2\x03\x02\x02\x02\x17\xE4\x03\x02\x02\x02\x19\x1A" +
+		"\x07f\x02\x02\x1A\x1B\x07g\x02\x02\x1B\x8F\x07h\x02\x02\x1C\x1D\x07t\x02" +
+		"\x02\x1D\x1E\x07g\x02\x02\x1E\x1F\x07v\x02\x02\x1F \x07w\x02\x02 !\x07" +
+		"t\x02\x02!\x8F\x07p\x02\x02\"#\x07k\x02\x02#\x8F\x07h\x02\x02$%\x07g\x02" +
+		"\x02%&\x07n\x02\x02&\'\x07k\x02\x02\'\x8F\x07h\x02\x02()\x07g\x02\x02" +
+		")*\x07n\x02\x02*+\x07u\x02\x02+\x8F\x07g\x02\x02,-\x07h\x02\x02-.\x07" +
+		"q\x02\x02.\x8F\x07t\x02\x02/0\x07y\x02\x0201\x07j\x02\x0212\x07k\x02\x02" +
+		"23\x07n\x02\x023\x8F\x07g\x02\x0245\x07k\x02\x0256\x07o\x02\x0267\x07" +
+		"r\x02\x0278\x07q\x02\x0289\x07t\x02\x029\x8F\x07v\x02\x02:;\x07h\x02\x02" +
+		";<\x07t\x02\x02<=\x07q\x02\x02=\x8F\x07o\x02\x02>?\x07c\x02\x02?\x8F\x07" +
+		"u\x02\x02@A\x07e\x02\x02AB\x07n\x02\x02BC\x07c\x02\x02CD\x07u\x02\x02" +
+		"D\x8F\x07u\x02\x02EF\x07v\x02\x02FG\x07t\x02\x02G\x8F\x07{\x02\x02HI\x07" +
+		"g\x02\x02IJ\x07z\x02\x02JK\x07e\x02\x02KL\x07g\x02\x02LM\x07r\x02\x02" +
+		"M\x8F\x07v\x02\x02NO\x07h\x02\x02OP\x07k\x02\x02PQ\x07p\x02\x02QR\x07" +
+		"c\x02\x02RS\x07n\x02\x02ST\x07n\x02\x02T\x8F\x07{\x02\x02UV\x07y\x02\x02" +
+		"VW\x07k\x02\x02WX\x07v\x02\x02X\x8F\x07j\x02\x02YZ\x07{\x02\x02Z[\x07" +
+		"k\x02\x02[\\\x07g\x02\x02\\]\x07n\x02\x02]\x8F\x07f\x02\x02^_\x07n\x02" +
+		"\x02_`\x07c\x02\x02`a\x07o\x02\x02ab\x07d\x02\x02bc\x07f\x02\x02c\x8F" +
+		"\x07c\x02\x02de\x07r\x02\x02ef\x07c\x02\x02fg\x07u\x02\x02g\x8F\x07u\x02" +
+		"\x02hi\x07d\x02\x02ij\x07t\x02\x02jk\x07g\x02\x02kl\x07c\x02\x02l\x8F" +
+		"\x07m\x02\x02mn\x07e\x02\x02no\x07q\x02\x02op\x07p\x02\x02pq\x07v\x02" +
+		"\x02qr\x07k\x02\x02rs\x07p\x02\x02st\x07w\x02\x02t\x8F\x07g\x02\x02uv" +
+		"\x07c\x02\x02vw\x07p\x02\x02w\x8F\x07f\x02\x02xy\x07q\x02\x02y\x8F\x07" +
+		"t\x02\x02z{\x07p\x02\x02{|\x07q\x02\x02|\x8F\x07v\x02\x02}~\x07k\x02\x02" +
+		"~\x8F\x07p\x02\x02\x7F\x80\x07k\x02\x02\x80\x8F\x07u\x02\x02\x81\x82\x07" +
+		"P\x02\x02\x82\x83\x07q\x02\x02\x83\x84\x07p\x02\x02\x84\x8F\x07g\x02\x02" +
+		"\x85\x86\x07V\x02\x02\x86\x87\x07t\x02\x02\x87\x88\x07w\x02\x02\x88\x8F" +
+		"\x07g\x02\x02\x89\x8A\x07H\x02\x02\x8A\x8B\x07c\x02\x02\x8B\x8C\x07n\x02" +
+		"\x02\x8C\x8D\x07u\x02\x02\x8D\x8F\x07g\x02\x02\x8E\x19\x03\x02\x02\x02" +
+		"\x8E\x1C\x03\x02\x02\x02\x8E\"\x03\x02\x02\x02\x8E$\x03\x02\x02\x02\x8E" +
+		"(\x03\x02\x02\x02\x8E,\x03\x02\x02\x02\x8E/\x03\x02\x02\x02\x8E4\x03\x02" +
+		"\x02\x02\x8E:\x03\x02\x02\x02\x8E>\x03\x02\x02\x02\x8E@\x03\x02\x02\x02" +
+		"\x8EE\x03\x02\x02\x02\x8EH\x03\x02\x02\x02\x8EN\x03\x02\x02\x02\x8EU\x03" +
+		"\x02\x02\x02\x8EY\x03\x02\x02\x02\x8E^\x03\x02\x02\x02\x8Ed\x03\x02\x02" +
+		"\x02\x8Eh\x03\x02\x02\x02\x8Em\x03\x02\x02\x02\x8Eu\x03\x02\x02\x02\x8E" +
+		"x\x03\x02\x02\x02\x8Ez\x03\x02\x02\x02\x8E}\x03\x02\x02\x02\x8E\x7F\x03" +
+		"\x02\x02\x02\x8E\x81\x03\x02\x02\x02\x8E\x85\x03\x02\x02\x02\x8E\x89\x03" +
+		"\x02\x02\x02\x8F\x04\x03\x02\x02\x02\x90\x94\x07%\x02\x02\x91\x93\n\x02" +
+		"\x02\x02\x92\x91\x03\x02\x02\x02\x93\x96\x03\x02\x02\x02\x94\x92\x03\x02" +
+		"\x02\x02\x94\x95\x03\x02\x02\x02\x95\x06\x03\x02\x02\x02\x96\x94\x03\x02" +
+		"\x02\x02\x97\x98\x07$\x02\x02\x98\x99\x07$\x02\x02\x99\x9A\x07$\x02\x02" +
+		"\x9A\x9E\x03\x02\x02\x02\x9B\x9D\v\x02\x02\x02\x9C\x9B\x03\x02\x02\x02" +
+		"\x9D\xA0\x03\x02\x02\x02\x9E\x9F\x03\x02\x02\x02\x9E\x9C\x03\x02\x02\x02" +
+		"\x9F\xA1\x03\x02\x02\x02\xA0\x9E\x03\x02\x02\x02\xA1\xA2\x07$\x02\x02" +
+		"\xA2\xA3\x07$\x02\x02\xA3\xB2\x07$\x02\x02\xA4\xA5\x07)\x02\x02\xA5\xA6" +
+		"\x07)\x02\x02\xA6\xA7\x07)\x02\x02\xA7\xAB\x03\x02\x02\x02\xA8\xAA\v\x02" +
+		"\x02\x02\xA9\xA8\x03\x02\x02\x02\xAA\xAD\x03\x02\x02\x02\xAB\xAC\x03\x02" +
+		"\x02\x02\xAB\xA9\x03\x02\x02\x02\xAC\xAE\x03\x02\x02\x02\xAD\xAB\x03\x02" +
+		"\x02\x02\xAE\xAF\x07)\x02\x02\xAF\xB0\x07)\x02\x02\xB0\xB2\x07)\x02\x02" +
+		"\xB1\x97\x03\x02\x02\x02\xB1\xA4\x03\x02\x02\x02\xB2\b\x03\x02\x02\x02" +
+		"\xB3\xB8\x07$\x02\x02\xB4\xB7\x05\x17\f\x02\xB5\xB7\n\x03\x02\x02\xB6" +
+		"\xB4\x03\x02\x02\x02\xB6\xB5\x03\x02\x02\x02\xB7\xBA\x03\x02\x02\x02\xB8" +
+		"\xB6\x03\x02\x02\x02\xB8\xB9\x03\x02\x02\x02\xB9\xBB\x03\x02\x02\x02\xBA" +
+		"\xB8\x03\x02\x02\x02\xBB\xBC\x07$\x02\x02\xBC\n\x03\x02\x02\x02\xBD\xC2" +
+		"\x07)\x02\x02\xBE\xC1\x05\x17\f\x02\xBF\xC1\n\x04\x02\x02\xC0\xBE\x03" +
+		"\x02\x02\x02\xC0\xBF\x03\x02\x02\x02\xC1\xC4\x03\x02\x02\x02\xC2\xC0\x03" +
+		"\x02\x02\x02\xC2\xC3\x03\x02\x02\x02\xC3\xC5\x03\x02\x02\x02\xC4\xC2\x03" +
+		"\x02\x02\x02\xC5\xC6\x07)\x02\x02\xC6\f\x03\x02\x02\x02\xC7\xC9\x05\x15" +
+		"\v\x02\xC8\xC7\x03\x02\x02\x02\xC9\xCA\x03\x02\x02\x02\xCA\xC8\x03\x02" +
+		"\x02\x02\xCA\xCB\x03\x02\x02\x02\xCB\xD2\x03\x02\x02\x02\xCC\xCE\x070" +
+		"\x02\x02\xCD\xCF\x05\x15\v\x02\xCE\xCD\x03\x02\x02\x02\xCF\xD0\x03\x02" +
+		"\x02\x02\xD0\xCE\x03\x02\x02\x02\xD0\xD1\x03\x02\x02\x02\xD1\xD3\x03\x02" +
+		"\x02\x02\xD2\xCC\x03\x02\x02\x02\xD2\xD3\x03\x02\x02\x02\xD3\x0E\x03\x02" +
+		"\x02\x02\xD4\xD8\t\x05\x02\x02\xD5\xD7\t\x06\x02\x02\xD6\xD5\x03\x02\x02" +
+		"\x02\xD7\xDA\x03\x02\x02\x02\xD8\xD6\x03\x02\x02\x02\xD8\xD9\x03\x02\x02" +
+		"\x02\xD9\x10\x03\x02\x02\x02\xDA\xD8\x03\x02\x02\x02\xDB\xDC\t\x07\x02" +
+		"\x02\xDC\x12\x03\x02\x02\x02\xDD\xDF\t\b\x02\x02\xDE\xDD\x03\x02\x02\x02" +
+		"\xDF\xE0\x03\x02\x02\x02\xE0\xDE\x03\x02\x02\x02\xE0\xE1\x03\x02\x02\x02" +
+		"\xE1\x14\x03\x02\x02\x02\xE2\xE3\t\t\x02\x02\xE3\x16\x03\x02\x02\x02\xE4" +
+		"\xE5\x07^\x02\x02\xE5\xE6\v\x02\x02\x02\xE6\x18\x03\x02\x02\x02\x11\x02" +
+		"\x8E\x94\x9E\xAB\xB1\xB6\xB8\xC0\xC2\xCA\xD0\xD2\xD8\xE0\x02";
+	public static __ATN: ATN;
 	public static get _ATN(): ATN {
 		if (!PythonMini.__ATN) {
-			PythonMini.__ATN = new ATNDeserializer().deserialize(PythonMini._serializedATN);
+			PythonMini.__ATN = new ATNDeserializer().deserialize(Utils.toCharArray(PythonMini._serializedATN));
 		}
 
 		return PythonMini.__ATN;
 	}
 
-
-	static DecisionsToDFA = PythonMini._ATN.decisionToState.map( (ds: DecisionState, index: number) => new DFA(ds, index) );
 }
+

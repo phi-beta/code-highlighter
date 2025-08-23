@@ -12,6 +12,7 @@ Lightweight TypeScript syntax highlighting library + CLI.
 - ESM build + type declarations
 - Vitest unit tests
 - CLI `code-highlight` with language + theme selection
+- Rainbow bracket/brace/paren depth coloring (enabled by default, configurable)
 
 ## Install
 ```
@@ -58,6 +59,16 @@ Theme JSON file example (pass with `--theme theme.json`):
 }
 ```
 
+### Rainbow Brackets
+By default bracket/brace/parenthesis tokens are re-labeled with depth token types like `bracket-depth-0`, `bracket-depth-1`, cycling colors. Unmatched closers use `bracket-unmatched`.
+
+Disable or customize palettes:
+```ts
+highlight(code, { bracketNesting: false });
+highlight(code, { bracketPaletteHtml: ['#ff5555', '#50fa7b'], bracketPaletteAnsi: ['\u001b[91m','\u001b[92m'] });
+highlight(code, { theme: { 'bracket-depth-0': { color: '#ff6b6b' }, 'bracket-unmatched': { color: '#ff0000', fontStyle: 'bold' } } });
+```
+
 ## Roadmap
 - More grammars via community ANTLR contributions
 - Potential TextMate grammar adapter
@@ -68,20 +79,20 @@ Theme JSON file example (pass with `--theme theme.json`):
 ## ANTLR Workflow
 Mini lexer grammars included (simplified): JavaScriptMini, PythonMini, JsonMini, BashMini, MarkdownMini.
 
-Generate real TypeScript lexers with antlr4ts:
-1. Ensure Java is installed and download `antlr-4.13.1-complete.jar` (or set `ANTLR_JAR` env var).
-2. Run generation:
+Generate real TypeScript lexers with the antlr4ts CLI (no Java jar step required):
 ```bash
-npm run generate:antlr -- --jar /path/to/antlr-4.13.1-complete.jar
+npm run generate:antlr
 ```
-3. Import and register a lexer (or use auto-registration utility):
+This outputs TypeScript lexers under `src/generated/antlr/src/grammars/antlr`. Auto-registration handles the nested path.
+
+Import and register a lexer manually (optional) or rely on auto-registration:
 ```ts
 import { registerAntlrLanguage } from 'code-highlighter/adapters/antlr';
-import { JavaScriptMiniLexer } from './generated/antlr/JavaScriptMiniLexer';
+import { JavaScriptMini } from './generated/antlr/src/grammars/antlr/JavaScriptMini';
 import { CharStreams } from 'antlr4ts';
 registerAntlrLanguage({
 	name: 'javascript',
-	createLexer: (code) => new JavaScriptMiniLexer(CharStreams.fromString(code)),
+	createLexer: (code) => new JavaScriptMini(CharStreams.fromString(code)),
 	tokenMap: { KEYWORD: 'keyword', STRING_DOUBLE: 'string', STRING_SINGLE: 'string', TEMPLATE: 'string', NUMBER: 'number', COMMENT_LINE: 'comment', COMMENT_BLOCK: 'comment', WS: 'whitespace', PUNCT: 'punctuation', IDENTIFIER: 'identifier' }
 });
 ```
@@ -95,7 +106,7 @@ If you generate multiple lexers you can auto-register all of them:
 import { registerGeneratedAntlrLanguages } from 'code-highlighter/register-antlr';
 await registerGeneratedAntlrLanguages({ verbose: true });
 ```
-This scans `dist/generated/antlr/*Lexer.js` and applies heuristic token mapping.
+This scans the generated output directory (including nested antlr4ts layout) and applies heuristic token mapping.
 ## Output Handlers
 Two built-in handlers are registered by default: `ansi` and `html`.
 

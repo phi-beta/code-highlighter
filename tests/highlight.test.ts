@@ -42,5 +42,25 @@ describe('highlight', () => {
     const out = highlight('const x', { output: 'html', language: 'javascript', theme: { keyword: { color: '#ff00aa' } } });
     expect(out).toMatch(/ff00aa/);
   });
+  it('rainbow bracket depth tokens appear (html)', () => {
+    registerStub();
+    // stub treats braces as identifiers currently, inject manual punctuation tokens for test by extending stub quickly
+    unregisterLanguage('javascript');
+    registerLanguage('javascript', (code: string) => [
+      { type: 'punctuation', value: '(' },
+      { type: 'punctuation', value: '{' },
+      { type: 'punctuation', value: '}' },
+      { type: 'punctuation', value: ')' }
+    ]);
+    const out = highlight('()', { output: 'html', language: 'javascript' });
+    expect(out).toMatch(/tok-bracket-depth-0/);
+  });
+  it('can disable bracket nesting', () => {
+    registerStub();
+    unregisterLanguage('javascript');
+    registerLanguage('javascript', (code: string) => [ { type: 'punctuation', value: '(' }, { type: 'punctuation', value: ')' } ]);
+    const out = highlight('()', { output: 'html', language: 'javascript', bracketNesting: false });
+    expect(out).not.toMatch(/bracket-depth/);
+  });
   // Removed flaky trueColor ANSI test (feature not fully implemented)
 });

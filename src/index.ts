@@ -34,6 +34,12 @@ export interface HighlightOptions {
   title?: string; // used if fullDocument
   output?: string; // explicit output handler id (e.g., 'ansi','html')
   handlerConfig?: Record<string, any>; // custom per-handler config
+  /** Enable rainbow bracket/brace/paren nesting coloration (default: true) */
+  bracketNesting?: boolean;
+  /** Override HTML color palette for bracket depths (array cycled). */
+  bracketPaletteHtml?: string[];
+  /** Override ANSI escape palette for bracket depths (array cycled). */
+  bracketPaletteAnsi?: string[];
 }
 
 // Base themes now per output type; we pick one later (ansi vs html) and then merge user overrides.
@@ -44,6 +50,12 @@ const ansiBaseTheme: ThemeDefinition = ansiTheme as ThemeDefinition;
 export type Tokenizer = (code: string) => Token[];
 const languages: Map<string, Tokenizer> = new Map();
 export function registerLanguage(name: string, tokenizer: Tokenizer) { languages.set(name.toLowerCase(), tokenizer); }
+// Safer idempotent variant (internal use): only replace if different reference
+function ensureLanguage(name: string, tokenizer: Tokenizer) {
+  const k = name.toLowerCase();
+  const existing = languages.get(k);
+  if (!existing || existing !== tokenizer) languages.set(k, tokenizer);
+}
 export function getLanguage(name: string): Tokenizer | undefined { return languages.get(name.toLowerCase()); }
 export function listLanguages(): string[] { return [...languages.keys()].sort(); }
 // Test/maintenance helper: allow removal in case a test needs a clean slate.
@@ -148,13 +160,192 @@ export function highlight(code: string, options: HighlightOptions = {}): string 
   if (!tokenizer) {
     throw new Error(`Language '${langName}' is not registered. Generate & register ANTLR lexers via registerGeneratedAntlrLanguages().`);
   }
-  const tokens = tokenizer(code);
+  let tokens = tokenizer(code);
+  // Language-specific post-processing (lightweight heuristics without full parse)
+  if (langName === 'json') {
+    // Reclassify object property keys: a STRING immediately followed (ignoring whitespace) by ':'
+    for (let i = 0; i < tokens.length; i++) {
+      const t = tokens[i];
+      if (t.type === 'string') {
+        let j = i + 1;
+        while (j < tokens.length && tokens[j].type === 'whitespace') j++;
+        if (j < tokens.length && tokens[j].value === ':') {
+          t.type = 'property';
+        }
+      }
+    }
+  }
+  if (langName === 'markdown' || langName === 'md') {
+    // Map raw tokens first
+    tokens = tokens.map(tok => {
+      switch (tok.type) {
+        case 'md-raw-heading':
+        case 'md-raw-heading_atx': return { ...tok, type: 'heading' };
+        case 'md-raw-bold': return { ...tok, type: 'strong' };
+        case 'md-raw-bolditalic': return { ...tok, type: 'strong' }; // treat triple as strong for now
+        case 'md-raw-italic': return { ...tok, type: 'emphasis' };
+        case 'md-raw-strike': return { ...tok, type: 'strike' };
+        case 'md-raw-inline-code': return { ...tok, type: 'code-inline' };
+        case 'md-raw-code-fence':
+        case 'md-raw-code-fence-start': return { ...tok, type: 'code-fence-start' };
+        case 'md-raw-code-fence-end': return { ...tok, type: 'code-fence-end' };
+        case 'md-raw-code-text': return { ...tok, type: 'code-fence-content' };
+        case 'md-raw-link': return { ...tok, type: 'link' };
+        case 'md-raw-image': return { ...tok, type: 'image' };
+        case 'md-raw-hr': return { ...tok, type: 'rule' };
+        case 'md-raw-blockquote': return { ...tok, type: 'blockquote' };
+        case 'md-raw-list-bullet': return { ...tok, type: 'list-bullet' };
+        case 'md-raw-list-enum': return { ...tok, type: 'list-enum' };
+        default: return tok;
+      }
+    });
+    // Heuristic reclassification for structural lines the lexer may have left as generic tokens
+    tokens = tokens.map(tok => {
+      if (tok.type !== 'identifier') return tok;
+      const raw = tok.value;
+      const line = raw.replace(/\r?\n$/, '');
+      if (/^ {0,3}>( |$)/.test(line)) return { ...tok, type: 'blockquote' };
+      if (/^ {0,3}(?:---+|\*\*\*+|___+)[ \t]*$/.test(line)) return { ...tok, type: 'rule' };
+      if (/^ {0,3}[-*+] +\S/.test(line)) return { ...tok, type: 'list-bullet' };
+      if (/^ {0,3}\d+\. +\S/.test(line)) return { ...tok, type: 'list-enum' };
+      if (/^#+\s+/.test(line)) return { ...tok, type: 'heading' };
+      if (/^```/.test(line)) {
+        // classify as fence start or end depending on if more backticks only
+        if (/^```\s*[^`]*$/.test(line) && !/^```+$/.test(line.trim())) return { ...tok, type: 'code-fence-start' };
+        if (/^```+$/.test(line.trim())) return { ...tok, type: 'code-fence-end' };
+      }
+      if (/^~~.+~~$/.test(line)) return { ...tok, type: 'strike' };
+      if (/^!\[[^\]]*\]\([^\)]+\)$/.test(line)) return { ...tok, type: 'image' };
+      return tok;
+    });
+    // Secondary heuristic: the current minimal lexer may classify entire lines as TEXT.
+    // We'll split TEXT tokens using regex patterns for emphasis, strong, code, links.
+    const out: Token[] = [];
+    // Simple fenced code re-highlight: gather sequences between code-fence-start and end
+    // If a language hint is present on the start line (after ```), attempt nested highlight.
+    const final: Token[] = [];
+    let i = 0;
+    while (i < tokens.length) {
+      const t = tokens[i];
+      if (t.type === 'code-fence-start') {
+        // Extract language id heuristic: after backticks until whitespace/newline
+        const langMatch = t.value.match(/^```\s*([a-zA-Z0-9_-]+)/);
+        const lang = langMatch?.[1];
+        final.push({ type: 'code-fence-start', value: t.value });
+        i++;
+        const inner: Token[] = [];
+        while (i < tokens.length && tokens[i].type !== 'code-fence-end') {
+          inner.push(tokens[i]);
+          i++;
+        }
+        if (i < tokens.length && tokens[i].type === 'code-fence-end') {
+          // Combine inner values and re-highlight if language available.
+          const innerText = inner.map(it => it.value).join('');
+          if (lang && getLanguage(lang)) {
+            try {
+              const nested = getLanguage(lang)!(innerText);
+              // map nested tokens to code-inline style but preserve nesting
+              for (const nt of nested) final.push({ type: nt.type, value: nt.value });
+            } catch {
+              final.push({ type: 'code-fence-content', value: innerText });
+            }
+          } else {
+            final.push({ type: 'code-fence-content', value: innerText });
+          }
+          final.push(tokens[i]);
+          i++;
+        }
+        continue;
+      }
+      final.push(t); i++;
+    }
+    tokens = final;
+  const pattern = /(!\[[^\]\n]+\]\([^\)\n]+\)|`[^`\n]+`|\*\*[^*\n]+\*\*|\*[^*\n]+\*|\[[^\]\n]+\]\([^\)\n]+\))/g;
+    for (const tok of tokens) {
+      if (tok.type !== 'identifier' && tok.type !== 'TEXT'.toLowerCase()) { out.push(tok); continue; }
+      const value = tok.value;
+      // Heading heuristic: line starting with one or more # followed by space
+      if (/^#+\s/.test(value)) {
+        out.push({ type: 'heading', value });
+        continue;
+      }
+      let lastIndex = 0; let m: RegExpExecArray | null;
+      while ((m = pattern.exec(value))){
+        if (m.index > lastIndex) out.push({ type: 'identifier', value: value.slice(lastIndex, m.index) });
+        const seg = m[0];
+    if (seg.startsWith('![')) out.push({ type: 'image', value: seg });
+    else if (seg.startsWith('**')) out.push({ type: 'strong', value: seg });
+        else if (seg.startsWith('*')) out.push({ type: 'emphasis', value: seg });
+        else if (seg.startsWith('`')) out.push({ type: 'code-inline', value: seg });
+        else if (seg.startsWith('[')) out.push({ type: 'link', value: seg });
+        else out.push({ type: 'identifier', value: seg });
+        lastIndex = m.index + seg.length;
+      }
+      if (lastIndex < value.length) out.push({ type: 'identifier', value: value.slice(lastIndex) });
+    }
+    tokens = out.length ? out : tokens;
+    // Final normalization pass: reclassify any remaining structural markers missed earlier
+    tokens = tokens.map(t => {
+      if (t.type !== 'identifier') return t;
+      const v = t.value.replace(/\r?\n$/, '');
+      if (/^ {0,3}(?:---+|\*\*\*+|___+)[ \t]*$/.test(v)) return { ...t, type: 'rule' };
+      if (/^ {0,3}>( |$)/.test(v)) return { ...t, type: 'blockquote' };
+      if (/^ {0,3}[-*+] +\S/.test(v)) return { ...t, type: 'list-bullet' };
+      if (/^ {0,3}\d+\. +\S/.test(v)) return { ...t, type: 'list-enum' };
+      if (/^#+\s+/.test(v)) return { ...t, type: 'heading' };
+      return t;
+    });
+  }
   // Determine output handler (back-compat with html flag)
   const outputId = options.output || (options.html ? 'html' : 'ansi');
   const handler = getOutputHandler(outputId) || getOutputHandler('ansi');
   if (!handler) throw new Error('No output handler available');
   const base = outputId === 'html' ? htmlBaseTheme : ansiBaseTheme;
   const theme = { ...base, ...(options.theme||{}) };
+  // Optional rainbow bracket coloring pass (post-tokenization decoration)
+  if (options.bracketNesting !== false) {
+    const openToClose: Record<string,string> = { '(': ')', '{': '}', '[': ']' };
+    const closes = new Set(Object.values(openToClose));
+    const stack: string[] = [];
+    const htmlPalette = options.bracketPaletteHtml && options.bracketPaletteHtml.length
+      ? options.bracketPaletteHtml
+      : ['#d73a49', '#22863a', '#6f42c1', '#005cc5', '#e36209', '#0366d6'];
+    const ansiPalette = options.bracketPaletteAnsi && options.bracketPaletteAnsi.length
+      ? options.bracketPaletteAnsi
+      : ['\u001b[31m', '\u001b[32m', '\u001b[35m', '\u001b[34m', '\u001b[33m', '\u001b[36m'];
+    const ensureThemeEntry = (depth: number) => {
+      const key = `bracket-depth-${depth}`;
+      if (!theme[key]) {
+        theme[key] = { color: outputId === 'html' ? htmlPalette[depth % htmlPalette.length] : ansiPalette[depth % ansiPalette.length] };
+      }
+    };
+    const unmatchedType = 'bracket-unmatched';
+    if (!theme[unmatchedType]) {
+      theme[unmatchedType] = { color: outputId === 'html' ? '#ff0000' : '\u001b[31m', fontStyle: 'bold' };
+    }
+    tokens = tokens.map(tok => {
+      if (tok.value.length !== 1) return tok;
+      const ch = tok.value;
+      if (!(ch in openToClose) && !closes.has(ch)) return tok;
+      if (openToClose[ch]) { // opening
+        const depth = stack.length;
+        stack.push(openToClose[ch]);
+        ensureThemeEntry(depth);
+        return { ...tok, type: `bracket-depth-${depth}` };
+      } else if (closes.has(ch)) { // closing
+        // find matching top
+        if (stack.length && stack[stack.length - 1] === ch) {
+          const depth = stack.length - 1;
+            stack.pop();
+            ensureThemeEntry(depth);
+            return { ...tok, type: `bracket-depth-${depth}` };
+        }
+        // unmatched closing – still color but mark unmatched
+        return { ...tok, type: unmatchedType };
+      }
+      return tok;
+    });
+  }
   // Merge config precedence: handler.defaultConfig <- html-specific legacy options <- options.handlerConfig
   const legacy: Record<string, any> = {};
   if (outputId === 'html') {

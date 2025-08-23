@@ -12,6 +12,7 @@ import { registerAntlrLanguage } from './adapters/antlr.js';
 
 // Basic heuristic mapping from token symbolic names to highlight categories.
 function mapSymbolicToType(symbolic: string): string | undefined {
+  const raw = symbolic;
   const s = symbolic.toLowerCase();
   // Direct exact name handling for stub & generated lexers
   if (s === 'keyword') return 'keyword';
@@ -25,7 +26,28 @@ function mapSymbolicToType(symbolic: string): string | undefined {
   if (s.includes('string') || s.includes('template')) return 'string';
   if (s === 'number' || /num|int|float|double|digit/.test(s)) return 'number';
   if (/kw|keyword|class|return|if|for|while|else|import|from|def/.test(s)) return 'keyword';
-  if (/punct|brace|brack|paren|colon|comma|semi|operator/.test(s)) return 'punctuation';
+  if (/punct|brace|brack|paren|colon|comma|semi|operator|curly/.test(s)) return 'punctuation';
+  // Markdown symbolic token names – map to temporary raw types we post-process later
+  // ANTLR symbolic names are uppercase (e.g., HEADING); map them case-insensitively
+  if (raw === 'HEADING') return 'md-raw-heading';
+  if (raw === 'HEADING_ATX') return 'md-raw-heading';
+  if (raw === 'HR') return 'md-raw-hr';
+  if (raw === 'BLOCKQUOTE') return 'md-raw-blockquote';
+  if (raw === 'LIST_BULLET') return 'md-raw-list-bullet';
+  if (raw === 'LIST_ENUM') return 'md-raw-list-enum';
+  if (raw === 'CODE_FENCE_START') return 'md-raw-code-fence-start';
+  if (raw === 'CODE_FENCE_END') return 'md-raw-code-fence-end';
+  if (raw === 'CODE_TEXT') return 'md-raw-code-text';
+  if (raw === 'IMAGE') return 'md-raw-image';
+  // Existing inline constructs
+  if (raw === 'BOLD') return 'md-raw-bold';
+  if (raw === 'ITALIC') return 'md-raw-italic';
+  if (raw === 'BOLDITALIC') return 'md-raw-bolditalic';
+  if (raw === 'STRIKETHROUGH') return 'md-raw-strike';
+  if (raw === 'INLINE_CODE') return 'md-raw-inline-code';
+  if (raw === 'CODE_FENCE') return 'md-raw-code-fence';
+  if (raw === 'LINK') return 'md-raw-link';
+  if (s === 'comment') return 'comment';
   if (s === 'ws' || s === 'whitespace') return 'whitespace';
   if (/identifier|id|name/.test(s)) return 'identifier';
   return undefined;
