@@ -3,8 +3,8 @@
 Lightweight TypeScript syntax highlighting library + CLI.
 
 ## Features
-- Pluggable multi-language tokenizers (built-in: JavaScript, Python)
-- Simple language registry `registerLanguage()`
+- Pluggable language registry (populate via generated ANTLR lexers)
+- Simple language registry `registerLanguage()` (for ad‑hoc / experimental use)
 - ANSI terminal highlighting
 - HTML inline span output
 - Pluggable output handlers (ansi, html) with extensibility
@@ -21,14 +21,12 @@ npm install code-highlighter
 ## Usage (Library)
 ```ts
 import { highlight, registerLanguage } from 'code-highlighter';
-// highlight JS
-const ansi = highlight('const x = 42;');
-// highlight Python as HTML
-const pyHtml = highlight('def foo():\n    return 1', { html: true, language: 'python' });
+// After generating & registering ANTLR lexers (see ANTLR Workflow) you can highlight:
+const jsAnsi = highlight('const x = 42;', { language: 'javascript' });
 
-// Add a custom language (trivial example)
+// Ad-hoc demo language (manual registration)
 registerLanguage('dum', code => [{ type: 'keyword', value: code }]);
-const custom = highlight('HELLO', { language: 'dum' });
+const custom = highlight('HELLO', { language: 'dum', output: 'html' });
 ```
 
 ## Usage (CLI)
@@ -59,13 +57,43 @@ Theme JSON file example (pass with `--theme theme.json`):
 ```
 
 ## Roadmap
-- More languages via community grammar contributions
-- Config-driven grammar (e.g., TextMate scope mapping)
+- More grammars via community ANTLR contributions
+- Potential TextMate grammar adapter
 - Streaming API
-- Theme packs & preset exports (e.g., dark/light)
+- Theme packs (dark/light) & preset exports
 - Performance benchmarks
 
-## ANTLR (Experimental)
+## ANTLR Workflow
+Mini lexer grammars included (simplified): JavaScriptMini, PythonMini, JsonMini, BashMini, MarkdownMini.
+
+Generate real TypeScript lexers with antlr4ts:
+1. Ensure Java is installed and download `antlr-4.13.1-complete.jar` (or set `ANTLR_JAR` env var).
+2. Run generation:
+```bash
+npm run generate:antlr -- --jar /path/to/antlr-4.13.1-complete.jar
+```
+3. Import and register a lexer (or use auto-registration utility):
+```ts
+import { registerAntlrLanguage } from 'code-highlighter/adapters/antlr';
+import { JavaScriptMiniLexer } from './generated/antlr/JavaScriptMiniLexer';
+import { CharStreams } from 'antlr4ts';
+registerAntlrLanguage({
+	name: 'javascript',
+	createLexer: (code) => new JavaScriptMiniLexer(CharStreams.fromString(code)),
+	tokenMap: { KEYWORD: 'keyword', STRING_DOUBLE: 'string', STRING_SINGLE: 'string', TEMPLATE: 'string', NUMBER: 'number', COMMENT_LINE: 'comment', COMMENT_BLOCK: 'comment', WS: 'whitespace', PUNCT: 'punctuation', IDENTIFIER: 'identifier' }
+});
+```
+4. Highlight normally with `language: 'javascript'`.
+
+Legacy inline regex tokenizers & JSON grammar loader have been removed to focus on a single high‑fidelity path (ANTLR).
+
+### Auto-registration Utility
+If you generate multiple lexers you can auto-register all of them:
+```ts
+import { registerGeneratedAntlrLanguages } from 'code-highlighter/register-antlr';
+await registerGeneratedAntlrLanguages({ verbose: true });
+```
+This scans `dist/generated/antlr/*Lexer.js` and applies heuristic token mapping.
 ## Output Handlers
 Two built-in handlers are registered by default: `ansi` and `html`.
 
@@ -85,24 +113,8 @@ const md = highlight('const x=1;', { output: 'markdown', language: 'javascript',
 ```
 You can integrate ANTLR grammars (using `antlr4ts`) for precise lexing/parsing.
 
-1. Add a `.g4` grammar in `grammars/`.
-2. Generate TypeScript sources:
-	```
-	java -jar antlr-4.13.1-complete.jar -Dlanguage=TypeScript -o src/grammars grammars/Example.g4
-	```
-3. Register the produced lexer:
-	```ts
-	import { registerAntlrLanguage } from 'code-highlighter/adapters/antlr';
-	import { ExampleLexer } from './grammars/ExampleLexer';
-	registerAntlrLanguage({
-	  name: 'example',
-	  createLexer: (code) => new ExampleLexer(CharStreams.fromString(code)),
-	  tokenMap: { KW_RETURN: 'keyword', INT: 'number', STRING: 'string', COMMENT: 'comment' }
-	});
-	```
-4. Highlight with `language: 'example'`.
-
-If ANTLR proves too heavy, a TextMate or custom JSON grammar loader can be substituted later.
+### Ad‑hoc tokenizers
+For quick experiments you can still manually register a simple tokenizer instead of a grammar.
 
 ## License
 MIT

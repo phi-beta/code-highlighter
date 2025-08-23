@@ -1,0 +1,66 @@
+{
+  "languages": [
+    {
+      "name": "javascript",
+      "aliases": ["js"],
+      "patterns": [
+        { "type": "comment", "regex": "//.*?$|/\\*[\\s\\S]*?\\*/" },
+        { "type": "string", "regex": "\\`(?:\\\\.|[^\\`\\\\])*\\`|\"(?:\\\\.|[^\"\\\\])*\"|'(?:\\\\.|[^'\\\\])*'" },
+        { "type": "number", "regex": "\\b\\d+(?:\\.\\d+)?\\b" },
+        { "type": "keyword", "regex": "\\b(?:break|case|catch|class|const|continue|debugger|default|delete|do|else|export|extends|finally|for|function|if|import|in|instanceof|let|new|return|super|switch|this|throw|try|typeof|var|void|while|with|yield|enum|await|implements|package|protected|static|interface|private|public)\\b" },
+        { "type": "identifier", "regex": "[A-Za-z_$][A-Za-z0-9_$]*" },
+        { "type": "punctuation", "regex": "[{}()[\\].,;:+\\-*/%&|^!?=<>]" },
+        { "type": "whitespace", "regex": "\\s+" }
+      ]
+    },
+    {
+      "name": "python",
+      "aliases": ["py"],
+      "patterns": [
+        { "type": "comment", "regex": "#.*$" },
+        { "type": "string", "regex": "\"\"\"[\\s\\S]*?\"\"\"|'''[\\s\\S]*?'''|\"(?:\\\\.|[^\"\\\\])*\"|'(?:\\\\.|[^'\\\\])*'" },
+        { "type": "number", "regex": "\\b\\d+(?:\\.\\d+)?\\b" },
+        { "type": "keyword", "regex": "\\b(?:def|return|if|elif|else|for|while|import|from|as|class|try|except|finally|with|yield|lambda|pass|break|continue|and|or|not|in|is|None|True|False)\\b" },
+        { "type": "identifier", "regex": "[A-Za-z_][A-Za-z0-9_]*" },
+        { "type": "punctuation", "regex": "[{}()[\\].,;:+\\-*/%&|^!?=<>]" },
+        { "type": "whitespace", "regex": "\\s+" }
+      ]
+    },
+    {
+      "name": "json",
+      "patterns": [
+        { "type": "whitespace", "regex": "\\s+" },
+  { "type": "punctuation", "regex": "[{}\\[\\]:,]" },
+        { "type": "number", "regex": "-?\\b\\d+(?:\\.\\d+)?(?:[eE][+-]?\\d+)?\\b" },
+        { "type": "string", "regex": "\"(?:\\\\.|[^\"\\\\])*\"" },
+        { "type": "keyword", "regex": "\\b(?:true|false|null)\\b" }
+      ]
+    },
+    {
+      "name": "bash",
+      "aliases": ["sh"],
+      "patterns": [
+        { "type": "comment", "regex": "#.*$" },
+        { "type": "string", "regex": "'(?:[^']*)'|\"(?:\\\\.|[^\"\\\\])*\"" },
+        { "type": "keyword", "regex": "\\b(?:if|then|else|elif|fi|for|while|in|do|done|case|esac|function|select|time)\\b" },
+        { "type": "punctuation", "regex": "[{}()[\\].,;:+\\-*/%&|^!?=<>]" },
+        { "type": "identifier", "regex": "[A-Za-z_][A-Za-z0-9_]*" },
+        { "type": "number", "regex": "\\b\\d+\\b" },
+        { "type": "whitespace", "regex": "\\s+" }
+      ]
+    },
+    {
+      "name": "markdown",
+      "aliases": ["md"],
+      "patterns": [
+        { "type": "comment", "regex": "<!--(?:.|\n)*?-->" },
+        { "type": "keyword", "regex": "^#+.*$" },
+        { "type": "string", "regex": "`[^`]+`" },
+        { "type": "number", "regex": "\\b\\d+(?:\\.\\d+)?\\b" },
+        { "type": "identifier", "regex": "[A-Za-z_][A-Za-z0-9_-]*" },
+        { "type": "punctuation", "regex": "[>*_\\-`#]" },
+        { "type": "whitespace", "regex": "\\s+" }
+      ]
+    }
+  ]
+}

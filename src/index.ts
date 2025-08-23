@@ -1,14 +1,15 @@
 /**
  * Core highlighting engine.
  * - Defines token / theme interfaces
- * - Provides pluggable language registry with built-in JS & Python regex tokenizers
- * - Supports ANSI & HTML output (inline spans, <pre><code>, or full document)
- * - Exposes registration utilities for future adapters (e.g., ANTLR)
+ * - Provides pluggable language & output handler registries
+ * - Real language support is expected to come from generated ANTLR lexers
+ *   (see register-antlr.ts). Legacy inline regex tokenizers have been removed.
  */
 import ansiDefault from './handlers/ansi.config.json' with { type: 'json' };
 import htmlDefault from './handlers/html.config.json' with { type: 'json' };
 import htmlTheme from './themes/html.theme.json' with { type: 'json' };
 import ansiTheme from './themes/ansi.theme.json' with { type: 'json' };
+// (File system utilities no longer needed here after removing regex grammar loader.)
 
 export interface Token {
   type: string;
@@ -46,30 +47,6 @@ export function registerLanguage(name: string, tokenizer: Tokenizer) { languages
 export function getLanguage(name: string): Tokenizer | undefined { return languages.get(name.toLowerCase()); }
 export function listLanguages(): string[] { return [...languages.keys()].sort(); }
 
-// JavaScript tokenizer (baseline)
-const jsKeywordSet = new Set(['break','case','catch','class','const','continue','debugger','default','delete','do','else','export','extends','finally','for','function','if','import','in','instanceof','let','new','return','super','switch','this','throw','try','typeof','var','void','while','with','yield','enum','await','implements','package','protected','static','interface','private','public']);
-export function tokenizeJavaScript(code: string): Token[] {
-  const tokens: Token[] = [];
-  const regex = /\/\/.*?$|\/\*[\s\S]*?\*\/|\"(?:\\.|[^\"\\])*\"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`|\b\d+(?:\.\d+)?\b|[A-Za-z_$][A-Za-z0-9_$]*|[{}()[\].,;:+\-*/%&|^!?=<>]|\s+/gm;
-  let match: RegExpExecArray | null;
-  while ((match = regex.exec(code)) !== null) {
-    const value = match[0];
-    let type: string;
-    if (/^\/\//.test(value) || /^\/\*/.test(value)) type = 'comment';
-    else if (/^[`'\"]/.test(value)) type = 'string';
-    else if (/^\d/.test(value)) type = 'number';
-    else if (jsKeywordSet.has(value)) type = 'keyword';
-    else if (/^[A-Za-z_$]/.test(value)) type = 'identifier';
-    else if (/^\s+$/.test(value)) type = 'whitespace';
-    else type = 'punctuation';
-    tokens.push({ type, value });
-  }
-  return tokens;
-}
-
-// (Early handler registration removed; handlers are registered after outputHandlers map is created.)
-// (Removed duplicate stray tokenize snippet from earlier patch)
-
 // ANSI helpers (theme already stores ANSI escape codes in color field)
 function applyAnsi(style: ThemeStyle, text: string): string {
   let prefix = '';
@@ -81,32 +58,10 @@ function applyAnsi(style: ThemeStyle, text: string): string {
   if (!prefix) return text;
   return prefix + text + '\u001b[0m';
 }
-// Python tokenizer (very small subset)
-const pyKeywordSet = new Set(['def','return','if','elif','else','for','while','import','from','as','class','try','except','finally','with','yield','lambda','pass','break','continue','and','or','not','in','is','None','True','False']);
-export function tokenizePython(code: string): Token[] {
-  const tokens: Token[] = [];
-  const regex = /#.*$|"""[\s\S]*?"""|'''[\s\S]*?'''|\"(?:\\.|[^\"\\])*\"|'(?:\\.|[^'\\])*'|\b\d+(?:\.\d+)?\b|[A-Za-z_][A-Za-z0-9_]*|[{}()[\].,;:+\-*/%&|^!?=<>]|\s+/gm;
-  let match: RegExpExecArray | null;
-  while ((match = regex.exec(code)) !== null) {
-    const value = match[0];
-    let type: string;
-    if (/^#/.test(value) || /^"""/.test(value) || /^'''/.test(value)) type = 'comment';
-    else if (/^["']/.test(value)) type = 'string';
-    else if (/^\d/.test(value)) type = 'number';
-    else if (pyKeywordSet.has(value)) type = 'keyword';
-    else if (/^[A-Za-z_]/.test(value)) type = 'identifier';
-    else if (/^\s+$/.test(value)) type = 'whitespace';
-    else type = 'punctuation';
-    tokens.push({ type, value });
-  }
-  return tokens;
-}
-
-// Register built-ins
-registerLanguage('javascript', tokenizeJavaScript);
-registerLanguage('js', tokenizeJavaScript);
-registerLanguage('python', tokenizePython);
-registerLanguage('py', tokenizePython);
+// Note: No built-in regex tokenizers are registered anymore. Users (or the CLI
+// bootstrap) must call registerGeneratedAntlrLanguages() from register-antlr to
+// populate languages. This keeps the core small and guarantees a single source
+// of truth (the ANTLR grammars) for token classification.
 
 function escapeHtml(str: string): string {
   return str.replace(/[&<>\"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;','\'':'&#39;'}[c]!));
@@ -181,7 +136,10 @@ registerOutputHandler({
 
 export function highlight(code: string, options: HighlightOptions = {}): string {
   const langName = options.language || 'javascript';
-  const tokenizer = getLanguage(langName) || tokenizeJavaScript;
+  const tokenizer = getLanguage(langName);
+  if (!tokenizer) {
+    throw new Error(`Language '${langName}' is not registered. Generate & register ANTLR lexers via registerGeneratedAntlrLanguages().`);
+  }
   const tokens = tokenizer(code);
   // Determine output handler (back-compat with html flag)
   const outputId = options.output || (options.html ? 'html' : 'ansi');
@@ -200,4 +158,4 @@ export function highlight(code: string, options: HighlightOptions = {}): string 
   return handler.render(tokens, theme, { language: langName, config });
 }
 
-export default { highlight, tokenizeJavaScript, tokenizePython, registerLanguage, listLanguages, registerOutputHandler, listOutputHandlers };
+export default { highlight, registerLanguage, listLanguages, registerOutputHandler, listOutputHandlers };

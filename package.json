@@ -16,6 +16,10 @@
     "./adapters/antlr": {
       "import": "./dist/adapters/antlr.js",
       "types": "./dist/adapters/antlr.d.ts"
+    },
+    "./register-antlr": {
+      "import": "./dist/register-antlr.js",
+      "types": "./dist/register-antlr.d.ts"
     }
   },
   "scripts": {
