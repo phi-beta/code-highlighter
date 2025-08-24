@@ -28,4 +28,11 @@
   ,"code-fence-start": { "color": "#6f42c1" }
   ,"code-fence-end": { "color": "#6f42c1" }
   ,"code-fence-content": { "color": "#6f42c1" }
+  ,"task-list": { "color": "#005cc5", "fontStyle": "bold" }
+  ,"link-reference": { "color": "#22863a", "fontStyle": "underline" }
+  ,"link-definition": { "color": "#6a737d", "fontStyle": "italic" }
+  ,"autolink": { "color": "#0366d6", "fontStyle": "underline" }
+  ,"footnote": { "color": "#6f42c1" }
+  ,"table": { "color": "#24292e" }
+  ,"line-break": { "backgroundColor": "#f6f8fa" }
 }
