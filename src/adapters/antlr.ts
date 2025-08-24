@@ -1,8 +1,8 @@
 /**
- * ANTLR adapter scaffold.
- * Provides helpers to adapt an ANTLR-generated lexer to the generic tokenizer interface
+ * ANTLR adapter for both lexer-only and full parser grammars.
+ * Provides helpers to adapt ANTLR-generated lexers/parsers to the generic tokenizer interface
  * so languages defined via .g4 grammars (converted with antlr4ts) can supply tokens.
- * Current focus: lexer-only mapping (no parse tree) for highlighting speed & simplicity.
+ * Supports both lexer-only mode (for simple tokenization) and parser mode (for context-aware parsing).
  */
 
 import type { Token as HLToken, ThemeDefinition } from '../index.js';
@@ -16,11 +16,17 @@ export interface AntlrLexerLike {
   channelNames?: string[];
 }
 
+export interface AntlrParserLike {
+  document?: () => any; // start rule method
+  reset(): void;
+}
+
 export interface AntlrAdapterOptions {
   tokenMap?: Record<string, string>; // symbolicName -> highlight token type
   defaultType?: string; // fallback highlight token type
   hiddenChannels?: string[]; // channel names to skip (e.g., 'HIDDEN')
   maxTokens?: number; // safety cap
+  useParser?: boolean; // if true, use parser for context-aware tokenization
 }
 
 export function tokenizeWithAntlr(createLexer: (code: string) => AntlrLexerLike, code: string, opts: AntlrAdapterOptions = {}): HLToken[] {
@@ -28,6 +34,7 @@ export function tokenizeWithAntlr(createLexer: (code: string) => AntlrLexerLike,
   const tokens: HLToken[] = [];
   const map = opts.tokenMap || {};
   const hidden = new Set(opts.hiddenChannels || ['HIDDEN']);
+  
   // Support both actual ANTLR lexers (symbolicNames on instance) and our stub lexers (static property only)
   // Try various locations for symbolic names depending on generator/runtime version.
   let symbolic: string[] = (lexer as any).symbolicNames || (lexer as any).constructor?.symbolicNames || [];
@@ -36,6 +43,7 @@ export function tokenizeWithAntlr(createLexer: (code: string) => AntlrLexerLike,
   }
   const vocabulary = (lexer as any).vocabulary || (lexer as any).constructor?.VOCABULARY;
   const max = opts.maxTokens || 200000;
+  
   for (let i = 0; i < max; i++) {
     const t = lexer.nextToken();
     if (!t || t.type <= 0) break; // EOF
@@ -67,6 +75,7 @@ function guessTokenType(name: string, value: string): string | undefined {
 export interface AntlrLanguageRegistrationOptions extends AntlrAdapterOptions {
   name: string;
   createLexer: (code: string) => AntlrLexerLike;
+  createParser?: (lexer: AntlrLexerLike) => AntlrParserLike; // optional for parser grammars
 }
 
 // Dynamically require registerLanguage to avoid circular ESM import cost.

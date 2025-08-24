@@ -186,6 +186,7 @@ export function highlight(code: string, options: HighlightOptions = {}): string 
       switch (tok.type) {
         case 'md-raw-heading':
         case 'md-raw-heading_atx': return { ...tok, type: 'heading' };
+        case 'md-raw-heading-setext': return { ...tok, type: 'heading-setext' };
         case 'md-raw-bold': return { ...tok, type: 'strong' };
         case 'md-raw-bolditalic': return { ...tok, type: 'strong' }; // treat triple as strong for now
         case 'md-raw-italic': return { ...tok, type: 'emphasis' };
@@ -195,7 +196,15 @@ export function highlight(code: string, options: HighlightOptions = {}): string 
         case 'md-raw-code-fence-start': return { ...tok, type: 'code-fence-start' };
         case 'md-raw-code-fence-end': return { ...tok, type: 'code-fence-end' };
         case 'md-raw-code-text': return { ...tok, type: 'code-fence-content' };
+        case 'md-raw-code-block': return { ...tok, type: 'code-block' };
+        case 'md-raw-task-list': return { ...tok, type: 'task-list' };
+        case 'md-raw-table': return { ...tok, type: 'table' };
         case 'md-raw-link': return { ...tok, type: 'link' };
+        case 'md-raw-link-reference': return { ...tok, type: 'link-reference' };
+        case 'md-raw-link-definition': return { ...tok, type: 'link-definition' };
+        case 'md-raw-autolink': return { ...tok, type: 'autolink' };
+        case 'md-raw-footnote': return { ...tok, type: 'footnote' };
+        case 'md-raw-line-break': return { ...tok, type: 'line-break' };
         case 'md-raw-image': return { ...tok, type: 'image' };
         case 'md-raw-hr': return { ...tok, type: 'rule' };
         case 'md-raw-blockquote': return { ...tok, type: 'blockquote' };
@@ -211,7 +220,7 @@ export function highlight(code: string, options: HighlightOptions = {}): string 
       const line = raw.replace(/\r?\n$/, '');
       if (/^ {0,3}>( |$)/.test(line)) return { ...tok, type: 'blockquote' };
       if (/^ {0,3}(?:---+|\*\*\*+|___+)[ \t]*$/.test(line)) return { ...tok, type: 'rule' };
-      if (/^ {0,3}[-*+] +\S/.test(line)) return { ...tok, type: 'list-bullet' };
+      if (/^ {0,3}[-*+] +(?!\[[ xX]\]).*\S/.test(line)) return { ...tok, type: 'list-bullet' };
       if (/^ {0,3}\d+\. +\S/.test(line)) return { ...tok, type: 'list-enum' };
       if (/^#+\s+/.test(line)) return { ...tok, type: 'heading' };
       if (/^```/.test(line)) {
@@ -265,9 +274,9 @@ export function highlight(code: string, options: HighlightOptions = {}): string 
       final.push(t); i++;
     }
     tokens = final;
-  const pattern = /(!\[[^\]\n]+\]\([^\)\n]+\)|`[^`\n]+`|\*\*[^*\n]+\*\*|\*[^*\n]+\*|\[[^\]\n]+\]\([^\)\n]+\))/g;
+  const pattern = /(!\[[^\]\n]+\]\([^\)\n]+\)|`[^`\n]+`|\*\*[^*\n]+\*\*|\*[^*\n]+\*|\[[^\]\n]+\]\([^\)\n]+\)|<[^<>\s]+>|\[[\^][^\]]+\]|\[[^\]]+\]\[[^\]]*\]|\[[^\]]+\]:\s*[^\s\n]+(\s+"[^"\n]*")?)/g;
     for (const tok of tokens) {
-      if (tok.type !== 'identifier' && tok.type !== 'TEXT'.toLowerCase()) { out.push(tok); continue; }
+      if (tok.type !== 'identifier' && tok.type !== 'TEXT'.toLowerCase() && tok.type !== 'code-fence-content') { out.push(tok); continue; }
       const value = tok.value;
       // Heading heuristic: line starting with one or more # followed by space
       if (/^#+\s/.test(value)) {
@@ -282,20 +291,46 @@ export function highlight(code: string, options: HighlightOptions = {}): string 
     else if (seg.startsWith('**')) out.push({ type: 'strong', value: seg });
         else if (seg.startsWith('*')) out.push({ type: 'emphasis', value: seg });
         else if (seg.startsWith('`')) out.push({ type: 'code-inline', value: seg });
+        else if (seg.startsWith('<')) out.push({ type: 'autolink', value: seg });
+        else if (seg.startsWith('[^')) out.push({ type: 'footnote', value: seg });
+        else if (seg.includes(']:')) out.push({ type: 'link-definition', value: seg });
+        else if (seg.includes('][')) out.push({ type: 'link-reference', value: seg });
         else if (seg.startsWith('[')) out.push({ type: 'link', value: seg });
         else out.push({ type: 'identifier', value: seg });
         lastIndex = m.index + seg.length;
       }
       if (lastIndex < value.length) out.push({ type: 'identifier', value: value.slice(lastIndex) });
     }
-    tokens = out.length ? out : tokens;
+    
+    // Special handling for hard line breaks: tokens ending with 2+ spaces before newline
+    const processedOut: Token[] = [];
+    for (let i = 0; i < out.length; i++) {
+      const tok = out[i];
+      const nextTok = out[i + 1];
+      
+      // Check if current token ends with 2+ spaces and next token is a newline
+      if (tok.type === 'identifier' && tok.value.endsWith('  ') && 
+          nextTok && nextTok.type === 'identifier' && nextTok.value === '\n') {
+        // Split the current token: content without spaces + line break
+        const content = tok.value.replace(/  +$/, '');
+        const spaces = tok.value.match(/  +$/)?.[0] || '';
+        
+        if (content) processedOut.push({ type: 'identifier', value: content });
+        processedOut.push({ type: 'line-break', value: spaces + nextTok.value });
+        i++; // Skip the newline token since we consumed it
+      } else {
+        processedOut.push(tok);
+      }
+    }
+    
+    tokens = processedOut.length ? processedOut : out;
     // Final normalization pass: reclassify any remaining structural markers missed earlier
     tokens = tokens.map(t => {
       if (t.type !== 'identifier') return t;
       const v = t.value.replace(/\r?\n$/, '');
       if (/^ {0,3}(?:---+|\*\*\*+|___+)[ \t]*$/.test(v)) return { ...t, type: 'rule' };
       if (/^ {0,3}>( |$)/.test(v)) return { ...t, type: 'blockquote' };
-      if (/^ {0,3}[-*+] +\S/.test(v)) return { ...t, type: 'list-bullet' };
+      if (/^ {0,3}[-*+] +(?!\[[ xX]\]).*\S/.test(v)) return { ...t, type: 'list-bullet' };
       if (/^ {0,3}\d+\. +\S/.test(v)) return { ...t, type: 'list-enum' };
       if (/^#+\s+/.test(v)) return { ...t, type: 'heading' };
       return t;

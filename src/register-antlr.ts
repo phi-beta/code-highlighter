@@ -24,21 +24,33 @@ function mapSymbolicToType(symbolic: string): string | undefined {
   if (s === 'ws' || s === 'whitespace') return 'whitespace';
   if (s.includes('comment')) return 'comment';
   if (s.includes('string') || s.includes('template')) return 'string';
-  if (s === 'number' || /num|int|float|double|digit/.test(s)) return 'number';
-  if (/kw|keyword|class|return|if|for|while|else|import|from|def/.test(s)) return 'keyword';
-  if (/punct|brace|brack|paren|colon|comma|semi|operator|curly/.test(s)) return 'punctuation';
+  if (s === 'number' || /^(num|int|float|double|digit)$/.test(s)) return 'number';
+  if (/^(kw|keyword)$|^(class|return|if|for|while|else|import|from|def)$/.test(s)) return 'keyword';
+  if (/^(punct|punctuation)$|^(brace|brack|paren|colon|comma|semi|operator|curly)$/.test(s)) return 'punctuation';
   // Markdown symbolic token names – map to temporary raw types we post-process later
   // ANTLR symbolic names are uppercase (e.g., HEADING); map them case-insensitively
   if (raw === 'HEADING') return 'md-raw-heading';
   if (raw === 'HEADING_ATX') return 'md-raw-heading';
+  if (raw === 'SETEXT_UNDERLINE_1') return 'md-raw-heading-setext';
+  if (raw === 'SETEXT_UNDERLINE_2') return 'md-raw-heading-setext';
   if (raw === 'HR') return 'md-raw-hr';
   if (raw === 'BLOCKQUOTE') return 'md-raw-blockquote';
   if (raw === 'LIST_BULLET') return 'md-raw-list-bullet';
   if (raw === 'LIST_ENUM') return 'md-raw-list-enum';
+  if (raw === 'TASK_LIST_ITEM') return 'md-raw-task-list';
   if (raw === 'CODE_FENCE_START') return 'md-raw-code-fence-start';
   if (raw === 'CODE_FENCE_END') return 'md-raw-code-fence-end';
   if (raw === 'CODE_TEXT') return 'md-raw-code-text';
+  if (raw === 'CODE_BLOCK_INDENTED') return 'md-raw-code-block';
+  if (raw === 'TABLE_ROW') return 'md-raw-table';
+  if (raw === 'TABLE_SEPARATOR') return 'md-raw-table';
   if (raw === 'IMAGE') return 'md-raw-image';
+  if (raw === 'LINK_REFERENCE') return 'md-raw-link-reference';
+  if (raw === 'LINK_DEFINITION') return 'md-raw-link-definition';
+  if (raw === 'AUTOLINK') return 'md-raw-autolink';
+  if (raw === 'FOOTNOTE_REF') return 'md-raw-footnote';
+  if (raw === 'FOOTNOTE_DEF') return 'md-raw-footnote';
+  if (raw === 'HARD_LINE_BREAK') return 'md-raw-line-break';
   // Existing inline constructs
   if (raw === 'BOLD') return 'md-raw-bold';
   if (raw === 'ITALIC') return 'md-raw-italic';
@@ -74,9 +86,12 @@ export async function registerGeneratedAntlrLanguages(opts: AutoRegisterOptions 
   }
   // Accept either .js (built) or .ts (stub/ts-node) files
   const all = fs.readdirSync(baseDir).filter(f => /\.(js|ts)$/.test(f) && !/\.d\.ts$/.test(f));
-  // Classify candidates
-  const stubLexerFiles = new Set(all.filter(f => /Lexer\.(js|ts)$/.test(f)));
+  // Classify candidates - for parser grammars, we want *Lexer.ts files
+  const stubLexerFiles = new Set(all.filter(f => /Lexer\.(js|ts)$/.test(f) && /(Bash|JavaScript|Json|Markdown|Python)MiniLexer/.test(f)));
   const realGeneratedFiles = new Set(all.filter(f => /Mini\.(js|ts)$/.test(f) && !/Lexer\.(js|ts)$/.test(f)));
+  // For parser grammars, also include the generated lexer files
+  const parserLexerFiles = new Set(all.filter(f => /MiniLexer\.(js|ts)$/.test(f)));
+  
   // If both a real generated *Mini and a stub *MiniLexer exist, drop the stub.
   for (const real of realGeneratedFiles) {
     const base = real.replace(/\.(js|ts)$/,'');
@@ -85,24 +100,43 @@ export async function registerGeneratedAntlrLanguages(opts: AutoRegisterOptions 
     stubLexerFiles.delete(stub);
     stubLexerFiles.delete(stubJs);
   }
-  // Final list: real generated first (deterministic order) then any remaining stubs.
-  const files = [ ...Array.from(realGeneratedFiles).sort(), ...Array.from(stubLexerFiles).sort() ];
+  // Final list: parser lexers first, then real generated, then any remaining stubs.
+  const files = [ ...Array.from(parserLexerFiles).sort(), ...Array.from(realGeneratedFiles).sort(), ...Array.from(stubLexerFiles).sort() ];
   if (opts.verbose) console.log('[register-antlr] Found lexer candidates:', files);
   for (const file of files) {
-    const isStub = /Lexer\.(js|ts)$/.test(file);
-    const langBase = isStub ? file.replace(/Lexer\.(js|ts)$/, '') : file.replace(/\.(js|ts)$/,'');
+    const isStub = /Lexer\.(js|ts)$/.test(file) && !/(Bash|JavaScript|Json|Markdown|Python)MiniLexer/.test(file);
+    const isParserLexer = /MiniLexer\.(js|ts)$/.test(file);
+    let langBase: string;
+    
+    if (isParserLexer) {
+      langBase = file.replace(/MiniLexer\.(js|ts)$/, '');
+    } else if (isStub) {
+      langBase = file.replace(/Lexer\.(js|ts)$/, '');
+    } else {
+      langBase = file.replace(/Mini\.(js|ts)$/, '');
+    }
+    
     const langName = langBase.replace(/Mini$/,'').toLowerCase();
     try {
       const filePath = path.join(baseDir, file);
       // Use file URL to ensure Windows path compatibility for dynamic import of .ts during tests.
       const mod = await import(pathToFileURL(filePath).href);
-      const LexerClass = isStub
-        ? ( (mod as any)[langBase + 'Lexer'] || (mod as any)[langBase] )
-        : ( (mod as any).default || (mod as any)[langBase] );
+      let LexerClass;
+      
+      if (isParserLexer) {
+        // For parser grammars, look for MarkdownMiniLexer class
+        LexerClass = (mod as any)[langBase + 'MiniLexer'] || (mod as any)[langBase + 'Lexer'] || (mod as any).default;
+      } else if (isStub) {
+        LexerClass = (mod as any)[langBase + 'Lexer'] || (mod as any)[langBase];
+      } else {
+        // For lexer-only grammars, try the full file base name first, then default
+        LexerClass = (mod as any)[langBase + 'Mini'] || (mod as any).default || (mod as any)[langBase];
+      }
       if (!LexerClass) continue;
       const explicitMap = opts.tokenMaps?.[langName];
       const tokenMap: Record<string,string> = explicitMap || {};
-      const symNames = LexerClass.symbolicNames || [];
+      const symNames = LexerClass.symbolicNames || (LexerClass as any)._SYMBOLIC_NAMES || [];
+      
       if (!explicitMap && Array.isArray(symNames)) {
         for (const name of symNames) {
           if (!name) continue;
@@ -113,7 +147,7 @@ export async function registerGeneratedAntlrLanguages(opts: AutoRegisterOptions 
       // Distinguish between real antlr4ts generated lexers and stub "Mini" lexers.
       // Real generated lexers expose serializedATN/ruleNames and require a CharStream.
       // Stubs expect a plain source string; passing a CharStream caused empty token output intermittently.
-  const isRealAntlr = !isStub && ('serializedATN' in LexerClass || 'ruleNames' in (LexerClass.prototype || {}));
+      const isRealAntlr = !isStub && ('serializedATN' in LexerClass || 'ruleNames' in (LexerClass.prototype || {}));
       const createLexer = (code: string) => isRealAntlr
         ? new LexerClass(CharStreams.fromString(code))
         : new LexerClass(code);
