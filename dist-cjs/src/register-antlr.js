@@ -48,7 +48,7 @@ const node_fs_1 = __importDefault(require("node:fs"));
 const node_path_1 = __importDefault(require("node:path"));
 const node_url_1 = require("node:url");
 const antlr4ts_1 = require("antlr4ts");
-const assets_js_1 = require("./utils/assets.js");
+const dirname_js_1 = require("./utils/dirname.js");
 const antlr_js_1 = require("./adapters/antlr.js");
 // Basic heuristic mapping from token symbolic names to highlight categories.
 function mapSymbolicToType(symbolic) {
@@ -208,11 +208,54 @@ function mapSymbolicToType(symbolic) {
         return 'operator';
     if (raw === 'REGEX')
         return 'string';
+    // CSS token mappings
+    if (raw === 'HEX_COLOR')
+        return 'color';
+    if (raw === 'NAMED_COLOR')
+        return 'color';
+    if (raw === 'FUNCTION')
+        return 'function';
+    if (raw === 'UNIT')
+        return 'number';
+    if (raw === 'PERCENTAGE')
+        return 'number';
+    if (raw === 'AT_RULE')
+        return 'at-rule';
+    if (raw === 'CLASS_SELECTOR')
+        return 'selector';
+    if (raw === 'ID_SELECTOR')
+        return 'selector';
+    if (raw === 'PSEUDO_CLASS')
+        return 'selector';
+    if (raw === 'PSEUDO_ELEMENT')
+        return 'selector';
+    if (raw === 'PROPERTY')
+        return 'property';
+    if (raw === 'CUSTOM_PROPERTY')
+        return 'property';
+    if (raw === 'IMPORTANT')
+        return 'keyword';
+    if (raw === 'URL')
+        return 'string';
+    if (raw === 'COMMENT_BLOCK')
+        return 'comment';
+    if (raw === 'ELEMENT')
+        return 'identifier';
+    if (raw === 'LPAREN')
+        return 'punctuation';
+    if (raw === 'RPAREN')
+        return 'punctuation';
     return undefined;
 }
 async function registerGeneratedAntlrLanguages(opts = {}) {
-    // Use asset-aware path resolution
-    let baseDir = opts.dir || (0, assets_js_1.getAssetPath)('generated/antlr');
+    // Use explicit path relative to this module's directory
+    const currentDir = (0, dirname_js_1.getDirname)();
+    let baseDir = opts.dir || node_path_1.default.join(currentDir, 'generated/antlr');
+    // If the compiled version doesn't exist, try the source version
+    if (!node_fs_1.default.existsSync(baseDir)) {
+        // We're probably in a built environment; try the source directory
+        baseDir = node_path_1.default.join(currentDir, '../../src/generated/antlr');
+    }
     // In pkg, also try the snapshot path directly
     if (process.pkg && !opts.dir) {
         const pkgPath = `/snapshot/${node_path_1.default.basename(process.execPath, node_path_1.default.extname(process.execPath))}/dist-cjs/src/generated/antlr`;
@@ -231,11 +274,21 @@ async function registerGeneratedAntlrLanguages(opts = {}) {
     }
     // Accept either .js (built) or .ts (stub/ts-node) files
     const all = node_fs_1.default.readdirSync(baseDir).filter(f => /\.(js|ts)$/.test(f) && !/\.d\.ts$/.test(f));
+    // Prioritize .ts files over .js files for each base name
+    const filesMap = new Map();
+    for (const file of all) {
+        const base = file.replace(/\.(js|ts)$/, '');
+        const isTs = file.endsWith('.ts');
+        if (!filesMap.has(base) || isTs) {
+            filesMap.set(base, file);
+        }
+    }
+    const prioritizedFiles = Array.from(filesMap.values());
     // Classify candidates - for parser grammars, we want *Lexer.ts files
-    const stubLexerFiles = new Set(all.filter(f => /Lexer\.(js|ts)$/.test(f) && /(Bash|JavaScript|Json|Markdown|Python|TypeScript)MiniLexer/.test(f)));
-    const realGeneratedFiles = new Set(all.filter(f => /Mini\.(js|ts)$/.test(f) && !/Lexer\.(js|ts)$/.test(f)));
+    const stubLexerFiles = new Set(prioritizedFiles.filter(f => /Lexer\.(js|ts)$/.test(f) && /(Bash|CSS|JavaScript|Json|Markdown|Python|TypeScript)MiniLexer/.test(f)));
+    const realGeneratedFiles = new Set(prioritizedFiles.filter(f => /Mini\.(js|ts)$/.test(f) && !/Lexer\.(js|ts)$/.test(f)));
     // For parser grammars, also include the generated lexer files
-    const parserLexerFiles = new Set(all.filter(f => /MiniLexer\.(js|ts)$/.test(f)));
+    const parserLexerFiles = new Set(prioritizedFiles.filter(f => /MiniLexer\.(js|ts)$/.test(f)));
     // If both a real generated *Mini and a stub *MiniLexer exist, drop the stub.
     for (const real of realGeneratedFiles) {
         const base = real.replace(/\.(js|ts)$/, '');
@@ -249,7 +302,7 @@ async function registerGeneratedAntlrLanguages(opts = {}) {
     if (opts.verbose)
         console.log('[register-antlr] Found lexer candidates:', files);
     for (const file of files) {
-        const isStub = /Lexer\.(js|ts)$/.test(file) && !/(Bash|JavaScript|Json|Markdown|Python)MiniLexer/.test(file);
+        const isStub = /Lexer\.(js|ts)$/.test(file) && !/(Bash|CSS|JavaScript|Json|Markdown|Python)MiniLexer/.test(file);
         const isParserLexer = /MiniLexer\.(js|ts)$/.test(file);
         let langBase;
         if (isParserLexer) {
@@ -315,6 +368,7 @@ async function registerGeneratedAntlrLanguages(opts = {}) {
                 await (0, antlr_js_1.registerAntlrLanguage)({ name: 'md', createLexer, tokenMap });
             if (langName === 'typescript')
                 await (0, antlr_js_1.registerAntlrLanguage)({ name: 'ts', createLexer, tokenMap });
+            // CSS has no common aliases but register main name
             if (opts.verbose)
                 console.log(`[register-antlr] Registered ${langName}`);
         }

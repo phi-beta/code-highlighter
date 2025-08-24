@@ -24,6 +24,8 @@ function inferLanguage(file: string): string | null {
     case '.json': return 'json';
     case '.sh': return 'bash';
     case '.md': return 'markdown';
+    case '.css': return 'css';
+    case '.ts': return 'typescript';
     default: return null;
   }
 }

@@ -42,4 +42,8 @@
   ,"decorator": { "color": "#6f42c1", "fontStyle": "bold" }
   ,"arithmetic-expansion": { "color": "#6f42c1", "fontStyle": "bold" }
   ,"type": { "color": "#005cc5", "fontStyle": "italic" }
+  ,"color": { "color": "#005cc5", "fontStyle": "bold" }
+  ,"function": { "color": "#6f42c1", "fontStyle": "bold" }
+  ,"selector": { "color": "#22863a", "fontStyle": "bold" }
+  ,"at-rule": { "color": "#d73a49", "fontStyle": "bold" }
 }

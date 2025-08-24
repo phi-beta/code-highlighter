@@ -42,4 +42,8 @@
   ,"operator": { "color": "\u001b[31m" }
   ,"decorator": { "color": "\u001b[35m", "fontStyle": "bold" }
   ,"type": { "color": "\u001b[34m", "fontStyle": "italic" }
+  ,"color": { "color": "\u001b[36m", "fontStyle": "bold" }
+  ,"function": { "color": "\u001b[35m", "fontStyle": "bold" }
+  ,"selector": { "color": "\u001b[32m", "fontStyle": "bold" }
+  ,"at-rule": { "color": "\u001b[31m", "fontStyle": "bold" }
 }
