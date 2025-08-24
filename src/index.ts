@@ -21,6 +21,33 @@ export interface Token {
   value: string;
 }
 
+// Enhanced token with position information for JSON export
+export interface EnhancedToken extends Token {
+  position: {
+    start: number;
+    end: number;
+    line: number;
+    column: number;
+  };
+}
+
+// JSON export format for token analysis
+export interface TokenAnalysis {
+  metadata: {
+    language: string;
+    totalTokens: number;
+    totalLines: number;
+    totalCharacters: number;
+    timestamp: string;
+  };
+  tokens: EnhancedToken[];
+  statistics: {
+    tokenTypes: Record<string, number>;
+    averageTokenLength: number;
+    longestToken: { type: string; value: string; length: number };
+  };
+}
+
 export interface ThemeStyle {
   color?: string; // hex or ansi name (we'll map)
   fontStyle?: 'bold' | 'italic' | 'underline' | 'dim';
@@ -397,4 +424,129 @@ export function highlight(code: string, options: HighlightOptions = {}): string 
   return handler.render(tokens, theme, { language: langName, config });
 }
 
-export default { highlight, registerLanguage, unregisterLanguage, listLanguages, registerOutputHandler, listOutputHandlers };
+/**
+ * Export token analysis as structured JSON data
+ * @param code Source code to analyze
+ * @param language Programming language for tokenization
+ * @returns TokenAnalysis object with detailed token information
+ */
+export function exportTokens(code: string, language: string = 'javascript'): TokenAnalysis {
+  const tokenizer = getLanguage(language);
+  if (!tokenizer) {
+    throw new Error(`Language '${language}' is not registered. Generate & register ANTLR lexers via registerGeneratedAntlrLanguages().`);
+  }
+
+  let tokens = tokenizer(code);
+  
+  // Apply same post-processing as highlight function
+  if (language === 'json') {
+    for (let i = 0; i < tokens.length; i++) {
+      const t = tokens[i];
+      if (t.type === 'string') {
+        let j = i + 1;
+        while (j < tokens.length && tokens[j].type === 'whitespace') j++;
+        if (j < tokens.length && tokens[j].value === ':') {
+          t.type = 'property';
+        }
+      }
+    }
+  }
+
+  if (language === 'markdown' || language === 'md') {
+    // Apply markdown post-processing (simplified version)
+    tokens = tokens.map(tok => {
+      switch (tok.type) {
+        case 'md-raw-heading':
+        case 'md-raw-heading_atx': return { ...tok, type: 'heading' };
+        case 'md-raw-bold': return { ...tok, type: 'strong' };
+        case 'md-raw-italic': return { ...tok, type: 'emphasis' };
+        case 'md-raw-inline-code': return { ...tok, type: 'code-inline' };
+        case 'md-raw-task-list': return { ...tok, type: 'task-list' };
+        default: return tok;
+      }
+    });
+  }
+
+  // Calculate positions
+  const enhancedTokens: EnhancedToken[] = [];
+  let currentPos = 0;
+  let currentLine = 1;
+  let currentColumn = 1;
+
+  for (const token of tokens) {
+    const start = currentPos;
+    const end = currentPos + token.value.length;
+    
+    enhancedTokens.push({
+      ...token,
+      position: {
+        start,
+        end,
+        line: currentLine,
+        column: currentColumn
+      }
+    });
+
+    // Update position tracking
+    for (const char of token.value) {
+      if (char === '\n') {
+        currentLine++;
+        currentColumn = 1;
+      } else {
+        currentColumn++;
+      }
+    }
+    currentPos = end;
+  }
+
+  // Calculate statistics
+  const tokenTypes: Record<string, number> = {};
+  let totalLength = 0;
+  let longestToken = { type: '', value: '', length: 0 };
+
+  for (const token of enhancedTokens) {
+    tokenTypes[token.type] = (tokenTypes[token.type] || 0) + 1;
+    totalLength += token.value.length;
+    
+    if (token.value.length > longestToken.length) {
+      longestToken = {
+        type: token.type,
+        value: token.value.substring(0, 50) + (token.value.length > 50 ? '...' : ''),
+        length: token.value.length
+      };
+    }
+  }
+
+  const averageTokenLength = enhancedTokens.length > 0 ? totalLength / enhancedTokens.length : 0;
+  const totalLines = currentLine;
+
+  return {
+    metadata: {
+      language,
+      totalTokens: enhancedTokens.length,
+      totalLines,
+      totalCharacters: code.length,
+      timestamp: new Date().toISOString()
+    },
+    tokens: enhancedTokens,
+    statistics: {
+      tokenTypes,
+      averageTokenLength: Math.round(averageTokenLength * 100) / 100,
+      longestToken
+    }
+  };
+}
+
+/**
+ * Export token analysis as JSON string
+ * @param code Source code to analyze  
+ * @param language Programming language for tokenization
+ * @param pretty Whether to format JSON with indentation
+ * @returns JSON string representation of token analysis
+ */
+export function exportTokensAsJson(code: string, language: string = 'javascript', pretty: boolean = true): string {
+  const analysis = exportTokens(code, language);
+  return pretty ? JSON.stringify(analysis, null, 2) : JSON.stringify(analysis);
+}
+
+export default { highlight, exportTokens, exportTokensAsJson, registerLanguage, unregisterLanguage, listLanguages, registerOutputHandler, listOutputHandlers };

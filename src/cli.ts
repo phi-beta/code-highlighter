@@ -8,14 +8,14 @@
  *  - Block (<pre><code>) or inline HTML; full HTML document generation
  */
 import { readFileSync } from 'fs';
-import { highlight, listLanguages } from './index.js';
+import { highlight, listLanguages, exportTokensAsJson } from './index.js';
 
 async function autoRegister() {
   try { await (await import('./register-antlr.js')).attemptAutoRegisterGeneratedAntlrLanguages?.({ verbose: false }); } catch { /* ignore */ }
 }
 
 function parseArgs(argv: string[]) {
-  const opts: { file?: string; html?: boolean; lang?: string; themePath?: string; list?: boolean; noBlock?: boolean; full?: boolean; title?: string; output?: string; handlerConfigPath?: string; generateSamples?: boolean } = {};
+  const opts: { file?: string; html?: boolean; lang?: string; themePath?: string; list?: boolean; noBlock?: boolean; full?: boolean; title?: string; output?: string; handlerConfigPath?: string; generateSamples?: boolean; exportJson?: boolean; compact?: boolean } = {};
   for (let i = 2; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--html') opts.html = true;
@@ -28,6 +28,8 @@ function parseArgs(argv: string[]) {
     else if (a === '--output') opts.output = argv[++i];
     else if (a === '--handler-config') opts.handlerConfigPath = argv[++i];
     else if (a === '--generate-samples') opts.generateSamples = true;
+    else if (a === '--export-json') opts.exportJson = true;
+    else if (a === '--compact') opts.compact = true;
     else if (!opts.file) opts.file = a;
   }
   return opts;
@@ -62,10 +64,18 @@ async function main() {
     return;
   }
   if (!args.file) {
-    console.error('Usage: code-highlight [--output ansi|html] [--html] [--lang <name>] [--theme theme.json] [--handler-config cfg.json] [--no-block] [--full] [--title Title] [--list-languages] <file>');
+    console.error('Usage: code-highlight [--output ansi|html] [--html] [--lang <name>] [--theme theme.json] [--handler-config cfg.json] [--no-block] [--full] [--title Title] [--export-json] [--compact] [--list-languages] <file>');
     process.exit(1);
   }
   const code = readFileSync(args.file, 'utf8');
+  
+  // Handle JSON export
+  if (args.exportJson) {
+    const jsonOutput = exportTokensAsJson(code, args.lang || 'javascript', !args.compact);
+    process.stdout.write(jsonOutput + '\n');
+    return;
+  }
+  
   let theme;
   if (args.themePath) {
     try { theme = JSON.parse(readFileSync(args.themePath, 'utf8')); } catch { console.error('Invalid theme file'); }
