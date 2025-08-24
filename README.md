@@ -107,6 +107,23 @@ import { registerGeneratedAntlrLanguages } from 'code-highlighter/register-antlr
 await registerGeneratedAntlrLanguages({ verbose: true });
 ```
 This scans the generated output directory (including nested antlr4ts layout) and applies heuristic token mapping.
+
+## Adding New Languages
+
+To implement syntax highlighting for a new language, see the comprehensive implementation guides:
+
+- **📖 [Implementation Guide](docs/IMPLEMENTATION_GUIDE.md)** - Complete step-by-step guide with templates and best practices
+- **⚡ [Quick Reference](docs/QUICK_REFERENCE.md)** - 30-second checklist and essential commands  
+- **📁 [Templates](docs/templates/)** - Copy-paste templates for grammar, token mappings, and tests
+
+### Quick Start
+1. Copy templates from `docs/templates/`
+2. Test bracket matching **first** with debug test  
+3. Add language features incrementally
+4. Estimated time: 1-2 hours (vs 8+ hours without guide)
+
+**Key Lesson**: Always separate brackets from composite tokens to ensure proper bracket matching.
+
 ## Output Handlers
 Two built-in handlers are registered by default: `ansi` and `html`.
 

@@ -26,6 +26,9 @@ function inferLanguage(file: string): string | null {
     case '.md': return 'markdown';
     case '.css': return 'css';
     case '.ts': return 'typescript';
+    case '.html':
+    case '.htm': return 'html';
+    case '.csv': return 'csv';
     default: return null;
   }
 }

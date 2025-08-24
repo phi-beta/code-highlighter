@@ -7,13 +7,31 @@
 import { readFileSync, writeFileSync, readdirSync } from 'fs';
 import { join, extname } from 'path';
 import { highlight } from '../src/index.js';
-import { attemptAutoRegisterGeneratedAntlrLanguages } from '../src/register-antlr.js';
+import { registerGeneratedAntlrLanguages } from '../src/register-antlr.js';
 
 const INPUT_DIR = join(process.cwd(), 'samples', 'inputs');
 const OUTPUT_DIR = join(process.cwd(), 'samples', 'outputs');
 
 export async function generateAll() {
-  await attemptAutoRegisterGeneratedAntlrLanguages({ verbose: false });
+  // Register languages with explicit CSV token mappings
+  const csvTokenMap: Record<string, string> = {
+    QUOTED_FIELD: 'string',
+    COMMA: 'punctuation',
+    NUMBER: 'number',
+    FIELD_TEXT: 'identifier',
+    NEWLINE: 'whitespace',
+  };
+  
+  console.log('Registering languages with CSV token mappings...');
+  await registerGeneratedAntlrLanguages({ 
+    verbose: true,
+    dir: join(process.cwd(), 'src', 'generated', 'antlr'),
+    tokenMaps: { csv: csvTokenMap }
+  });
+  
+  // Check what languages are available
+  const { listLanguages } = await import('../src/index.js');
+  console.log('Available languages after registration:', listLanguages());
   const files = readdirSync(INPUT_DIR);
   for (const f of files) {
     const abs = join(INPUT_DIR, f);
@@ -24,6 +42,7 @@ export async function generateAll() {
     else if (ext === '.json') lang = 'json';
     else if (ext === '.sh') lang = 'bash';
     else if (ext === '.md') lang = 'markdown';
+    else if (ext === '.csv') lang = 'csv';
     else if (ext === '.js' || ext === '.mjs' || ext === '.cjs') lang = 'javascript';
     // ANSI output
     try {

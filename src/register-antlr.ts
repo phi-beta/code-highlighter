@@ -116,7 +116,51 @@ function mapSymbolicToType(symbolic: string): string | undefined {
   if (raw === 'ELEMENT') return 'identifier';
   if (raw === 'LPAREN') return 'punctuation';
   if (raw === 'RPAREN') return 'punctuation';
+  // HTML token mappings
+  if (raw === 'HTML_COMMENT') return 'comment';
+  if (raw === 'DOCTYPE') return 'keyword';
+  if (raw === 'TAG_NAME') return 'keyword';  // Make tag names prominent like keywords
+  if (raw === 'CLOSING_TAG') return 'keyword';  // Closing tags same as opening tags
+  if (raw === 'ATTRIBUTE_PATTERN') return 'property';  // Attribute name=value pairs
+  if (raw === 'DOUBLE_QUOTED_STRING') return 'string';
+  if (raw === 'SINGLE_QUOTED_STRING') return 'string';
+  if (raw === 'STYLE_CONTENT') return 'string';
+  if (raw === 'JS_KEYWORD') return 'keyword';  // JavaScript keywords
+  if (raw === 'CSS_SELECTOR') return 'function';  // CSS class/id selectors
+  if (raw === 'CSS_PROPERTY') return 'property';  // CSS property: value pairs
+  if (raw === 'HTML_ENTITY') return 'string';
+  if (raw === 'TEXT_CONTENT') return 'text';  // Change from identifier to text for better contrast
+  if (raw === 'LT') return 'punctuation';
+  if (raw === 'GT') return 'punctuation';
+  if (raw === 'SLASH') return 'punctuation';
+  if (raw === 'EQUALS') return 'punctuation';
+  if (raw === 'NEWLINE') return 'whitespace';
+  if (raw === 'WHITESPACE') return 'whitespace';
   return undefined;
+}
+
+/**
+ * Post-process HTML tokens to fix opening tag recognition.
+ * Converts 'identifier' tokens to 'keyword' when they appear in tag contexts.
+ */
+function postProcessHtmlTokens(tokens: { type: string; value: string }[]): { type: string; value: string }[] {
+  const result = [...tokens];
+  
+  for (let i = 0; i < result.length; i++) {
+    const token = result[i];
+    const prevToken = i > 0 ? result[i - 1] : null;
+    
+    // If this is an identifier token that follows a '<' punctuation, 
+    // it's likely an opening tag name that should be a keyword
+    if (token.type === 'identifier' && 
+        prevToken && 
+        prevToken.type === 'punctuation' && 
+        prevToken.value === '<') {
+      result[i] = { ...token, type: 'keyword' };
+    }
+  }
+  
+  return result;
 }
 
 export interface AutoRegisterOptions {
@@ -169,7 +213,7 @@ export async function registerGeneratedAntlrLanguages(opts: AutoRegisterOptions 
   const prioritizedFiles = Array.from(filesMap.values());
   
   // Classify candidates - for parser grammars, we want *Lexer.ts files
-  const stubLexerFiles = new Set(prioritizedFiles.filter(f => /Lexer\.(js|ts)$/.test(f) && /(Bash|CSS|JavaScript|Json|Markdown|Python|TypeScript)MiniLexer/.test(f)));
+  const stubLexerFiles = new Set(prioritizedFiles.filter(f => /Lexer\.(js|ts)$/.test(f) && /(Bash|CSS|CSV|Html|JavaScript|Json|Markdown|Python|TypeScript)MiniLexer/.test(f)));
   const realGeneratedFiles = new Set(prioritizedFiles.filter(f => /Mini\.(js|ts)$/.test(f) && !/Lexer\.(js|ts)$/.test(f)));
   // For parser grammars, also include the generated lexer files
   const parserLexerFiles = new Set(prioritizedFiles.filter(f => /MiniLexer\.(js|ts)$/.test(f)));
@@ -186,7 +230,7 @@ export async function registerGeneratedAntlrLanguages(opts: AutoRegisterOptions 
   const files = [ ...Array.from(parserLexerFiles).sort(), ...Array.from(realGeneratedFiles).sort(), ...Array.from(stubLexerFiles).sort() ];
   if (opts.verbose) console.log('[register-antlr] Found lexer candidates:', files);
   for (const file of files) {
-    const isStub = /Lexer\.(js|ts)$/.test(file) && !/(Bash|CSS|JavaScript|Json|Markdown|Python)MiniLexer/.test(file);
+    const isStub = /Lexer\.(js|ts)$/.test(file) && !/(Bash|CSS|CSV|Html|JavaScript|Json|Markdown|Python|TypeScript)MiniLexer/.test(file);
     const isParserLexer = /MiniLexer\.(js|ts)$/.test(file);
     let langBase: string;
     
@@ -239,6 +283,17 @@ export async function registerGeneratedAntlrLanguages(opts: AutoRegisterOptions 
         tokenMap,
         defaultType: 'identifier'
       });
+      
+      // Special post-processing for HTML to fix opening tag recognition
+      if (langName === 'html') {
+        const { registerLanguage } = await import('./index.js');
+        const { tokenizeWithAntlr } = await import('./adapters/antlr.js');
+        registerLanguage('html', (code: string) => {
+          const rawTokens = tokenizeWithAntlr(createLexer, code, { tokenMap, defaultType: 'identifier' });
+          return postProcessHtmlTokens(rawTokens);
+        });
+      }
+      
       if (langName === 'javascript') await registerAntlrLanguage({ name: 'js', createLexer, tokenMap });
       if (langName === 'python') await registerAntlrLanguage({ name: 'py', createLexer, tokenMap });
       if (langName === 'bash') await registerAntlrLanguage({ name: 'sh', createLexer, tokenMap });

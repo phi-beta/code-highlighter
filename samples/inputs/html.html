@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample HTML Document</title>
+    <style>
+        .highlight { color: #ff6b6b; }
+        #main { background: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <!-- Main content area -->
+    <header class="top-nav" id="header">
+        <h1>Welcome to My Site</h1>
+        <nav>
+            <ul>
+                <li><a href="#home" data-active="true">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main id="main">
+        <section class="intro">
+            <h2>Introduction</h2>
+            <p>This is a <strong>sample HTML</strong> document with various elements.</p>
+            <p>It includes <em>emphasis</em>, <code>inline code</code>, and more.</p>
+        </section>
+        
+        <section class="features">
+            <h3>Features</h3>
+            <ul>
+                <li>HTML5 semantic elements</li>
+                <li>CSS styling</li>
+                <li>JavaScript interactions</li>
+            </ul>
+            
+            <div class="demo-box" data-count="42">
+                <input type="text" placeholder="Enter your name" required>
+                <button onclick="alert('Hello!')">Click Me</button>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 My Website. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Simple JavaScript example
+        const button = document.querySelector('button');
+        button.addEventListener('click', () => {
+            console.log('Button clicked!');
+        });
+    </script>
+</body>
+</html>

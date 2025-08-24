@@ -22,3 +22,12 @@
   - CLI executed successfully producing sample.html.
 - [x] Ensure Documentation is Complete
   - README present; instructions reflect current functionality.
+  - Added comprehensive implementation guides (`docs/IMPLEMENTATION_GUIDE.md`, `docs/QUICK_REFERENCE.md`) with templates and lessons learned from CSS implementation.
+  - Created copy-paste templates for new language implementation to prevent common pitfalls.
+  
+## Implementation Notes for Future Languages
+- **CRITICAL**: Always separate bracket tokens from composite tokens (e.g., don't include '(' in FUNCTION tokens)
+- Use `docs/IMPLEMENTATION_GUIDE.md` for step-by-step language implementation
+- Test bracket matching FIRST before adding complexity
+- Copy templates from `docs/templates/` for new languages
+- Estimated implementation time with guides: 1-2 hours (vs 8+ hours without)
