@@ -1,10 +1,112 @@
 {
-  "name": "example",
-  "version": 1,
-  "active": true,
-  "nested": {
-    "items": [1, 2, 3],
-    "note": null,
-    "flags": { "alpha": false, "beta": true }
+  "name": "comprehensive-json-example",
+  "version": "1.2.3",
+  "description": "A comprehensive JSON file showcasing all data types and structures",
+  "author": {
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "website": "https://johndoe.dev"
+  },
+  "config": {
+    "debug": true,
+    "production": false,
+    "environment": "development",
+    "port": 3000,
+    "timeout": 30.5,
+    "retries": 3,
+    "api_key": null,
+    "features": {
+      "authentication": true,
+      "caching": false,
+      "logging": true,
+      "metrics": null
+    }
+  },
+  "dependencies": [
+    {
+      "name": "express",
+      "version": "4.18.2",
+      "required": true,
+      "dev_only": false
+    },
+    {
+      "name": "jest",
+      "version": "29.0.0",
+      "required": false,
+      "dev_only": true
+    },
+    {
+      "name": "typescript",
+      "version": "4.9.5",
+      "required": true,
+      "dev_only": false
+    }
+  ],
+  "scripts": [
+    "npm install",
+    "npm run build",
+    "npm test",
+    "npm start"
+  ],
+  "numbers": {
+    "integer": 42,
+    "negative": -17,
+    "float": 3.14159,
+    "scientific": 2.5e10,
+    "large": 1000000,
+    "zero": 0
+  },
+  "boolean_values": {
+    "enabled": true,
+    "disabled": false,
+    "debug_mode": true,
+    "production_ready": false
+  },
+  "null_values": {
+    "optional_field": null,
+    "unset_value": null,
+    "placeholder": null
+  },
+  "arrays": {
+    "empty": [],
+    "numbers": [1, 2, 3, 4, 5],
+    "strings": ["apple", "banana", "cherry"],
+    "mixed": [1, "two", true, null, {"nested": "object"}],
+    "nested_arrays": [[1, 2], [3, 4], [5, 6]]
+  },
+  "unicode": {
+    "emoji": "🚀 🎉 ✨",
+    "international": "café naïve résumé",
+    "symbols": "© ® ™ € £ ¥"
+  },
+  "escape_sequences": {
+    "quotes": "He said \"Hello, World!\"",
+    "backslash": "File path: C:\\Users\\Name\\Documents",
+    "newline": "Line 1\nLine 2\nLine 3",
+    "tab": "Column 1\tColumn 2\tColumn 3",
+    "unicode": "Unicode: \u0048\u0065\u006C\u006C\u006F"
+  },
+  "deeply_nested": {
+    "level1": {
+      "level2": {
+        "level3": {
+          "level4": {
+            "level5": {
+              "data": "Deep nesting example",
+              "value": 12345,
+              "active": true
+            }
+          }
+        }
+      }
+    }
+  },
+  "metadata": {
+    "created_at": "2025-01-15T10:30:00Z",
+    "updated_at": "2025-01-15T15:45:30Z",
+    "schema_version": "2.1.0",
+    "checksum": "a1b2c3d4e5f6",
+    "file_size_bytes": 2048,
+    "compression_ratio": 0.75
   }
 }

@@ -59,6 +59,18 @@ function mapSymbolicToType(symbolic: string): string | undefined {
   if (raw === 'INLINE_CODE') return 'md-raw-inline-code';
   if (raw === 'CODE_FENCE') return 'md-raw-code-fence';
   if (raw === 'LINK') return 'md-raw-link';
+  // Bash shell token mappings
+  if (raw === 'ARITHMETIC_EXPANSION') return 'arithmetic-expansion';
+  if (raw === 'COMMAND_SUBSTITUTION') return 'command-substitution';
+  if (raw === 'COMMAND_SUBSTITUTION_BACKTICK') return 'command-substitution';
+  if (raw === 'PARAMETER_EXPANSION') return 'parameter-expansion';
+  if (raw === 'VAR_POSITIONAL') return 'variable';
+  if (raw === 'VAR_SPECIAL') return 'variable';
+  if (raw === 'TEST_OP') return 'operator';
+  if (raw === 'REDIRECT') return 'operator';
+  if (raw === 'PIPE') return 'operator';
+  if (raw === 'LOGICAL') return 'operator';
+  // General fallback patterns
   if (s === 'comment') return 'comment';
   if (s === 'ws' || s === 'whitespace') return 'whitespace';
   if (/identifier|id|name/.test(s)) return 'identifier';

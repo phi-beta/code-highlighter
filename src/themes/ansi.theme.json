@@ -35,4 +35,9 @@
   ,"footnote": { "color": "\u001b[35m" }
   ,"table": { "color": "\u001b[37m" }
   ,"line-break": { "color": "\u001b[90m" }
+  ,"arithmetic-expansion": { "color": "\u001b[33m", "fontStyle": "bold" }
+  ,"command-substitution": { "color": "\u001b[32m", "fontStyle": "bold" }
+  ,"parameter-expansion": { "color": "\u001b[35m", "fontStyle": "bold" }
+  ,"variable": { "color": "\u001b[35m" }
+  ,"operator": { "color": "\u001b[31m" }
 }
