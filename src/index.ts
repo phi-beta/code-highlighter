@@ -11,6 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { getDirname } from './utils/dirname.js';
 import { getAssetPath } from './utils/assets.js';
 import { ANSI_DEFAULT_CONFIG, HTML_DEFAULT_CONFIG, HTML_THEME, ANSI_THEME } from './config/embedded.js';
+import { isHexColor, createColorTokenHtml, hexToClosestAnsi } from './utils/color-utils.js';
 
 // Use embedded configuration for standalone executables, fallback to files for development
 let ansiDefault: any, htmlDefault: any, htmlTheme: any, ansiTheme: any;
@@ -176,6 +177,17 @@ function ensureBuiltInHandlers() {
     render(tokens, theme) {
       return tokens.map(t => {
         if (t.type === 'whitespace') return t.value;
+        
+        // Special handling for color tokens (hex colors)
+        if (t.type === 'color') {
+          if (isHexColor(t.value)) {
+            // Use closest ANSI color for hex values
+            const ansiColor = hexToClosestAnsi(t.value);
+            const style = { ...theme[t.type], color: ansiColor };
+            return applyAnsi(style, t.value);
+          }
+        }
+        
         const style = theme[t.type] || {};
         return applyAnsi(style, t.value);
       }).join('');
@@ -195,6 +207,15 @@ function ensureBuiltInHandlers() {
         if (style.fontStyle === 'italic') css.push('font-style:italic');
         if (style.fontStyle === 'underline') css.push('text-decoration:underline');
         if (style.fontStyle === 'dim') css.push('opacity:0.75');
+        
+        // Special handling for color tokens (hex colors)
+        if (t.type === 'color') {
+          if (isHexColor(t.value)) {
+            const colorStyles = createColorTokenHtml(t.value, css);
+            return `<span class=\"tok-${t.type}\" style=\"${colorStyles}\">${escapeHtml(t.value)}</span>`;
+          }
+        }
+        
         return `<span class=\"tok-${t.type}\" style=\"${css.join(';')}\">${escapeHtml(t.value)}</span>`;
       }).join('');
       const block = config.block !== false; // default true

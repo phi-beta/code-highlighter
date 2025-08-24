@@ -4,8 +4,16 @@ lexer grammar TypeScriptMini;
 
 // --- Lexer Rules (UPPERCASE) - Order matters! More specific patterns first ---
 
+// === CRITICAL: Universal bracket tokens (NEVER include in composite tokens) ===
+LPAREN: '(';
+RPAREN: ')';
+LBRACE: '{';
+RBRACE: '}';
+LBRACKET: '[';
+RBRACKET: ']';
+
 // Decorators must come first to handle @ symbol
-DECORATOR: '@' [A-Za-z_$] [A-Za-z0-9_$]* ('(' [^)]* ')')? ;
+DECORATOR: '@' [A-Za-z_$] [A-Za-z0-9_$]* ;
 
 // Comments first - both single and multi-line
 COMMENT_SINGLE: '//' ~[\r\n]* ;
@@ -31,8 +39,8 @@ NUMBER:
 // Regular expressions
 REGEX: '/' ( '\\' . | ~[\\/\r\n] )+ '/' [gimuy]* ;
 
-// Type annotations and generics
-TYPE_ANNOTATION: ':' [ \t]* ~[;,)}\r\n]+ ;
+// Type annotations and generics  
+TYPE_ANNOTATION: ':' [ \t]* ~[;,)}[{\r\n]+ ;
 GENERIC_TYPE: '<' ( ~[<>] | '<' ~[<>]* '>' )* '>' ;
 
 // Operators and punctuation - TypeScript-specific operators
@@ -40,7 +48,7 @@ OPERATOR_TS: '?.' | '??' | '??=' | '||=' | '&&=' | '=>' | '...' | '?:' | '!' | '
 OPERATOR: '+=' | '-=' | '*=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>=' | '>>>=' | '==' | '!=' | '===' | '!==' | '<=' | '>=' | '<<' | '>>' | '>>>' | '&&' | '||' | '++' | '--' | '+' | '-' | '*' | '/' | '%' | '&' | '|' | '^' | '~' | '<' | '>' | '=' ;
 
 // Punctuation
-PUNCTUATION: '{' | '}' | '(' | ')' | '[' | ']' | ';' | ',' | '.' | ':' ;
+PUNCTUATION: ';' | ',' | '.' | ':' ;
 
 // Identifiers - variables, functions, types (must come after keywords)
 IDENTIFIER: [A-Za-z_$] [A-Za-z0-9_$]* ;

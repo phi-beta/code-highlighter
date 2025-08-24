@@ -24,14 +24,6 @@ DOCTYPE: '<!DOCTYPE' [ \t\r\n]+ [a-zA-Z]+ [ \t\r\n]* '>';
 DOUBLE_QUOTED_STRING: '"' (~["\r\n] | '\\"')* '"';
 SINGLE_QUOTED_STRING: '\'' (~['\r\n] | '\\\'')* '\'';
 
-// === CSS in style blocks ===
-// Note: This is simplified - in a real implementation, you'd switch to CSS lexer mode
-STYLE_CONTENT: '{' .*? '}';
-
-// === JavaScript keywords in script blocks ===
-// Note: This is simplified - in a real implementation, you'd switch to JS lexer mode  
-JS_KEYWORD: 'function' | 'const' | 'let' | 'var' | 'if' | 'else' | 'for' | 'while' | 'document' | 'console' | 'alert';
-
 // === HTML Entities ===
 HTML_ENTITY: '&' [a-zA-Z][a-zA-Z0-9]* ';' | '&#' [0-9]+ ';' | '&#x' [0-9a-fA-F]+ ';';
 

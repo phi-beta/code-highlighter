@@ -124,8 +124,6 @@ function mapSymbolicToType(symbolic: string): string | undefined {
   if (raw === 'ATTRIBUTE_PATTERN') return 'property';  // Attribute name=value pairs
   if (raw === 'DOUBLE_QUOTED_STRING') return 'string';
   if (raw === 'SINGLE_QUOTED_STRING') return 'string';
-  if (raw === 'STYLE_CONTENT') return 'string';
-  if (raw === 'JS_KEYWORD') return 'keyword';  // JavaScript keywords
   if (raw === 'CSS_SELECTOR') return 'function';  // CSS class/id selectors
   if (raw === 'CSS_PROPERTY') return 'property';  // CSS property: value pairs
   if (raw === 'HTML_ENTITY') return 'string';
@@ -286,11 +284,28 @@ export async function registerGeneratedAntlrLanguages(opts: AutoRegisterOptions 
       
       // Special post-processing for HTML to fix opening tag recognition
       if (langName === 'html') {
-        const { registerLanguage } = await import('./index.js');
+        const { registerLanguage, getLanguage } = await import('./index.js');
         const { tokenizeWithAntlr } = await import('./adapters/antlr.js');
-        registerLanguage('html', (code: string) => {
+        const { createDelegatingHtmlTokenizer } = await import('./utils/html-delegation.js');
+        
+        // Create the base HTML tokenizer
+        const baseHtmlTokenizer = (code: string) => {
           const rawTokens = tokenizeWithAntlr(createLexer, code, { tokenMap, defaultType: 'identifier' });
           return postProcessHtmlTokens(rawTokens);
+        };
+        
+        // Register HTML with delegation to CSS/JS tokenizers
+        registerLanguage('html', (code: string) => {
+          const cssTokenizer = getLanguage('css');
+          const jsTokenizer = getLanguage('javascript');
+          
+          const delegatingTokenizer = createDelegatingHtmlTokenizer(
+            baseHtmlTokenizer,
+            cssTokenizer,
+            jsTokenizer
+          );
+          
+          return delegatingTokenizer(code);
         });
       }
       

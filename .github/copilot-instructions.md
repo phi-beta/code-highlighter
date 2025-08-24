@@ -31,3 +31,11 @@
 - Test bracket matching FIRST before adding complexity
 - Copy templates from `docs/templates/` for new languages
 - Estimated implementation time with guides: 1-2 hours (vs 8+ hours without)
+
+## Advanced Features Implementation Notes
+- **Color Rendering**: Successfully implemented hex color visualization in HTML (actual background colors with contrast-optimized text) and ANSI (closest color mapping via Euclidean distance algorithm)
+- **Output Handler Enhancement**: Use proper TypeScript imports (not require()) when adding special token handling in output handlers
+- **Token Type Specialization**: The `tok-color` token type can be enhanced with visual rendering without breaking existing theme compatibility
+- **Multi-Pass Tokenization**: HTML delegation to CSS/JavaScript tokenizers provides dramatically superior highlighting compared to monolithic approaches
+- **Performance**: Color utilities should be imported once at module level rather than required per token for optimal performance
+- **Type Annotation Conflicts**: When using universal bracket tokens, ensure TYPE_ANNOTATION patterns exclude brackets [{}] to prevent lexer conflicts and bracket mismatch issues
