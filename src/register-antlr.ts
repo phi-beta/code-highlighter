@@ -74,6 +74,27 @@ function mapSymbolicToType(symbolic: string): string | undefined {
   if (s === 'comment') return 'comment';
   if (s === 'ws' || s === 'whitespace') return 'whitespace';
   if (/identifier|id|name/.test(s)) return 'identifier';
+  // Python token mappings
+  if (raw === 'BOOLEAN') return 'keyword';
+  if (raw === 'NONE') return 'keyword';
+  if (raw === 'F_STRING') return 'string';
+  if (raw === 'RAW_STRING') return 'string';
+  if (raw === 'TRIPLE_STRING') return 'string';
+  if (raw === 'STRING_DOUBLE') return 'string';
+  if (raw === 'STRING_SINGLE') return 'string';
+  if (raw === 'HEX_NUMBER') return 'number';
+  if (raw === 'BIN_NUMBER') return 'number';
+  if (raw === 'OCT_NUMBER') return 'number';
+  if (raw === 'FLOAT_NUMBER') return 'number';
+  if (raw === 'INT_NUMBER') return 'number';
+  if (raw === 'OPERATOR') return 'operator';
+  if (raw === 'DECORATOR') return 'decorator';
+  // TypeScript token mappings
+  if (raw === 'TYPE_ANNOTATION') return 'type';
+  if (raw === 'GENERIC_TYPE') return 'type';
+  if (raw === 'STRING_TEMPLATE') return 'string';
+  if (raw === 'OPERATOR_TS') return 'operator';
+  if (raw === 'REGEX') return 'string';
   return undefined;
 }
 
@@ -99,7 +120,7 @@ export async function registerGeneratedAntlrLanguages(opts: AutoRegisterOptions 
   // Accept either .js (built) or .ts (stub/ts-node) files
   const all = fs.readdirSync(baseDir).filter(f => /\.(js|ts)$/.test(f) && !/\.d\.ts$/.test(f));
   // Classify candidates - for parser grammars, we want *Lexer.ts files
-  const stubLexerFiles = new Set(all.filter(f => /Lexer\.(js|ts)$/.test(f) && /(Bash|JavaScript|Json|Markdown|Python)MiniLexer/.test(f)));
+  const stubLexerFiles = new Set(all.filter(f => /Lexer\.(js|ts)$/.test(f) && /(Bash|JavaScript|Json|Markdown|Python|TypeScript)MiniLexer/.test(f)));
   const realGeneratedFiles = new Set(all.filter(f => /Mini\.(js|ts)$/.test(f) && !/Lexer\.(js|ts)$/.test(f)));
   // For parser grammars, also include the generated lexer files
   const parserLexerFiles = new Set(all.filter(f => /MiniLexer\.(js|ts)$/.test(f)));
@@ -173,6 +194,7 @@ export async function registerGeneratedAntlrLanguages(opts: AutoRegisterOptions 
       if (langName === 'python') await registerAntlrLanguage({ name: 'py', createLexer, tokenMap });
       if (langName === 'bash') await registerAntlrLanguage({ name: 'sh', createLexer, tokenMap });
       if (langName === 'markdown') await registerAntlrLanguage({ name: 'md', createLexer, tokenMap });
+      if (langName === 'typescript') await registerAntlrLanguage({ name: 'ts', createLexer, tokenMap });
   if (opts.verbose) console.log(`[register-antlr] Registered ${langName}`);
     } catch (e) {
       if (opts.verbose) console.warn('[register-antlr] Failed for', file, e);

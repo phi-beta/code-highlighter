@@ -40,4 +40,6 @@
   ,"parameter-expansion": { "color": "\u001b[35m", "fontStyle": "bold" }
   ,"variable": { "color": "\u001b[35m" }
   ,"operator": { "color": "\u001b[31m" }
+  ,"decorator": { "color": "\u001b[35m", "fontStyle": "bold" }
+  ,"type": { "color": "\u001b[34m", "fontStyle": "italic" }
 }

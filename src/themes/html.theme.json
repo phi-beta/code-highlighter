@@ -35,9 +35,11 @@
   ,"footnote": { "color": "#6f42c1" }
   ,"table": { "color": "#24292e" }
   ,"line-break": { "backgroundColor": "#f6f8fa" }
-  ,"arithmetic-expansion": { "color": "#e36209", "fontStyle": "bold" }
   ,"command-substitution": { "color": "#22863a", "fontStyle": "bold" }
   ,"parameter-expansion": { "color": "#6f42c1", "fontStyle": "bold" }
   ,"variable": { "color": "#6f42c1" }
   ,"operator": { "color": "#d73a49" }
+  ,"decorator": { "color": "#6f42c1", "fontStyle": "bold" }
+  ,"arithmetic-expansion": { "color": "#6f42c1", "fontStyle": "bold" }
+  ,"type": { "color": "#005cc5", "fontStyle": "italic" }
 }

@@ -25,10 +25,33 @@ raw_string = r"Raw string with \n literal backslashes"
 triple_string = '''Triple quoted
 multi-line string'''
 
-# Numbers (int, float)
+# Numbers (int, float, scientific, hex, binary, octal)
 integer_num = 42
 float_num = 3.14159
 scientific = 2.5e10
+scientific_negative = 1.5e-5
+hex_number = 0xFF
+binary_number = 0b1010
+octal_number = 0o755
+
+# Decorators
+@property
+def area(self):
+    return self._area
+
+@staticmethod
+def create_default():
+    return Animal("Unknown", "Unknown")
+
+# Async/await example  
+async def async_function():
+    import asyncio
+    await asyncio.sleep(1)
+    return "Async result"
+
+async def main():
+    result = await async_function()
+    print(f"Got: {result}")
 
 # Collections
 numbers = [1, 2, 3, 4, 5]

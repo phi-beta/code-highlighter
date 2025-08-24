@@ -61,6 +61,21 @@
         { "type": "punctuation", "regex": "[>*_\\-`#]" },
         { "type": "whitespace", "regex": "\\s+" }
       ]
+    },
+    {
+      "name": "typescript",
+      "aliases": ["ts"],
+      "patterns": [
+        { "type": "comment", "regex": "//.*?$|/\\*[\\s\\S]*?\\*/" },
+        { "type": "string", "regex": "\\`(?:\\\\.|[^\\`\\\\])*\\`|\"(?:\\\\.|[^\"\\\\])*\"|'(?:\\\\.|[^'\\\\])*'" },
+        { "type": "number", "regex": "\\b\\d+(?:\\.\\d+)?(?:[eE][+-]?\\d+)?\\b|0x[0-9a-fA-F]+\\b|0b[01]+\\b|0o[0-7]+\\b" },
+        { "type": "keyword", "regex": "\\b(?:abstract|any|as|asserts|async|await|boolean|break|case|catch|class|const|constructor|continue|debugger|declare|default|delete|do|else|enum|export|extends|false|finally|for|from|function|get|if|implements|import|in|infer|instanceof|interface|is|keyof|let|module|namespace|never|new|null|number|object|of|override|private|protected|public|readonly|return|set|static|string|super|switch|symbol|this|throw|true|try|type|typeof|undefined|union|unknown|var|void|while|with|yield)\\b" },
+        { "type": "type", "regex": ":[^;,)}\\r\\n]+" },
+        { "type": "decorator", "regex": "@[A-Za-z_$][A-Za-z0-9_$]*(?:\\([^)]*\\))?" },
+        { "type": "identifier", "regex": "[A-Za-z_$][A-Za-z0-9_$]*" },
+        { "type": "punctuation", "regex": "[{}()[\\].,;:+\\-*/%&|^!?=<>]|\\?\\.?|\\?\\?=?|\\|\\|=?|&&=?|=>|\\.\\.\\.|\\.\\.\\.?" },
+        { "type": "whitespace", "regex": "\\s+" }
+      ]
     }
   ]
 }
