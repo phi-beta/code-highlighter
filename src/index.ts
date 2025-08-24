@@ -8,12 +8,35 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { getDirname } from './utils/dirname.js';
+import { getAssetPath } from './utils/assets.js';
+import { ANSI_DEFAULT_CONFIG, HTML_DEFAULT_CONFIG, HTML_THEME, ANSI_THEME } from './config/embedded.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ansiDefault = JSON.parse(fs.readFileSync(path.join(__dirname, './handlers/ansi.config.json'), 'utf-8'));
-const htmlDefault = JSON.parse(fs.readFileSync(path.join(__dirname, './handlers/html.config.json'), 'utf-8'));
-const htmlTheme = JSON.parse(fs.readFileSync(path.join(__dirname, './themes/html.theme.json'), 'utf-8'));
-const ansiTheme = JSON.parse(fs.readFileSync(path.join(__dirname, './themes/ansi.theme.json'), 'utf-8'));
+// Use embedded configuration for standalone executables, fallback to files for development
+let ansiDefault: any, htmlDefault: any, htmlTheme: any, ansiTheme: any;
+
+try {
+  // Try to load from files first (for development/testing)
+  if ((process as any).pkg) {
+    // In pkg bundle, use embedded config
+    ansiDefault = ANSI_DEFAULT_CONFIG;
+    htmlDefault = HTML_DEFAULT_CONFIG;
+    htmlTheme = HTML_THEME;
+    ansiTheme = ANSI_THEME;
+  } else {
+    // Normal execution, try to load from files
+    ansiDefault = JSON.parse(fs.readFileSync(getAssetPath('./handlers/ansi.config.json'), 'utf-8'));
+    htmlDefault = JSON.parse(fs.readFileSync(getAssetPath('./handlers/html.config.json'), 'utf-8'));
+    htmlTheme = JSON.parse(fs.readFileSync(getAssetPath('./themes/html.theme.json'), 'utf-8'));
+    ansiTheme = JSON.parse(fs.readFileSync(getAssetPath('./themes/ansi.theme.json'), 'utf-8'));
+  }
+} catch (error) {
+  // Fallback to embedded config if files can't be loaded
+  ansiDefault = ANSI_DEFAULT_CONFIG;
+  htmlDefault = HTML_DEFAULT_CONFIG;
+  htmlTheme = HTML_THEME;
+  ansiTheme = ANSI_THEME;
+}
 // (File system utilities no longer needed here after removing regex grammar loader.)
 
 export interface Token {
@@ -22,6 +45,8 @@ export interface Token {
 }
 
 // Enhanced token with position information for JSON export
+// For complete type definitions, see: src/types/token-analysis.d.ts
+// For JSON schema validation, see: schemas/token-analysis.json
 export interface EnhancedToken extends Token {
   position: {
     start: number;

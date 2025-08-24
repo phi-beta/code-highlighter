@@ -1,0 +1,34 @@
+import { ATN } from "antlr4ts/atn/ATN";
+import { CharStream } from "antlr4ts/CharStream";
+import { Lexer } from "antlr4ts/Lexer";
+import { Vocabulary } from "antlr4ts/Vocabulary";
+export declare class JsonMini extends Lexer {
+    static readonly LCURLY = 1;
+    static readonly RCURLY = 2;
+    static readonly LBRACK = 3;
+    static readonly RBRACK = 4;
+    static readonly COLON = 5;
+    static readonly COMMA = 6;
+    static readonly TRUE = 7;
+    static readonly FALSE = 8;
+    static readonly NULL = 9;
+    static readonly NUMBER = 10;
+    static readonly STRING = 11;
+    static readonly WS = 12;
+    static readonly channelNames: string[];
+    static readonly modeNames: string[];
+    static readonly ruleNames: string[];
+    private static readonly _LITERAL_NAMES;
+    private static readonly _SYMBOLIC_NAMES;
+    static readonly VOCABULARY: Vocabulary;
+    get vocabulary(): Vocabulary;
+    constructor(input: CharStream);
+    get grammarFileName(): string;
+    get ruleNames(): string[];
+    get serializedATN(): string;
+    get channelNames(): string[];
+    get modeNames(): string[];
+    static readonly _serializedATN: string;
+    static __ATN: ATN;
+    static get _ATN(): ATN;
+}

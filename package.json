@@ -1,6 +1,6 @@
 {
   "name": "code-highlighter",
-  "version": "0.1.0",
+      "clean:artifacts": "rimraf dist dist-cjs bin node_modules/.vitest tsconfig.tsbuildinfo",  "clean:cache": "rimraf dist dist-cjs bin node_modules/.vitest","version": "0.1.0",
   "description": "Lightweight TypeScript syntax highlighting library + CLI (initial JS support) with HTML and ANSI output and theming.",
   "type": "module",
   "main": "dist/src/index.js",
@@ -23,11 +23,14 @@
     }
   },
   "scripts": {
-  "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json",
+    "build:executables": "npm run build && npm run build:cjs && npm run package:executables",
+    "build:cjs": "tsc -p tsconfig.cjs.json && cp -r src/handlers dist-cjs/src/ && cp -r src/themes dist-cjs/src/ && cp -r src/grammars dist-cjs/src/ && cp -r src/generated dist-cjs/src/ && cp src/cli-cjs.js dist-cjs/src/cli-cjs.cjs",
+    "package:executables": "pkg dist-cjs/src/cli-cjs.cjs --targets node18-linux-x64,node18-win-x64 --out-path bin && mv bin/cli-cjs-linux bin/code-highlight-linux && mv bin/cli-cjs-win.exe bin/code-highlight-win.exe",
   "generate:antlr": "antlr4ts -o src/generated/antlr src/grammars/antlr/*.g4 && node scripts/flatten-antlr.js",
   "setup:antlr": "node scripts/fetch-antlr.js",
   "generate:samples": "ts-node samples/generate-samples.ts",
-  "clean": "rimraf dist",
+  "clean": "rimraf dist dist-cjs bin",
   "clean:cache": "rimraf dist node_modules/.vitest",
   "clean:artifacts": "rimraf dist node_modules/.vitest tsconfig.tsbuildinfo",
   "test": "vitest run",
@@ -37,6 +40,16 @@
     "dev": "vitest",
     "prepare": "npm run build"
   },
+  "pkg": {
+    "assets": [
+      "dist-cjs/src/**/*.js",
+      "dist-cjs/src/**/*.json",
+      "dist-cjs/src/themes/**/*",
+      "dist-cjs/src/handlers/**/*",
+      "dist-cjs/src/grammars/**/*"
+    ],
+    "outputPath": "bin"
+  },
   "keywords": ["syntax", "highlight", "ansi", "html", "cli", "javascript", "typescript"],
   "author": "",
   "license": "MIT",
@@ -44,9 +57,10 @@
     "@types/node": "^20.11.30",
     "typescript": "^5.4.0",
     "vitest": "^1.6.0",
-  "rimraf": "^5.0.5",
-  "antlr4ts": "^0.5.0-alpha.4",
-  "antlr4ts-cli": "^0.5.0-alpha.4",
-  "ts-node": "^10.9.2"
+    "rimraf": "^5.0.5",
+    "antlr4ts": "^0.5.0-alpha.4",
+    "antlr4ts-cli": "^0.5.0-alpha.4",
+    "ts-node": "^10.9.2",
+    "pkg": "^5.8.1"
   }
 }

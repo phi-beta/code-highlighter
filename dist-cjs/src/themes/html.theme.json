@@ -1,0 +1,45 @@
+{
+  "keyword": { "color": "#d73a49", "fontStyle": "bold" },
+  "string": { "color": "#032f62" },
+  "number": { "color": "#005cc5" },
+  "punctuation": { "color": "#24292e" },
+  "comment": { "color": "#6a737d", "fontStyle": "italic" },
+  "identifier": { "color": "#24292e" },
+  "bracket-depth-0": { "color": "#d73a49" },
+  "bracket-depth-1": { "color": "#22863a" },
+  "bracket-depth-2": { "color": "#6f42c1" },
+  "bracket-depth-3": { "color": "#005cc5" },
+  "bracket-depth-4": { "color": "#e36209" },
+  "bracket-depth-5": { "color": "#0366d6" },
+  "bracket-unmatched": { "color": "#ff0000", "fontStyle": "bold" }
+  ,"property": { "color": "#6f42c1", "fontStyle": "bold" }
+  ,"heading": { "color": "#005cc5", "fontStyle": "bold" }
+  ,"strong": { "color": "#d73a49", "fontStyle": "bold" }
+  ,"emphasis": { "color": "#e36209", "fontStyle": "italic" }
+  ,"code-inline": { "color": "#6f42c1" }
+  ,"code-block": { "color": "#6f42c1" }
+  ,"link": { "color": "#22863a", "fontStyle": "underline" }
+  ,"image": { "color": "#22863a" }
+  ,"blockquote": { "color": "#6a737d", "fontStyle": "italic" }
+  ,"list-bullet": { "color": "#005cc5" }
+  ,"list-enum": { "color": "#005cc5" }
+  ,"rule": { "color": "#d73a49" }
+  ,"strike": { "color": "#6a737d" }
+  ,"code-fence-start": { "color": "#6f42c1" }
+  ,"code-fence-end": { "color": "#6f42c1" }
+  ,"code-fence-content": { "color": "#6f42c1" }
+  ,"task-list": { "color": "#005cc5", "fontStyle": "bold" }
+  ,"link-reference": { "color": "#22863a", "fontStyle": "underline" }
+  ,"link-definition": { "color": "#6a737d", "fontStyle": "italic" }
+  ,"autolink": { "color": "#0366d6", "fontStyle": "underline" }
+  ,"footnote": { "color": "#6f42c1" }
+  ,"table": { "color": "#24292e" }
+  ,"line-break": { "backgroundColor": "#f6f8fa" }
+  ,"command-substitution": { "color": "#22863a", "fontStyle": "bold" }
+  ,"parameter-expansion": { "color": "#6f42c1", "fontStyle": "bold" }
+  ,"variable": { "color": "#6f42c1" }
+  ,"operator": { "color": "#d73a49" }
+  ,"decorator": { "color": "#6f42c1", "fontStyle": "bold" }
+  ,"arithmetic-expansion": { "color": "#6f42c1", "fontStyle": "bold" }
+  ,"type": { "color": "#005cc5", "fontStyle": "italic" }
+}

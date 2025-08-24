@@ -1,0 +1,226 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/phi-beta/code-highlighter/schemas/token-analysis.json",
+  "title": "Code Highlighter Token Analysis",
+  "description": "Schema for the JSON export format of the code-highlighter token analysis",
+  "type": "object",
+  "required": ["metadata", "tokens", "statistics"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "description": "Information about the analysis context and configuration",
+      "required": ["language", "timestamp", "version", "inputSize"],
+      "properties": {
+        "language": {
+          "type": "string",
+          "description": "The programming language used for tokenization",
+          "examples": ["javascript", "typescript", "python", "bash", "markdown", "json"]
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp when the analysis was performed"
+        },
+        "version": {
+          "type": "string",
+          "description": "Version of the code-highlighter library used",
+          "pattern": "^\\d+\\.\\d+\\.\\d+.*$"
+        },
+        "inputSize": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Size of the input code in characters"
+        },
+        "outputFormat": {
+          "type": "string",
+          "enum": ["html", "ansi"],
+          "description": "The output format used for highlighting (if applicable)"
+        },
+        "theme": {
+          "type": "string",
+          "description": "Theme name or path used for highlighting (if applicable)"
+        }
+      },
+      "additionalProperties": false
+    },
+    "tokens": {
+      "type": "array",
+      "description": "Array of tokens with their types, values, and position information",
+      "items": {
+        "type": "object",
+        "required": ["type", "value", "position"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "The token type classification",
+            "examples": [
+              "keyword", "string", "number", "comment", "identifier", 
+              "operator", "punctuation", "whitespace", "bracket-depth-0",
+              "bracket-depth-1", "bracket-depth-2", "bracket-unmatched",
+              "function", "variable", "class", "type", "decorator",
+              "heading", "strong", "emphasis", "code-inline", "code-block",
+              "link", "image", "blockquote", "list-bullet", "list-enum"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "description": "The actual text content of the token"
+          },
+          "position": {
+            "type": "object",
+            "description": "Position information for the token within the source code",
+            "required": ["start", "end", "line", "column"],
+            "properties": {
+              "start": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Starting character index in the source code (0-based)"
+              },
+              "end": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Ending character index in the source code (0-based, exclusive)"
+              },
+              "line": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Line number where the token appears (1-based)"
+              },
+              "column": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Column number where the token starts (1-based)"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "statistics": {
+      "type": "object",
+      "description": "Statistical analysis of the tokenization results",
+      "required": ["totalTokens", "tokenTypes", "coverage"],
+      "properties": {
+        "totalTokens": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Total number of tokens found"
+        },
+        "tokenTypes": {
+          "type": "object",
+          "description": "Count of tokens by type",
+          "patternProperties": {
+            "^[a-zA-Z][a-zA-Z0-9\\-_]*$": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Number of tokens of this type"
+            }
+          },
+          "additionalProperties": false
+        },
+        "coverage": {
+          "type": "object",
+          "description": "Analysis coverage information",
+          "required": ["charactersAnalyzed", "percentage"],
+          "properties": {
+            "charactersAnalyzed": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Number of characters that were successfully tokenized"
+            },
+            "percentage": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "description": "Percentage of input characters that were tokenized"
+            }
+          },
+          "additionalProperties": false
+        },
+        "lineCount": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Total number of lines in the source code"
+        },
+        "averageTokensPerLine": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Average number of tokens per line"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "metadata": {
+        "language": "javascript",
+        "timestamp": "2025-08-24T15:30:45.123Z",
+        "version": "0.1.0",
+        "inputSize": 156,
+        "outputFormat": "html",
+        "theme": "default"
+      },
+      "tokens": [
+        {
+          "type": "keyword",
+          "value": "const",
+          "position": {
+            "start": 0,
+            "end": 5,
+            "line": 1,
+            "column": 1
+          }
+        },
+        {
+          "type": "identifier",
+          "value": "greeting",
+          "position": {
+            "start": 6,
+            "end": 14,
+            "line": 1,
+            "column": 7
+          }
+        },
+        {
+          "type": "operator",
+          "value": "=",
+          "position": {
+            "start": 15,
+            "end": 16,
+            "line": 1,
+            "column": 16
+          }
+        },
+        {
+          "type": "string",
+          "value": "\"Hello, World!\"",
+          "position": {
+            "start": 17,
+            "end": 32,
+            "line": 1,
+            "column": 18
+          }
+        }
+      ],
+      "statistics": {
+        "totalTokens": 4,
+        "tokenTypes": {
+          "keyword": 1,
+          "identifier": 1,
+          "operator": 1,
+          "string": 1
+        },
+        "coverage": {
+          "charactersAnalyzed": 32,
+          "percentage": 100.0
+        },
+        "lineCount": 1,
+        "averageTokensPerLine": 4.0
+      }
+    }
+  ]
+}

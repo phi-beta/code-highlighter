@@ -8,6 +8,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import { CharStreams } from 'antlr4ts';
+import { getDirname } from './utils/dirname.js';
+import { getAssetPath } from './utils/assets.js';
 import { registerAntlrLanguage } from './adapters/antlr.js';
 
 // Basic heuristic mapping from token symbolic names to highlight categories.
@@ -108,8 +110,16 @@ export interface AutoRegisterOptions {
 }
 
 export async function registerGeneratedAntlrLanguages(opts: AutoRegisterOptions = {}) {
-  const here = path.dirname(fileURLToPath(import.meta.url));
-  let baseDir = opts.dir || path.join(here, 'generated', 'antlr');
+  // Use asset-aware path resolution
+  let baseDir = opts.dir || getAssetPath('generated/antlr');
+  
+  // In pkg, also try the snapshot path directly
+  if ((process as any).pkg && !opts.dir) {
+    const pkgPath = `/snapshot/${path.basename(process.execPath, path.extname(process.execPath))}/dist-cjs/src/generated/antlr`;
+    if (fs.existsSync(pkgPath)) {
+      baseDir = pkgPath;
+    }
+  }
   // If antlr4ts CLI nested structure is present, descend into it
   const nested = path.join(baseDir, 'src', 'grammars', 'antlr');
   if (fs.existsSync(nested)) baseDir = nested;

@@ -126,6 +126,92 @@ const md = highlight('const x=1;', { output: 'markdown', language: 'javascript',
 ```
 You can integrate ANTLR grammars (using `antlr4ts`) for precise lexing/parsing.
 
+## JSON Export & Token Analysis
+
+The library provides comprehensive JSON export functionality for token analysis, debugging, and integration with other tools.
+
+### Basic JSON Export
+```ts
+import { exportTokensAsJson } from 'code-highlighter';
+
+const code = 'const greeting = "Hello, World!";';
+const jsonOutput = exportTokensAsJson(code, 'javascript');
+console.log(jsonOutput); // Pretty-printed JSON string
+
+// For compact output
+const compactJson = exportTokensAsJson(code, 'javascript', { compact: true });
+```
+
+### Programmatic Token Analysis
+```ts
+import { exportTokens } from 'code-highlighter';
+
+const analysis = exportTokens(code, 'javascript');
+// Returns TokenAnalysis object with metadata, tokens, and statistics
+```
+
+### CLI JSON Export
+```bash
+# Export to JSON file
+code-highlight --lang javascript --export-json input.js > analysis.json
+
+# Compact JSON output
+code-highlight --lang javascript --export-json --compact input.js
+
+# Combine with highlighting
+code-highlight --lang javascript --export-json --html input.js > output.html
+```
+
+### JSON Schema & TypeScript Types
+
+The JSON export format follows a well-defined schema:
+
+- **Schema**: `schemas/token-analysis.json` - JSON Schema for validation
+- **Types**: `src/types/token-analysis.d.ts` - TypeScript type definitions
+
+### JSON Output Structure
+
+```ts
+interface TokenAnalysis {
+  metadata: {
+    language: string;           // e.g., "javascript"
+    timestamp: string;          // ISO 8601 timestamp
+    version: string;            // Library version
+    inputSize: number;          // Character count
+    outputFormat?: string;      // "html" | "ansi"
+    theme?: string;             // Theme name/path
+  };
+  tokens: Array<{
+    type: string;               // Token type (e.g., "keyword", "string")
+    value: string;              // Actual token text
+    position: {
+      start: number;            // Start character index (0-based)
+      end: number;              // End character index (0-based)
+      line: number;             // Line number (1-based)
+      column: number;           // Column number (1-based)
+    };
+  }>;
+  statistics: {
+    totalTokens: number;        // Total token count
+    tokenTypes: Record<string, number>; // Count by token type
+    coverage: {
+      charactersAnalyzed: number;
+      percentage: number;       // Coverage percentage
+    };
+    lineCount?: number;         // Total lines
+    averageTokensPerLine?: number;
+  };
+}
+```
+
+### Use Cases
+
+- **Debugging**: Analyze tokenization accuracy and coverage
+- **Integration**: Feed token data to other syntax highlighting systems
+- **Analysis**: Study code structure and token distribution
+- **Testing**: Validate grammar rules and token mappings
+- **Tooling**: Build custom syntax analysis tools
+
 ### Ad‑hoc tokenizers
 For quick experiments you can still manually register a simple tokenizer instead of a grammar.
 
