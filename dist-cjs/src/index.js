@@ -23,6 +23,7 @@ exports.exportTokensAsJson = exportTokensAsJson;
 const node_fs_1 = __importDefault(require("node:fs"));
 const assets_js_1 = require("./utils/assets.js");
 const embedded_js_1 = require("./config/embedded.js");
+const color_utils_js_1 = require("./utils/color-utils.js");
 // Use embedded configuration for standalone executables, fallback to files for development
 let ansiDefault, htmlDefault, htmlTheme, ansiTheme;
 try {
@@ -125,6 +126,15 @@ function ensureBuiltInHandlers() {
             return tokens.map(t => {
                 if (t.type === 'whitespace')
                     return t.value;
+                // Special handling for color tokens (hex colors)
+                if (t.type === 'color') {
+                    if ((0, color_utils_js_1.isHexColor)(t.value)) {
+                        // Use closest ANSI color for hex values
+                        const ansiColor = (0, color_utils_js_1.hexToClosestAnsi)(t.value);
+                        const style = { ...theme[t.type], color: ansiColor };
+                        return applyAnsi(style, t.value);
+                    }
+                }
                 const style = theme[t.type] || {};
                 return applyAnsi(style, t.value);
             }).join('');
@@ -150,6 +160,13 @@ function ensureBuiltInHandlers() {
                     css.push('text-decoration:underline');
                 if (style.fontStyle === 'dim')
                     css.push('opacity:0.75');
+                // Special handling for color tokens (hex colors)
+                if (t.type === 'color') {
+                    if ((0, color_utils_js_1.isHexColor)(t.value)) {
+                        const colorStyles = (0, color_utils_js_1.createColorTokenHtml)(t.value, css);
+                        return `<span class=\"tok-${t.type}\" style=\"${colorStyles}\">${escapeHtml(t.value)}</span>`;
+                    }
+                }
                 return `<span class=\"tok-${t.type}\" style=\"${css.join(';')}\">${escapeHtml(t.value)}</span>`;
             }).join('');
             const block = config.block !== false; // default true

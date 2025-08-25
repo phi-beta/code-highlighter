@@ -1,0 +1,87 @@
+# YAML sample demonstrating various YAML features
+---
+# Document start marker
+
+# Basic key-value pairs
+name: "John Doe"
+age: 30
+active: true
+balance: 1234.56
+nullable: null
+
+# Sequences (arrays)
+fruits:
+  - apple
+  - banana
+  - "cherry pie"
+  - orange
+
+# Flow sequences
+colors: [red, green, blue]
+
+# Nested mappings
+address:
+  street: "123 Main St"
+  city: New York
+  zip: 10001
+  coordinates:
+    lat: 40.7128
+    lng: -74.0060
+
+# Flow mapping
+person: {name: Jane, age: 25, married: false}
+
+# Multi-line strings
+description: |
+  This is a multi-line string
+  with preserved line breaks
+  and indentation.
+
+folded_description: >
+  This is a folded string
+  that will be joined into
+  a single line with spaces.
+
+# Anchors and aliases
+defaults: &default_settings
+  timeout: 30
+  retries: 3
+  debug: false
+
+server1:
+  <<: *default_settings
+  host: server1.example.com
+  port: 8080
+
+server2:
+  <<: *default_settings
+  host: server2.example.com
+  port: 8081
+  debug: true  # Override default
+
+# Tags
+version: !!str 2.1
+timestamp: !!timestamp 2023-01-01T00:00:00Z
+
+# Special values
+positive_infinity: .inf
+negative_infinity: -.inf
+not_a_number: .nan
+
+# Boolean variations
+production: yes
+development: no
+testing: on
+maintenance: off
+
+...
+# Document end marker
+
+---
+# Second document
+title: "Another Document"
+items:
+  - id: 1
+    name: "Item One"
+  - id: 2
+    name: "Item Two"

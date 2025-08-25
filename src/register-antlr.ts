@@ -16,6 +16,8 @@ import { registerAntlrLanguage } from './adapters/antlr.js';
 function mapSymbolicToType(symbolic: string): string | undefined {
   const raw = symbolic;
   const s = symbolic.toLowerCase();
+  
+  // Markdown tokens
   // Direct exact name handling for stub & generated lexers
   if (s === 'keyword') return 'keyword';
   if (s === 'string') return 'string';
@@ -72,6 +74,18 @@ function mapSymbolicToType(symbolic: string): string | undefined {
   if (raw === 'REDIRECT') return 'operator';
   if (raw === 'PIPE') return 'operator';
   if (raw === 'LOGICAL') return 'operator';
+  
+  // XML token mappings (MUST come before general fallback patterns)
+  if (raw === 'XML_COMMENT') return 'comment';
+  if (raw === 'XML_DECLARATION') return 'keyword';
+  if (raw === 'PROCESSING_INSTRUCTION') return 'keyword';
+  if (raw === 'CDATA_SECTION') return 'string';
+  if (raw === 'XML_ENTITY') return 'string';
+  if (raw === 'ATTRIBUTE_NAME') return 'property';
+  if (raw === 'TAG_NAME') return 'keyword';  // For opening tag names
+  if (raw === 'NAMESPACE_PREFIX') return 'type';  // Use type for namespace prefixes
+  if (raw === 'QUESTION') return 'punctuation';
+  
   // General fallback patterns
   if (s === 'comment') return 'comment';
   if (s === 'ws' || s === 'whitespace') return 'whitespace';
@@ -119,7 +133,6 @@ function mapSymbolicToType(symbolic: string): string | undefined {
   // HTML token mappings
   if (raw === 'HTML_COMMENT') return 'comment';
   if (raw === 'DOCTYPE') return 'keyword';
-  if (raw === 'TAG_NAME') return 'keyword';  // Make tag names prominent like keywords
   if (raw === 'CLOSING_TAG') return 'keyword';  // Closing tags same as opening tags
   if (raw === 'ATTRIBUTE_PATTERN') return 'property';  // Attribute name=value pairs
   if (raw === 'DOUBLE_QUOTED_STRING') return 'string';
@@ -134,6 +147,38 @@ function mapSymbolicToType(symbolic: string): string | undefined {
   if (raw === 'EQUALS') return 'punctuation';
   if (raw === 'NEWLINE') return 'whitespace';
   if (raw === 'WHITESPACE') return 'whitespace';
+  
+  // CSV token mappings
+  if (raw === 'QUOTED_FIELD') return 'string';
+  if (raw === 'UNQUOTED_FIELD') return 'text';  
+  if (raw === 'BOOLEAN') return 'keyword';
+  if (raw === 'EMPTY_FIELD') return 'string';
+  if (raw === 'COMMA') return 'punctuation';
+  if (raw === 'SEMICOLON') return 'punctuation';
+  if (raw === 'TAB') return 'punctuation';
+  if (raw === 'PIPE') return 'punctuation';
+  
+  // YAML token mappings
+  if (raw === 'DOCUMENT_START') return 'keyword';
+  if (raw === 'DOCUMENT_END') return 'keyword';
+  if (raw === 'DOUBLE_QUOTED_STRING') return 'string';
+  if (raw === 'SINGLE_QUOTED_STRING') return 'string';
+  if (raw === 'YAML_NUMBER') return 'number';
+  if (raw === 'YAML_FLOAT') return 'number';
+  if (raw === 'YAML_SPECIAL_FLOAT') return 'number';
+  if (raw === 'YAML_BOOLEAN') return 'keyword';
+  if (raw === 'YAML_NULL') return 'keyword';
+  if (raw === 'ANCHOR') return 'type';  // & anchors as types
+  if (raw === 'ALIAS') return 'type';   // * aliases as types  
+  if (raw === 'TAG') return 'type'; // ! tags as type annotations
+  if (raw === 'PLAIN_SCALAR') return 'text';
+  if (raw === 'COLON') return 'punctuation';
+  if (raw === 'DASH') return 'punctuation';
+  if (raw === 'QUESTION') return 'punctuation';
+  if (raw === 'GT') return 'punctuation';
+  if (raw === 'AMPERSAND') return 'punctuation';
+  if (raw === 'ASTERISK') return 'punctuation';
+  
   return undefined;
 }
 
@@ -155,6 +200,87 @@ function postProcessHtmlTokens(tokens: { type: string; value: string }[]): { typ
         prevToken.type === 'punctuation' && 
         prevToken.value === '<') {
       result[i] = { ...token, type: 'keyword' };
+    }
+  }
+  
+  return result;
+}
+
+/**
+ * Post-process XML tokens to fix opening tag recognition and text content.
+ * - Converts 'property' tokens (ATTRIBUTE_NAME) to 'keyword' when they appear right after '<' (opening tag names)
+ * - Converts 'property' tokens (ATTRIBUTE_NAME) to 'text' when they appear between '>' and '<' (text content)
+ */
+function postProcessXmlTokens(tokens: { type: string; value: string }[]): { type: string; value: string }[] {
+  const result = [...tokens];
+  let insideTag = false;
+  
+  for (let i = 0; i < result.length; i++) {
+    const token = result[i];
+    const prevToken = i > 0 ? result[i - 1] : null;
+    
+    // Track whether we're inside a tag or in text content
+    if (token.type === 'punctuation') {
+      if (token.value === '<') {
+        insideTag = true;
+      } else if (token.value === '>') {
+        insideTag = false;
+      }
+    }
+    
+    // Handle property tokens (ATTRIBUTE_NAME) based on context
+    if (token.type === 'property') {
+      if (prevToken && 
+          prevToken.type === 'punctuation' && 
+          prevToken.value === '<') {
+        // This is an opening tag name - convert to keyword
+        result[i] = { ...token, type: 'keyword' };
+      } else if (!insideTag) {
+        // This is text content between tags - convert to text
+        result[i] = { ...token, type: 'text' };
+      }
+      // Otherwise, it's a real attribute name - keep as property
+    }
+  }
+  
+  return result;
+}
+
+/**
+ * Post-process YAML tokens to highlight keys differently from values.
+ * Converts 'text' tokens (PLAIN_SCALAR) to 'property' when they appear before ':' (YAML keys).
+ * Avoids converting timestamp components by detecting timestamp patterns.
+ */
+function postProcessYamlTokens(tokens: { type: string; value: string }[]): { type: string; value: string }[] {
+  const result = [...tokens];
+  
+  for (let i = 0; i < result.length; i++) {
+    const token = result[i];
+    const nextToken = i < result.length - 1 ? result[i + 1] : null;
+    const nextNextToken = i < result.length - 2 ? result[i + 2] : null;
+    
+    // If this is a text token (PLAIN_SCALAR) that is followed by a colon
+    if (token.type === 'text' && 
+        nextToken && 
+        nextToken.type === 'punctuation' && 
+        nextToken.value === ':') {
+      
+      // Check if this looks like a timestamp pattern to avoid false key detection
+      // Patterns like: "2023-01-01T00:00:00Z" or "HH:MM:SS"
+      const isTimestampComponent = 
+        // Check if token looks like a date/time component (ends with T + digits)
+        /\d{4}-\d{2}-\d{2}T\d{2}$/.test(token.value) ||
+        // Check if next token after colon is a number (time component)
+        (nextNextToken && nextNextToken.type === 'number' && /^\d{2}$/.test(nextNextToken.value)) ||
+        // Check if this token is just digits (time component) and preceded by another time component
+        (/^\d{2}$/.test(token.value) && i > 1 && 
+         result[i-1].type === 'punctuation' && result[i-1].value === ':' &&
+         result[i-2].type === 'number');
+      
+      if (!isTimestampComponent) {
+        // This is a real YAML key - convert to property
+        result[i] = { ...token, type: 'property' };
+      }
     }
   }
   
@@ -306,6 +432,30 @@ export async function registerGeneratedAntlrLanguages(opts: AutoRegisterOptions 
           );
           
           return delegatingTokenizer(code);
+        });
+      }
+      
+      // Special post-processing for XML to fix opening tag recognition
+      if (langName === 'xml') {
+        const { registerLanguage } = await import('./index.js');
+        const { tokenizeWithAntlr } = await import('./adapters/antlr.js');
+        
+        // Register XML with post-processing to fix opening tag recognition
+        registerLanguage('xml', (code: string) => {
+          const rawTokens = tokenizeWithAntlr(createLexer, code, { tokenMap, defaultType: 'identifier' });
+          return postProcessXmlTokens(rawTokens);
+        });
+      }
+      
+      // Special post-processing for YAML to highlight keys differently from values
+      if (langName === 'yaml') {
+        const { registerLanguage } = await import('./index.js');
+        const { tokenizeWithAntlr } = await import('./adapters/antlr.js');
+        
+        // Register YAML with post-processing to highlight keys as properties
+        registerLanguage('yaml', (code: string) => {
+          const rawTokens = tokenizeWithAntlr(createLexer, code, { tokenMap, defaultType: 'identifier' });
+          return postProcessYamlTokens(rawTokens);
         });
       }
       

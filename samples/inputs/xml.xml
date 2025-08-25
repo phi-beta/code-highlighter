@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE bookstore SYSTEM "bookstore.dtd">
+<!-- XML Sample for Testing Syntax Highlighting -->
+<bookstore xmlns="http://example.com/bookstore" xmlns:author="http://example.com/author">
+  
+  <!-- Book catalog with various XML features -->
+  <book id="1" category="fiction" available="true">
+    <title lang="en">The Great Adventure</title>
+    <author:name prefix="Dr.">John Smith</author:name>
+    <author:bio><![CDATA[
+      Dr. John Smith is a renowned author with over 20 years of experience.
+      He has written numerous bestsellers including "The Great Adventure" and
+      "Mystery of the Lost City". His works span multiple genres.
+    ]]></author:bio>
+    <publication>
+      <year>2023</year>
+      <publisher>Amazing Books Inc.</publisher>
+      <isbn>978-0-123456-78-9</isbn>
+    </publication>
+    <price currency="USD">24.99</price>
+    <description>
+      An epic journey through unknown lands filled with danger &amp; excitement.
+      Follow the hero as they discover ancient secrets and face legendary creatures.
+    </description>
+    <keywords>
+      <keyword>adventure</keyword>
+      <keyword>fantasy</keyword>
+      <keyword>epic</keyword>
+    </keywords>
+  </book>
+
+  <book id="2" category="science" available="false">
+    <title lang="en">Quantum Physics Explained</title>
+    <author:name>Dr. Sarah Johnson</author:name>
+    <publication>
+      <year>2022</year>
+      <publisher>Science Press</publisher>
+      <isbn>978-0-987654-32-1</isbn>
+    </publication>
+    <price currency="EUR">39.50</price>
+    <description>
+      A comprehensive guide to understanding quantum mechanics and its applications
+      in modern technology. Includes practical examples &amp; experiments.
+    </description>
+  </book>
+
+  <!-- Processing instruction for stylesheet -->
+  <?xml-stylesheet type="text/xsl" href="bookstore.xsl"?>
+  
+  <!-- Special characters and entities -->
+  <special-chars>
+    <symbols>&lt; &gt; &amp; &quot; &apos;</symbols>
+    <unicode>&#8364; &#165; &#8482;</unicode>
+    <hex-entities>&#x20AC; &#xA5; &#x2122;</hex-entities>
+  </special-chars>
+
+  <!-- Self-closing elements -->
+  <metadata created="2023-08-24" />
+  <stats total-books="2" total-authors="2" />
+  
+</bookstore>

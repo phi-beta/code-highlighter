@@ -7,23 +7,27 @@
 
 ## Implementation Status
 
-### ✅ Complete (7 languages)
+### ✅ Complete (11 languages)
 | Language | Status | Features | Tests | Notes |
 |----------|--------|----------|-------|-------|
 | **Bash** | ✅ | Shell expansions, parameters, command substitution | ✅ | Enhanced grammar with advanced shell features |
 | **CSS** | ✅ | Selectors, properties, colors, functions, at-rules | ✅ 6/6 | Complete styling support with hex/named colors |
+| **CSV** | ✅ | Quoted fields, escaped quotes, multiple delimiters | ✅ | RFC 4180 compliant with comma/semicolon/tab/pipe support |
+| **HTML** | ✅ | Tags, attributes, CSS/JS delegation, color rendering | ✅ | Multi-pass tokenization with embedded language support |
 | **JavaScript** | ✅ | ES6+, boolean literals, scientific notation | ✅ | Modern JS features, comprehensive coverage |
 | **JSON** | ✅ | Complete JSON syntax, nested structures | ✅ | Full JSON specification support |
 | **Markdown** | ✅ | CommonMark, tables, tasks, footnotes | ✅ 10/10 | Most comprehensive implementation |
 | **Python** | ✅ | Decorators, f-strings, async/await, all number formats | ✅ | Modern Python 3.x features |
-| **TypeScript** | ✅ | Type annotations, generics, decorators, utilities | ✅ | Full implementation with JSON export support |
+| **TypeScript** | ✅ | Type annotations, generics, decorators, utilities | ✅ | Complete implementation with fixed bracket matching |
+| **XML** | ✅ | Elements, attributes, CDATA, processing instructions, namespaces | ✅ | Complete XML 1.0 support with universal bracket tokens |
+| **YAML** | ✅ | Documents, scalars, mappings, basic sequences, anchors | ✅ | Core YAML 1.2 features with universal bracket support |
 
 ### 🚧 Partial Implementation (0 languages)
 | Language | Status | Features | Issues | Next Steps |
 |----------|--------|----------|---------|------------|
 | *(None currently)* | - | - | - | - |
 
-### ❌ Not Started (70 languages)
+### ❌ Not Started (67 languages)
 
 #### Programming Languages (35)
 - ActionScript
@@ -140,11 +144,19 @@
 
 ## Implementation Statistics
 - **Total Languages**: 76
-- **Completed**: 7 (9.2%)
+- **Completed**: 11 (14.5%)
 - **Partial**: 0 (0%)
-- **Not Started**: 69 (90.8%)
+- **Not Started**: 65 (85.5%)
 
 ## Recent Progress
+- ✅ **YAML Timestamp Highlighting Fix** - Fixed timestamp values like "2023-01-01T00:00:00Z" being incorrectly highlighted as keys instead of values by enhancing YAML post-processing with timestamp pattern detection (Aug 2025)
+- ✅ **YAML Key Highlighting** - Added context-aware post-processing to highlight YAML keys as purple properties while preserving value semantics (Aug 2025)
+- ✅ **XML Text Content Distinction** - Fixed text content between tags displaying as purple properties instead of neutral text by enhancing context-aware post-processing (Aug 2025)
+- ✅ **XML Tag vs Attribute Distinction** - Fixed opening tag names displaying as purple properties instead of red keywords by enhancing XML post-processing (Aug 2025)
+- ✅ **XML Attribute Highlighting Fix** - Fixed XML attributes displaying as gray identifiers instead of purple properties by correcting token mapping precedence (Aug 2025)
+- ✅ **TypeScript** - Fixed bracket matching issues and TYPE_ANNOTATION conflicts with bracket tokens (Aug 2025)
+- ✅ **HTML** - Complete implementation with CSS/JavaScript delegation and color rendering (Aug 2025)  
+- ✅ **Color Rendering** - Added hex color visualization in HTML (background colors) and ANSI (closest color mapping) (Aug 2025)
 - ✅ **CSS** - Complete implementation with selectors, properties, colors, functions, and at-rules (Jan 2025)
 - ✅ **Standalone Executables** - Added build system for Linux/Windows binaries with pkg (Aug 2024)
 
@@ -186,13 +198,19 @@
 - ✅ **Markdown** - Achieved 10/10 test coverage
 
 ## Next Recommended Target
-With CSS now complete, **HTML** would be the logical next language to implement as it:
-- Complements our existing web stack (CSS/JavaScript/TypeScript)
-- Forms the foundation of web development alongside CSS
-- Has well-defined tag and attribute syntax
-- Would complete the core web development trio
+With HTML and TypeScript now complete, our **core web development stack is finished**! Next logical targets:
 
-**Alternative high-value targets:**
-- **XML** - Foundation for many data formats and web services, enables XSLT/XPath later
-- **SQL** - Universal database query language with broad applicability  
-- **CSV** - Simple but widely used data format, relatively easy to implement
+**High Priority:**
+- **XML** - Foundation for many data formats, enables XSLT/XPath later, widely used in enterprise
+- **SQL** - Universal database query language with broad applicability across all development
+- **CSV** - Simple but ubiquitous data format, relatively easy to implement
+
+**Medium Priority (Expanding Language Coverage):**
+- **Go** - Modern systems language, growing popularity, clean syntax
+- **Rust** - Systems programming, high developer interest, memory safety
+- **Java** - Enterprise development, large ecosystem
+
+**Alternative Approaches:**
+- **Data Formats**: Focus on XML, CSV, YAML to complement our web stack
+- **Systems Languages**: Go, Rust, C++ for systems programming coverage
+- **DevOps Tools**: YAML, Dockerfile, Makefile for infrastructure-as-code

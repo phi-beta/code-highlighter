@@ -54,6 +54,7 @@ const antlr_js_1 = require("./adapters/antlr.js");
 function mapSymbolicToType(symbolic) {
     const raw = symbolic;
     const s = symbolic.toLowerCase();
+    // Markdown tokens
     // Direct exact name handling for stub & generated lexers
     if (s === 'keyword')
         return 'keyword';
@@ -245,7 +246,133 @@ function mapSymbolicToType(symbolic) {
         return 'punctuation';
     if (raw === 'RPAREN')
         return 'punctuation';
+    // HTML token mappings
+    if (raw === 'HTML_COMMENT')
+        return 'comment';
+    if (raw === 'DOCTYPE')
+        return 'keyword';
+    if (raw === 'CLOSING_TAG')
+        return 'keyword'; // Closing tags same as opening tags
+    if (raw === 'ATTRIBUTE_PATTERN')
+        return 'property'; // Attribute name=value pairs
+    if (raw === 'DOUBLE_QUOTED_STRING')
+        return 'string';
+    if (raw === 'SINGLE_QUOTED_STRING')
+        return 'string';
+    if (raw === 'CSS_SELECTOR')
+        return 'function'; // CSS class/id selectors
+    if (raw === 'CSS_PROPERTY')
+        return 'property'; // CSS property: value pairs
+    if (raw === 'HTML_ENTITY')
+        return 'string';
+    if (raw === 'TEXT_CONTENT')
+        return 'text'; // Change from identifier to text for better contrast
+    if (raw === 'LT')
+        return 'punctuation';
+    if (raw === 'GT')
+        return 'punctuation';
+    if (raw === 'SLASH')
+        return 'punctuation';
+    if (raw === 'EQUALS')
+        return 'punctuation';
+    if (raw === 'NEWLINE')
+        return 'whitespace';
+    if (raw === 'WHITESPACE')
+        return 'whitespace';
+    // XML token mappings
+    if (raw === 'XML_COMMENT')
+        return 'comment';
+    if (raw === 'XML_DECLARATION')
+        return 'keyword';
+    if (raw === 'PROCESSING_INSTRUCTION')
+        return 'keyword';
+    if (raw === 'CDATA_SECTION')
+        return 'string';
+    if (raw === 'XML_ENTITY')
+        return 'string';
+    if (raw === 'ATTRIBUTE_NAME')
+        return 'property';
+    if (raw === 'NAMESPACE_PREFIX')
+        return 'type'; // Use type for namespace prefixes
+    if (raw === 'QUESTION')
+        return 'punctuation';
+    // CSV token mappings
+    if (raw === 'QUOTED_FIELD')
+        return 'string';
+    if (raw === 'UNQUOTED_FIELD')
+        return 'text';
+    if (raw === 'BOOLEAN')
+        return 'keyword';
+    if (raw === 'EMPTY_FIELD')
+        return 'string';
+    if (raw === 'COMMA')
+        return 'punctuation';
+    if (raw === 'SEMICOLON')
+        return 'punctuation';
+    if (raw === 'TAB')
+        return 'punctuation';
+    if (raw === 'PIPE')
+        return 'punctuation';
+    // YAML token mappings
+    if (raw === 'DOCUMENT_START')
+        return 'keyword';
+    if (raw === 'DOCUMENT_END')
+        return 'keyword';
+    if (raw === 'DOUBLE_QUOTED_STRING')
+        return 'string';
+    if (raw === 'SINGLE_QUOTED_STRING')
+        return 'string';
+    if (raw === 'YAML_NUMBER')
+        return 'number';
+    if (raw === 'YAML_FLOAT')
+        return 'number';
+    if (raw === 'YAML_SPECIAL_FLOAT')
+        return 'number';
+    if (raw === 'YAML_BOOLEAN')
+        return 'keyword';
+    if (raw === 'YAML_NULL')
+        return 'keyword';
+    if (raw === 'ANCHOR')
+        return 'type'; // & anchors as types
+    if (raw === 'ALIAS')
+        return 'type'; // * aliases as types  
+    if (raw === 'TAG')
+        return 'function'; // ! tags as functions
+    if (raw === 'PLAIN_SCALAR')
+        return 'text';
+    if (raw === 'COLON')
+        return 'punctuation';
+    if (raw === 'DASH')
+        return 'punctuation';
+    if (raw === 'QUESTION')
+        return 'punctuation';
+    if (raw === 'GT')
+        return 'punctuation';
+    if (raw === 'AMPERSAND')
+        return 'punctuation';
+    if (raw === 'ASTERISK')
+        return 'punctuation';
     return undefined;
+}
+/**
+ * Post-process HTML tokens to fix opening tag recognition.
+ * Converts 'identifier' tokens to 'keyword' when they appear in tag contexts.
+ */
+function postProcessHtmlTokens(tokens) {
+    const result = [...tokens];
+    for (let i = 0; i < result.length; i++) {
+        const token = result[i];
+        const prevToken = i > 0 ? result[i - 1] : null;
+        // If this is an identifier token that follows a '<' punctuation, 
+        // it's likely an opening tag name that should be a keyword
+        if (token.type === 'identifier' &&
+            prevToken &&
+            prevToken.type === 'punctuation' &&
+            prevToken.value === '<') {
+            result[i] = { ...token, type: 'keyword' };
+        }
+    }
+    return result;
 }
 async function registerGeneratedAntlrLanguages(opts = {}) {
     // Use explicit path relative to this module's directory
@@ -285,7 +412,7 @@ async function registerGeneratedAntlrLanguages(opts = {}) {
     }
     const prioritizedFiles = Array.from(filesMap.values());
     // Classify candidates - for parser grammars, we want *Lexer.ts files
-    const stubLexerFiles = new Set(prioritizedFiles.filter(f => /Lexer\.(js|ts)$/.test(f) && /(Bash|CSS|JavaScript|Json|Markdown|Python|TypeScript)MiniLexer/.test(f)));
+    const stubLexerFiles = new Set(prioritizedFiles.filter(f => /Lexer\.(js|ts)$/.test(f) && /(Bash|CSS|CSV|Html|JavaScript|Json|Markdown|Python|TypeScript)MiniLexer/.test(f)));
     const realGeneratedFiles = new Set(prioritizedFiles.filter(f => /Mini\.(js|ts)$/.test(f) && !/Lexer\.(js|ts)$/.test(f)));
     // For parser grammars, also include the generated lexer files
     const parserLexerFiles = new Set(prioritizedFiles.filter(f => /MiniLexer\.(js|ts)$/.test(f)));
@@ -302,7 +429,7 @@ async function registerGeneratedAntlrLanguages(opts = {}) {
     if (opts.verbose)
         console.log('[register-antlr] Found lexer candidates:', files);
     for (const file of files) {
-        const isStub = /Lexer\.(js|ts)$/.test(file) && !/(Bash|CSS|JavaScript|Json|Markdown|Python)MiniLexer/.test(file);
+        const isStub = /Lexer\.(js|ts)$/.test(file) && !/(Bash|CSS|CSV|Html|JavaScript|Json|Markdown|Python|TypeScript)MiniLexer/.test(file);
         const isParserLexer = /MiniLexer\.(js|ts)$/.test(file);
         let langBase;
         if (isParserLexer) {
@@ -358,6 +485,24 @@ async function registerGeneratedAntlrLanguages(opts = {}) {
                 tokenMap,
                 defaultType: 'identifier'
             });
+            // Special post-processing for HTML to fix opening tag recognition
+            if (langName === 'html') {
+                const { registerLanguage, getLanguage } = await Promise.resolve().then(() => __importStar(require('./index.js')));
+                const { tokenizeWithAntlr } = await Promise.resolve().then(() => __importStar(require('./adapters/antlr.js')));
+                const { createDelegatingHtmlTokenizer } = await Promise.resolve().then(() => __importStar(require('./utils/html-delegation.js')));
+                // Create the base HTML tokenizer
+                const baseHtmlTokenizer = (code) => {
+                    const rawTokens = tokenizeWithAntlr(createLexer, code, { tokenMap, defaultType: 'identifier' });
+                    return postProcessHtmlTokens(rawTokens);
+                };
+                // Register HTML with delegation to CSS/JS tokenizers
+                registerLanguage('html', (code) => {
+                    const cssTokenizer = getLanguage('css');
+                    const jsTokenizer = getLanguage('javascript');
+                    const delegatingTokenizer = createDelegatingHtmlTokenizer(baseHtmlTokenizer, cssTokenizer, jsTokenizer);
+                    return delegatingTokenizer(code);
+                });
+            }
             if (langName === 'javascript')
                 await (0, antlr_js_1.registerAntlrLanguage)({ name: 'js', createLexer, tokenMap });
             if (langName === 'python')
