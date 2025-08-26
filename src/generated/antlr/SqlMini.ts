@@ -1,6 +1,12 @@
 /**
  * SQL Mini-Lexer Stub - Manual Token Classification
- * Provides basic SQL syntax highlighting without complex ANTLR dependencies.
+ * Provides basic SQL s  static readonly CASE = 66;
+  static readonly WHEN = 67;
+  static readonly THEN = 68;
+  static readonly ELSE = 69;
+  static readonly END = 70;
+  static readonly ASC = 71;
+  static readonly DESC = 72;ighlighting without complex ANTLR dependencies.
  */
 
 export interface TokenLike {
@@ -74,57 +80,61 @@ export class SqlMini {
   static readonly WITH = 59;
   static readonly SHOW = 60;
   static readonly IF = 61;
-  static readonly CASE = 62;
-  static readonly WHEN = 63;
-  static readonly THEN = 64;
-  static readonly ELSE = 65;
-  static readonly END = 66;
-  static readonly INT = 67;
-  static readonly INTEGER = 68;
-  static readonly VARCHAR = 69;
-  static readonly CHAR = 70;
-  static readonly TEXT = 71;
-  static readonly BOOLEAN = 72;
-  static readonly DECIMAL = 73;
-  static readonly FLOAT = 74;
-  static readonly DOUBLE = 75;
-  static readonly DATE = 76;
-  static readonly TIME = 77;
-  static readonly TIMESTAMP = 78;
-  static readonly PRIMARY = 79;
-  static readonly KEY = 80;
-  static readonly FOREIGN = 81;
-  static readonly REFERENCES = 82;
-  static readonly UNIQUE = 83;
-  static readonly NOT_NULL = 84;
-  static readonly DEFAULT = 85;
-  static readonly AUTO_INCREMENT = 86;
-  static readonly CHECK = 87;
-  static readonly ADD = 88;
-  static readonly MODIFY = 89;
-  static readonly EQUALS = 90;
-  static readonly NOT_EQUALS = 91;
-  static readonly LESS_THAN = 92;
-  static readonly GREATER_THAN = 93;
-  static readonly LESS_EQUAL = 94;
-  static readonly GREATER_EQUAL = 95;
-  static readonly PLUS = 96;
-  static readonly MINUS = 97;
-  static readonly MULTIPLY = 98;
-  static readonly DIVIDE = 99;
-  static readonly MODULO = 100;
-  static readonly SEMICOLON = 101;
-  static readonly COMMA = 102;
-  static readonly DOT = 103;
-  static readonly LPAREN = 104;
-  static readonly RPAREN = 105;
-  static readonly STRING_LITERAL = 106;
-  static readonly DOUBLE_QUOTED_STRING = 107;
-  static readonly NUMBER = 108;
-  static readonly IDENTIFIER = 109;
-  static readonly LINE_COMMENT = 110;
-  static readonly BLOCK_COMMENT = 111;
-  static readonly WHITESPACE = 112;
+  static readonly COLUMN = 62;
+  static readonly TABLES = 63;
+  static readonly DATABASES = 64;
+  static readonly DESCRIBE = 65;
+  static readonly CASE = 66;
+  static readonly WHEN = 67;
+  static readonly THEN = 68;
+  static readonly ELSE = 69;
+  static readonly END = 70;
+  static readonly INT = 71;
+  static readonly INTEGER = 72;
+  static readonly VARCHAR = 73;
+  static readonly CHAR = 74;
+  static readonly TEXT = 75;
+  static readonly BOOLEAN = 76;
+  static readonly DECIMAL = 77;
+  static readonly FLOAT = 78;
+  static readonly DOUBLE = 79;
+  static readonly DATE = 80;
+  static readonly TIME = 81;
+  static readonly TIMESTAMP = 82;
+  static readonly PRIMARY = 83;
+  static readonly KEY = 84;
+  static readonly FOREIGN = 85;
+  static readonly REFERENCES = 86;
+  static readonly UNIQUE = 87;
+  static readonly NOT_NULL = 88;
+  static readonly DEFAULT = 89;
+  static readonly AUTO_INCREMENT = 90;
+  static readonly CHECK = 91;
+  static readonly ADD = 92;
+  static readonly MODIFY = 93;
+  static readonly EQUALS = 94;
+  static readonly NOT_EQUALS = 95;
+  static readonly LESS_THAN = 96;
+  static readonly GREATER_THAN = 97;
+  static readonly LESS_EQUAL = 98;
+  static readonly GREATER_EQUAL = 99;
+  static readonly PLUS = 100;
+  static readonly MINUS = 101;
+  static readonly MULTIPLY = 102;
+  static readonly DIVIDE = 103;
+  static readonly MODULO = 104;
+  static readonly SEMICOLON = 105;
+  static readonly COMMA = 106;
+  static readonly DOT = 107;
+  static readonly LPAREN = 108;
+  static readonly RPAREN = 109;
+  static readonly STRING_LITERAL = 110;
+  static readonly DOUBLE_QUOTED_STRING = 111;
+  static readonly NUMBER = 112;
+  static readonly IDENTIFIER = 113;
+  static readonly LINE_COMMENT = 114;
+  static readonly BLOCK_COMMENT = 115;
+  static readonly WHITESPACE = 116;
   
   // SQL Keywords mapping
   private static readonly KEYWORDS: Record<string, number> = {
@@ -189,6 +199,10 @@ export class SqlMini {
     'with': SqlMini.WITH,
     'show': SqlMini.SHOW,
     'if': SqlMini.IF,
+    'column': SqlMini.COLUMN,
+    'tables': SqlMini.TABLES,
+    'databases': SqlMini.DATABASES,
+    'describe': SqlMini.DESCRIBE,
     'case': SqlMini.CASE,
     'when': SqlMini.WHEN,
     'then': SqlMini.THEN,
@@ -224,7 +238,7 @@ export class SqlMini {
     'JOIN', 'INNER', 'LEFT', 'RIGHT', 'FULL', 'OUTER', 'ON', 'AS', 'ORDER', 'BY',
     'GROUP', 'HAVING', 'LIMIT', 'OFFSET', 'UNION', 'ALL', 'DISTINCT', 'ASC', 'DESC',
     'AND', 'OR', 'NOT', 'IN', 'EXISTS', 'BETWEEN', 'LIKE', 'IS', 'NULL', 'TRUE', 'FALSE',
-    'COUNT', 'SUM', 'AVG', 'MIN', 'MAX', 'RANK', 'DENSE_RANK', 'ROW_NUMBER', 'OVER', 'PARTITION', 'USE', 'WITH', 'SHOW', 'IF', 'CASE', 'WHEN', 'THEN', 'ELSE', 'END',
+    'COUNT', 'SUM', 'AVG', 'MIN', 'MAX', 'RANK', 'DENSE_RANK', 'ROW_NUMBER', 'OVER', 'PARTITION', 'USE', 'WITH', 'SHOW', 'IF', 'COLUMN', 'TABLES', 'DATABASES', 'DESCRIBE', 'CASE', 'WHEN', 'THEN', 'ELSE', 'END',
     'INT', 'INTEGER', 'VARCHAR', 'CHAR', 'TEXT', 'BOOLEAN', 'DECIMAL', 'FLOAT', 'DOUBLE',
     'DATE', 'TIME', 'TIMESTAMP', 'PRIMARY', 'KEY', 'FOREIGN', 'REFERENCES', 'UNIQUE',
     'NOT_NULL', 'DEFAULT', 'AUTO_INCREMENT', 'CHECK', 'ADD', 'MODIFY',

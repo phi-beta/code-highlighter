@@ -257,7 +257,7 @@ function mapSqlSymbolicToType(raw: string): string | undefined {
        'ORDER', 'ASC', 'DESC_ORDER', 'LIMIT', 'AS', 'IF', 'EXISTS', 'ADD', 'MODIFY',
        'JOIN', 'INNER', 'LEFT', 'RIGHT', 'FULL', 'OUTER', 'ON', 'WITH',
        'AND', 'OR', 'NOT', 'NULL', 'PRIMARY', 'FOREIGN', 'KEY', 'REFERENCES',
-       'UNIQUE', 'AUTO_INCREMENT', 'DEFAULT', 'TABLES', 'DATABASES', 'COLUMNS'].includes(raw)) {
+       'UNIQUE', 'AUTO_INCREMENT', 'DEFAULT', 'TABLES', 'DATABASES', 'COLUMN'].includes(raw)) {
     return 'keyword';
   }
   
