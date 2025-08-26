@@ -1,4 +1,4 @@
-const { SqlMini } = require('./dist-cjs/src/generated/antlr/SqlMini.js');
+import { SqlMini } from './src/generated/antlr/SqlMini.ts';
 
 // Test simple SQL with whitespace
 const sqlCode = `SELECT id, name

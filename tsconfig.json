@@ -13,5 +13,5 @@
     "resolveJsonModule": true
   },
   "include": ["src", "samples/generate-samples.ts"],
-  "exclude": ["dist", "node_modules", "src/generated/antlr", "samples/inputs", "simple-typescript-test.ts"]
+  "exclude": ["dist", "node_modules", "samples/inputs", "simple-typescript-test.ts", "src/generated/antlr"]
 }

@@ -45,6 +45,7 @@ export async function generateAll() {
     else if (ext === '.csv') lang = 'csv';
     else if (ext === '.xml') lang = 'xml';
     else if (ext === '.yaml' || ext === '.yml') lang = 'yaml';
+    else if (ext === '.sql') lang = 'sql';
     else if (ext === '.js' || ext === '.mjs' || ext === '.cjs') lang = 'javascript';
     // ANSI output
     try {

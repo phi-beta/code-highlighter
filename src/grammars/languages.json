@@ -93,6 +93,20 @@
         { "type": "punctuation", "regex": "[{}();,>+~*[\\]=\"']|!important" },
         { "type": "whitespace", "regex": "\\s+" }
       ]
+    },
+    {
+      "name": "sql",
+      "patterns": [
+        { "type": "comment", "regex": "--.*$|/\\*[\\s\\S]*?\\*/" },
+        { "type": "string", "regex": "'(?:''|[^'])*'" },
+        { "type": "number", "regex": "\\b\\d+(?:\\.\\d+)?\\b" },
+        { "type": "keyword", "regex": "\\b(?i:SELECT|FROM|WHERE|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|DROP|ALTER|TABLE|VIEW|INDEX|DATABASE|SCHEMA|USE|SHOW|DESCRIBE|DESC|DISTINCT|GROUP|BY|HAVING|ORDER|ASC|LIMIT|AS|IF|EXISTS|ADD|MODIFY|AND|OR|NOT|NULL|PRIMARY|FOREIGN|KEY|REFERENCES|UNIQUE|AUTO_INCREMENT|DEFAULT|TABLES|DATABASES|COLUMNS|JOIN|INNER|LEFT|RIGHT|FULL|OUTER|ON|UNION|ALL|CASE|WHEN|THEN|ELSE|END|IN|BETWEEN|LIKE|IS|TRUE|FALSE)\\b" },
+        { "type": "type", "regex": "\\b(?i:VARCHAR|CHAR|INT|INTEGER|BIGINT|SMALLINT|TINYINT|DECIMAL|NUMERIC|FLOAT|DOUBLE|REAL|DATE|TIME|DATETIME|TIMESTAMP|TEXT|BLOB|BOOLEAN)\\b" },
+        { "type": "operator", "regex": "=|!=|<>|<|>|<=|>=|\\+|-|\\*|/|%" },
+        { "type": "identifier", "regex": "`[^`]+`|\"[^\"]+\"|[a-zA-Z_][a-zA-Z0-9_]*" },
+        { "type": "punctuation", "regex": "[();,.]" },
+        { "type": "whitespace", "regex": "\\s+" }
+      ]
     }
   ]
 }

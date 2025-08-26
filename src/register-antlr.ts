@@ -247,6 +247,65 @@ function postProcessXmlTokens(tokens: { type: string; value: string }[]): { type
 }
 
 /**
+ * Map SQL symbolic token names to semantic types.
+ */
+function mapSqlSymbolicToType(raw: string): string | undefined {
+  // SQL Keywords
+  if (['SELECT', 'FROM', 'WHERE', 'INSERT', 'INTO', 'VALUES', 'UPDATE', 'SET', 'DELETE',
+       'CREATE', 'DROP', 'ALTER', 'TABLE', 'VIEW', 'INDEX', 'DATABASE', 'SCHEMA',
+       'USE', 'SHOW', 'DESCRIBE', 'DESC', 'DISTINCT', 'GROUP', 'BY', 'HAVING',
+       'ORDER', 'ASC', 'DESC_ORDER', 'LIMIT', 'AS', 'IF', 'EXISTS', 'ADD', 'MODIFY',
+       'JOIN', 'INNER', 'LEFT', 'RIGHT', 'FULL', 'OUTER', 'ON', 'WITH',
+       'AND', 'OR', 'NOT', 'NULL', 'PRIMARY', 'FOREIGN', 'KEY', 'REFERENCES',
+       'UNIQUE', 'AUTO_INCREMENT', 'DEFAULT', 'TABLES', 'DATABASES', 'COLUMNS'].includes(raw)) {
+    return 'keyword';
+  }
+  
+  // Data Types
+  if (['VARCHAR', 'CHAR', 'INT', 'INTEGER', 'BIGINT', 'SMALLINT', 'TINYINT',
+       'DECIMAL', 'NUMERIC', 'FLOAT', 'DOUBLE', 'REAL', 'DATE', 'TIME',
+       'DATETIME', 'TIMESTAMP', 'TEXT', 'BLOB', 'BOOLEAN'].includes(raw)) {
+    return 'type';
+  }
+  
+  // SQL Functions (Aggregate, Window, etc.)
+  if (['COUNT', 'SUM', 'AVG', 'MIN', 'MAX', 'RANK', 'DENSE_RANK', 'ROW_NUMBER',
+       'OVER', 'PARTITION', 'CASE', 'WHEN', 'THEN', 'ELSE', 'END'].includes(raw)) {
+    return 'function';
+  }
+  
+  // Boolean literals
+  if (['TRUE', 'FALSE', 'BOOLEAN_LITERAL'].includes(raw)) {
+    return 'boolean';
+  }
+  
+  // Strings and Numbers
+  if (raw === 'STRING') return 'string';
+  if (raw === 'NUMBER') return 'number';
+  
+  // Comments
+  if (raw === 'COMMENT') return 'comment';
+  
+  // Whitespace - essential for preserving formatting
+  if (raw === 'WHITESPACE') return 'whitespace';
+  
+  // Operators
+  if (['EQUALS', 'NOT_EQUALS', 'LESS_THAN', 'GREATER_THAN', 'LESS_EQUAL', 'GREATER_EQUAL',
+       'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'MODULO'].includes(raw)) {
+    return 'operator';
+  }
+  
+  // Punctuation and Brackets
+  if (['SEMICOLON', 'COMMA', 'MULTIPLY'].includes(raw)) return 'punctuation';
+  if (['LPAREN', 'RPAREN'].includes(raw)) return 'bracket';
+  
+  // Identifiers (table names, column names, etc.)
+  if (['IDENTIFIER', 'QUOTED_IDENTIFIER'].includes(raw)) return 'identifier';
+  
+  return undefined;
+}
+
+/**
  * Post-process YAML tokens to highlight keys differently from values.
  * Converts 'text' tokens (PLAIN_SCALAR) to 'property' when they appear before ':' (YAML keys).
  * Avoids converting timestamp components by detecting timestamp patterns.
@@ -390,8 +449,9 @@ export async function registerGeneratedAntlrLanguages(opts: AutoRegisterOptions 
       if (!explicitMap && Array.isArray(symNames)) {
         for (const name of symNames) {
           if (!name) continue;
-            const mapped = mapSymbolicToType(name);
-            if (mapped) tokenMap[name] = mapped;
+          // Use SQL-specific mapping for SQL language, otherwise use general mapping
+          const mapped = langName === 'sql' ? mapSqlSymbolicToType(name) : mapSymbolicToType(name);
+          if (mapped) tokenMap[name] = mapped;
         }
       }
       // Distinguish between real antlr4ts generated lexers and stub "Mini" lexers.

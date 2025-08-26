@@ -7,7 +7,7 @@
 
 ## Implementation Status
 
-### ✅ Complete (11 languages)
+### ✅ Complete (12 languages)
 | Language | Status | Features | Tests | Notes |
 |----------|--------|----------|-------|-------|
 | **Bash** | ✅ | Shell expansions, parameters, command substitution | ✅ | Enhanced grammar with advanced shell features |
@@ -18,6 +18,7 @@
 | **JSON** | ✅ | Complete JSON syntax, nested structures | ✅ | Full JSON specification support |
 | **Markdown** | ✅ | CommonMark, tables, tasks, footnotes | ✅ 10/10 | Most comprehensive implementation |
 | **Python** | ✅ | Decorators, f-strings, async/await, all number formats | ✅ | Modern Python 3.x features |
+| **SQL** | ✅ | DDL, DML, queries, joins, functions, constraints | ✅ | Complete manual lexer with comprehensive SQL keyword support |
 | **TypeScript** | ✅ | Type annotations, generics, decorators, utilities | ✅ | Complete implementation with fixed bracket matching |
 | **XML** | ✅ | Elements, attributes, CDATA, processing instructions, namespaces | ✅ | Complete XML 1.0 support with universal bracket tokens |
 | **YAML** | ✅ | Documents, scalars, mappings, basic sequences, anchors | ✅ | Core YAML 1.2 features with universal bracket support |
@@ -144,13 +145,15 @@
 
 ## Implementation Statistics
 - **Total Languages**: 76
-- **Completed**: 11 (14.5%)
+- **Completed**: 12 (15.8%)
 - **Partial**: 0 (0%)
-- **Not Started**: 65 (85.5%)
+- **Not Started**: 64 (84.2%)
 
 ## Recent Progress
+- ✅ **SQL Sample Regeneration** - Successfully regenerated SQL sample outputs with proper keyword highlighting (red keywords, blue data types, proper comment styling) after fixing ANTLR lexer integration issues with manual lexer implementation (Aug 2025)
+- ✅ **SQL** - Complete manual lexer implementation with comprehensive DDL/DML/query support, SQL keyword/type/operator classification, and proper syntax highlighting (Aug 2025)
+- ✅ **YAML Tag Semantic Improvement** - Changed YAML tags from 'function' to 'type' highlighting for better semantic accuracy (Aug 2025)
 - ✅ **YAML Timestamp Highlighting Fix** - Fixed timestamp values like "2023-01-01T00:00:00Z" being incorrectly highlighted as keys instead of values by enhancing YAML post-processing with timestamp pattern detection (Aug 2025)
-- ✅ **YAML Key Highlighting** - Added context-aware post-processing to highlight YAML keys as purple properties while preserving value semantics (Aug 2025)
 - ✅ **XML Text Content Distinction** - Fixed text content between tags displaying as purple properties instead of neutral text by enhancing context-aware post-processing (Aug 2025)
 - ✅ **XML Tag vs Attribute Distinction** - Fixed opening tag names displaying as purple properties instead of red keywords by enhancing XML post-processing (Aug 2025)
 - ✅ **XML Attribute Highlighting Fix** - Fixed XML attributes displaying as gray identifiers instead of purple properties by correcting token mapping precedence (Aug 2025)
