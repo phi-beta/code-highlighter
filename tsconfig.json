@@ -12,6 +12,22 @@
     "types": ["node"],
     "resolveJsonModule": true
   },
-  "include": ["src", "samples/generate-samples.ts"],
-  "exclude": ["dist", "node_modules", "samples/inputs", "simple-typescript-test.ts", "src/generated/antlr"]
+  "files": [
+    "src/cli.ts",
+    "src/index.ts", 
+    "src/register-antlr.ts",
+    "src/adapters/antlr.ts",
+    "src/config/embedded.ts",
+    "src/config/static-registration.ts",
+    "src/types/token-analysis.d.ts",
+    "src/utils/assets.ts",
+    "src/utils/color-utils.ts",
+    "src/utils/dirname.ts",
+    "src/utils/html-delegation.ts",
+    "src/utils/validation.ts",
+    "src/generated/antlr/PythonMini.ts",
+    "src/generated/antlr/SqlMini.ts",
+    "samples/generate-samples.ts"
+  ],
+  "exclude": ["dist", "node_modules", "samples/inputs", "simple-typescript-test.ts"]
 }

@@ -1,361 +1,432 @@
-// Generated from src/grammars/antlr/PythonMini.g4 by ANTLR 4.9.0-SNAPSHOT
+/**
+ * SQL Mini-Lexer Stub - Manual Token Classification
+ * Provides basic SQL s  static readonly CASE = 66;
+  static readonly WHEN = 67;
+  static readonly THEN = 68;
+  static readonly ELSE = 69;
+  static readonly END = 70;
+  static readonly ASC = 71;
+  static readonly DESC = 72;ighlighting without complex ANTLR dependencies.
+ */
 
-
-import { ATN } from "antlr4ts/atn/ATN";
-import { ATNDeserializer } from "antlr4ts/atn/ATNDeserializer";
-import { CharStream } from "antlr4ts/CharStream";
-import { Lexer } from "antlr4ts/Lexer";
-import { LexerATNSimulator } from "antlr4ts/atn/LexerATNSimulator";
-import { NotNull } from "antlr4ts/Decorators";
-import { Override } from "antlr4ts/Decorators";
-import { RuleContext } from "antlr4ts/RuleContext";
-import { Vocabulary } from "antlr4ts/Vocabulary";
-import { VocabularyImpl } from "antlr4ts/VocabularyImpl";
-
-import * as Utils from "antlr4ts/misc/Utils";
-
-
-export class PythonMini extends Lexer {
-	public static readonly KEYWORD = 1;
-	public static readonly BOOLEAN = 2;
-	public static readonly NONE = 3;
-	public static readonly COMMENT = 4;
-	public static readonly F_STRING = 5;
-	public static readonly RAW_STRING = 6;
-	public static readonly TRIPLE_STRING = 7;
-	public static readonly STRING_DOUBLE = 8;
-	public static readonly STRING_SINGLE = 9;
-	public static readonly NUMBER = 10;
-	public static readonly HEX_NUMBER = 11;
-	public static readonly BIN_NUMBER = 12;
-	public static readonly OCT_NUMBER = 13;
-	public static readonly FLOAT_NUMBER = 14;
-	public static readonly INT_NUMBER = 15;
-	public static readonly OPERATOR = 16;
-	public static readonly PUNCT = 17;
-	public static readonly DECORATOR = 18;
-	public static readonly IDENTIFIER = 19;
-	public static readonly NEWLINE = 20;
-	public static readonly WS = 21;
-
-	// tslint:disable:no-trailing-whitespace
-	public static readonly channelNames: string[] = [
-		"DEFAULT_TOKEN_CHANNEL", "HIDDEN",
-	];
-
-	// tslint:disable:no-trailing-whitespace
-	public static readonly modeNames: string[] = [
-		"DEFAULT_MODE",
-	];
-
-	public static readonly ruleNames: string[] = [
-		"KEYWORD", "BOOLEAN", "NONE", "COMMENT", "F_STRING", "RAW_STRING", "TRIPLE_STRING", 
-		"STRING_DOUBLE", "STRING_SINGLE", "NUMBER", "HEX_NUMBER", "BIN_NUMBER", 
-		"OCT_NUMBER", "FLOAT_NUMBER", "INT_NUMBER", "OPERATOR", "PUNCT", "DECORATOR", 
-		"IDENTIFIER", "NEWLINE", "WS", "DIGIT", "ESC", "EXPONENT",
-	];
-
-	private static readonly _LITERAL_NAMES: Array<string | undefined> = [
-		undefined, undefined, undefined, "'None'",
-	];
-	private static readonly _SYMBOLIC_NAMES: Array<string | undefined> = [
-		undefined, "KEYWORD", "BOOLEAN", "NONE", "COMMENT", "F_STRING", "RAW_STRING", 
-		"TRIPLE_STRING", "STRING_DOUBLE", "STRING_SINGLE", "NUMBER", "HEX_NUMBER", 
-		"BIN_NUMBER", "OCT_NUMBER", "FLOAT_NUMBER", "INT_NUMBER", "OPERATOR", 
-		"PUNCT", "DECORATOR", "IDENTIFIER", "NEWLINE", "WS",
-	];
-	public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(PythonMini._LITERAL_NAMES, PythonMini._SYMBOLIC_NAMES, []);
-
-	// @Override
-	// @NotNull
-	public get vocabulary(): Vocabulary {
-		return PythonMini.VOCABULARY;
-	}
-	// tslint:enable:no-trailing-whitespace
-
-
-	constructor(input: CharStream) {
-		super(input);
-		this._interp = new LexerATNSimulator(PythonMini._ATN, this);
-	}
-
-	// @Override
-	public get grammarFileName(): string { return "PythonMini.g4"; }
-
-	// @Override
-	public get ruleNames(): string[] { return PythonMini.ruleNames; }
-
-	// @Override
-	public get serializedATN(): string { return PythonMini._serializedATN; }
-
-	// @Override
-	public get channelNames(): string[] { return PythonMini.channelNames; }
-
-	// @Override
-	public get modeNames(): string[] { return PythonMini.modeNames; }
-
-	public static readonly _serializedATN: string =
-		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x02\x17\u01DD\b\x01" +
-		"\x04\x02\t\x02\x04\x03\t\x03\x04\x04\t\x04\x04\x05\t\x05\x04\x06\t\x06" +
-		"\x04\x07\t\x07\x04\b\t\b\x04\t\t\t\x04\n\t\n\x04\v\t\v\x04\f\t\f\x04\r" +
-		"\t\r\x04\x0E\t\x0E\x04\x0F\t\x0F\x04\x10\t\x10\x04\x11\t\x11\x04\x12\t" +
-		"\x12\x04\x13\t\x13\x04\x14\t\x14\x04\x15\t\x15\x04\x16\t\x16\x04\x17\t" +
-		"\x17\x04\x18\t\x18\x04\x19\t\x19\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02" +
-		"\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02" +
-		"\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02" +
-		"\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02" +
-		"\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02" +
-		"\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02" +
-		"\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02" +
-		"\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02" +
-		"\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02" +
-		"\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02" +
-		"\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02" +
-		"\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02" +
-		"\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02" +
-		"\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02" +
-		"\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02" +
-		"\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02" +
-		"\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02" +
-		"\x03\x02\x03\x02\x05\x02\xCB\n\x02\x03\x03\x03\x03\x03\x03\x03\x03\x03" +
-		"\x03\x03\x03\x03\x03\x03\x03\x03\x03\x05\x03\xD6\n\x03\x03\x04\x03\x04" +
-		"\x03\x04\x03\x04\x03\x04\x03\x05\x03\x05\x07\x05\xDF\n\x05\f\x05\x0E\x05" +
-		"\xE2\v\x05\x03\x06\x03\x06\x03\x06\x03\x06\x07\x06\xE8\n\x06\f\x06\x0E" +
-		"\x06\xEB\v\x06\x03\x06\x03\x06\x03\x06\x03\x06\x07\x06\xF1\n\x06\f\x06" +
-		"\x0E\x06\xF4\v\x06\x03\x06\x05\x06\xF7\n\x06\x03\x07\x03\x07\x03\x07\x03" +
-		"\x07\x07\x07\xFD\n\x07\f\x07\x0E\x07\u0100\v\x07\x03\x07\x03\x07\x03\x07" +
-		"\x03\x07\x07\x07\u0106\n\x07\f\x07\x0E\x07\u0109\v\x07\x03\x07\x05\x07" +
-		"\u010C\n\x07\x03\b\x03\b\x03\b\x03\b\x03\b\x07\b\u0113\n\b\f\b\x0E\b\u0116" +
-		"\v\b\x03\b\x03\b\x03\b\x03\b\x03\b\x03\b\x03\b\x03\b\x07\b\u0120\n\b\f" +
-		"\b\x0E\b\u0123\v\b\x03\b\x03\b\x03\b\x05\b\u0128\n\b\x03\t\x03\t\x03\t" +
-		"\x07\t\u012D\n\t\f\t\x0E\t\u0130\v\t\x03\t\x03\t\x03\n\x03\n\x03\n\x07" +
-		"\n\u0137\n\n\f\n\x0E\n\u013A\v\n\x03\n\x03\n\x03\v\x03\v\x03\v\x03\v\x03" +
-		"\v\x05\v\u0143\n\v\x03\f\x03\f\x03\f\x06\f\u0148\n\f\r\f\x0E\f\u0149\x03" +
-		"\r\x03\r\x03\r\x06\r\u014F\n\r\r\r\x0E\r\u0150\x03\x0E\x03\x0E\x03\x0E" +
-		"\x06\x0E\u0156\n\x0E\r\x0E\x0E\x0E\u0157\x03\x0F\x06\x0F\u015B\n\x0F\r" +
-		"\x0F\x0E\x0F\u015C\x03\x0F\x03\x0F\x07\x0F\u0161\n\x0F\f\x0F\x0E\x0F\u0164" +
-		"\v\x0F\x03\x0F\x05\x0F\u0167\n\x0F\x03\x0F\x03\x0F\x06\x0F\u016B\n\x0F" +
-		"\r\x0F\x0E\x0F\u016C\x03\x0F\x05\x0F\u0170\n\x0F\x03\x0F\x06\x0F\u0173" +
-		"\n\x0F\r\x0F\x0E\x0F\u0174\x03\x0F\x03\x0F\x05\x0F\u0179\n\x0F\x03\x10" +
-		"\x06\x10\u017C\n\x10\r\x10\x0E\x10\u017D\x03\x11\x03\x11\x03\x11\x03\x11" +
-		"\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11" +
-		"\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11" +
-		"\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11" +
-		"\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11" +
-		"\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x03\x11\x05\x11" +
-		"\u01B0\n\x11\x03\x12\x03\x12\x03\x13\x03\x13\x03\x13\x03\x13\x07\x13\u01B8" +
-		"\n\x13\f\x13\x0E\x13\u01BB\v\x13\x03\x14\x03\x14\x07\x14\u01BF\n\x14\f" +
-		"\x14\x0E\x14\u01C2\v\x14\x03\x15\x05\x15\u01C5\n\x15\x03\x15\x03\x15\x03" +
-		"\x16\x06\x16\u01CA\n\x16\r\x16\x0E\x16\u01CB\x03\x16\x03\x16\x03\x17\x03" +
-		"\x17\x03\x18\x03\x18\x03\x18\x03\x19\x03\x19\x05\x19\u01D7\n\x19\x03\x19" +
-		"\x06\x19\u01DA\n\x19\r\x19\x0E\x19\u01DB\x04\u0114\u0121\x02\x02\x1A\x03" +
-		"\x02\x03\x05\x02\x04\x07\x02\x05\t\x02\x06\v\x02\x07\r\x02\b\x0F\x02\t" +
-		"\x11\x02\n\x13\x02\v\x15\x02\f\x17\x02\r\x19\x02\x0E\x1B\x02\x0F\x1D\x02" +
-		"\x10\x1F\x02\x11!\x02\x12#\x02\x13%\x02\x14\'\x02\x15)\x02\x16+\x02\x17" +
-		"-\x02\x02/\x02\x021\x02\x02\x03\x02\x16\x04\x02\f\f\x0F\x0F\x04\x02HH" +
-		"hh\x05\x02\f\f\x0F\x0F$$\x05\x02\f\f\x0F\x0F))\x04\x02TTtt\x06\x02\f\f" +
-		"\x0F\x0F$$^^\x06\x02\f\f\x0F\x0F))^^\x04\x02ZZzz\x05\x022;CHch\x04\x02" +
-		"DDdd\x03\x0223\x04\x02QQqq\x03\x0229\t\x02##\'(*1<B]]_`}\x80\x05\x02C" +
-		"\\aac|\x06\x022;C\\aac|\x04\x02\v\v\"\"\x03\x022;\x04\x02GGgg\x04\x02" +
-		"--//\x02\u0238\x02\x03\x03\x02\x02\x02\x02\x05\x03\x02\x02\x02\x02\x07" +
-		"\x03\x02\x02\x02\x02\t\x03\x02\x02\x02\x02\v\x03\x02\x02\x02\x02\r\x03" +
-		"\x02\x02\x02\x02\x0F\x03\x02\x02\x02\x02\x11\x03\x02\x02\x02\x02\x13\x03" +
-		"\x02\x02\x02\x02\x15\x03\x02\x02\x02\x02\x17\x03\x02\x02\x02\x02\x19\x03" +
-		"\x02\x02\x02\x02\x1B\x03\x02\x02\x02\x02\x1D\x03\x02\x02\x02\x02\x1F\x03" +
-		"\x02\x02\x02\x02!\x03\x02\x02\x02\x02#\x03\x02\x02\x02\x02%\x03\x02\x02" +
-		"\x02\x02\'\x03\x02\x02\x02\x02)\x03\x02\x02\x02\x02+\x03\x02\x02\x02\x03" +
-		"\xCA\x03\x02\x02\x02\x05\xD5\x03\x02\x02\x02\x07\xD7\x03\x02\x02\x02\t" +
-		"\xDC\x03\x02\x02\x02\v\xE3\x03\x02\x02\x02\r\xF8\x03\x02\x02\x02\x0F\u0127" +
-		"\x03\x02\x02\x02\x11\u0129\x03\x02\x02\x02\x13\u0133\x03\x02\x02\x02\x15" +
-		"\u0142\x03\x02\x02\x02\x17\u0144\x03\x02\x02\x02\x19\u014B\x03\x02\x02" +
-		"\x02\x1B\u0152\x03\x02\x02\x02\x1D\u0178\x03\x02\x02\x02\x1F\u017B\x03" +
-		"\x02\x02\x02!\u01AF\x03\x02\x02\x02#\u01B1\x03\x02\x02\x02%\u01B3\x03" +
-		"\x02\x02\x02\'\u01BC\x03\x02\x02\x02)\u01C4\x03\x02\x02\x02+\u01C9\x03" +
-		"\x02\x02\x02-\u01CF\x03\x02\x02\x02/\u01D1\x03\x02\x02\x021\u01D4\x03" +
-		"\x02\x02\x0234\x07c\x02\x0245\x07p\x02\x025\xCB\x07f\x02\x0267\x07c\x02" +
-		"\x027\xCB\x07u\x02\x0289\x07c\x02\x029:\x07u\x02\x02:;\x07u\x02\x02;<" +
-		"\x07g\x02\x02<=\x07t\x02\x02=\xCB\x07v\x02\x02>?\x07d\x02\x02?@\x07t\x02" +
-		"\x02@A\x07g\x02\x02AB\x07c\x02\x02B\xCB\x07m\x02\x02CD\x07e\x02\x02DE" +
-		"\x07n\x02\x02EF\x07c\x02\x02FG\x07u\x02\x02G\xCB\x07u\x02\x02HI\x07e\x02" +
-		"\x02IJ\x07q\x02\x02JK\x07p\x02\x02KL\x07v\x02\x02LM\x07k\x02\x02MN\x07" +
-		"p\x02\x02NO\x07w\x02\x02O\xCB\x07g\x02\x02PQ\x07f\x02\x02QR\x07g\x02\x02" +
-		"R\xCB\x07h\x02\x02ST\x07f\x02\x02TU\x07g\x02\x02U\xCB\x07n\x02\x02VW\x07" +
-		"g\x02\x02WX\x07n\x02\x02XY\x07k\x02\x02Y\xCB\x07h\x02\x02Z[\x07g\x02\x02" +
-		"[\\\x07n\x02\x02\\]\x07u\x02\x02]\xCB\x07g\x02\x02^_\x07g\x02\x02_`\x07" +
-		"z\x02\x02`a\x07e\x02\x02ab\x07g\x02\x02bc\x07r\x02\x02c\xCB\x07v\x02\x02" +
-		"de\x07g\x02\x02ef\x07z\x02\x02fg\x07g\x02\x02g\xCB\x07e\x02\x02hi\x07" +
-		"h\x02\x02ij\x07k\x02\x02jk\x07p\x02\x02kl\x07c\x02\x02lm\x07n\x02\x02" +
-		"mn\x07n\x02\x02n\xCB\x07{\x02\x02op\x07h\x02\x02pq\x07q\x02\x02q\xCB\x07" +
-		"t\x02\x02rs\x07h\x02\x02st\x07t\x02\x02tu\x07q\x02\x02u\xCB\x07o\x02\x02" +
-		"vw\x07i\x02\x02wx\x07n\x02\x02xy\x07q\x02\x02yz\x07d\x02\x02z{\x07c\x02" +
-		"\x02{\xCB\x07n\x02\x02|}\x07k\x02\x02}\xCB\x07h\x02\x02~\x7F\x07k\x02" +
-		"\x02\x7F\x80\x07o\x02\x02\x80\x81\x07r\x02\x02\x81\x82\x07q\x02\x02\x82" +
-		"\x83\x07t\x02\x02\x83\xCB\x07v\x02\x02\x84\x85\x07k\x02\x02\x85\xCB\x07" +
-		"p\x02\x02\x86\x87\x07k\x02\x02\x87\xCB\x07u\x02\x02\x88\x89\x07n\x02\x02" +
-		"\x89\x8A\x07c\x02\x02\x8A\x8B\x07o\x02\x02\x8B\x8C\x07d\x02\x02\x8C\x8D" +
-		"\x07f\x02\x02\x8D\xCB\x07c\x02\x02\x8E\x8F\x07p\x02\x02\x8F\x90\x07q\x02" +
-		"\x02\x90\xCB\x07v\x02\x02\x91\x92\x07q\x02\x02\x92\xCB\x07t\x02\x02\x93" +
-		"\x94\x07r\x02\x02\x94\x95\x07c\x02\x02\x95\x96\x07u\x02\x02\x96\xCB\x07" +
-		"u\x02\x02\x97\x98\x07r\x02\x02\x98\x99\x07t\x02\x02\x99\x9A\x07k\x02\x02" +
-		"\x9A\x9B\x07p\x02\x02\x9B\xCB\x07v\x02\x02\x9C\x9D\x07t\x02\x02\x9D\x9E" +
-		"\x07c\x02\x02\x9E\x9F\x07k\x02\x02\x9F\xA0\x07u\x02\x02\xA0\xCB\x07g\x02" +
-		"\x02\xA1\xA2\x07t\x02\x02\xA2\xA3\x07g\x02\x02\xA3\xA4\x07v\x02\x02\xA4" +
-		"\xA5\x07w\x02\x02\xA5\xA6\x07t\x02\x02\xA6\xCB\x07p\x02\x02\xA7\xA8\x07" +
-		"v\x02\x02\xA8\xA9\x07t\x02\x02\xA9\xCB\x07{\x02\x02\xAA\xAB\x07y\x02\x02" +
-		"\xAB\xAC\x07j\x02\x02\xAC\xAD\x07k\x02\x02\xAD\xAE\x07n\x02\x02\xAE\xCB" +
-		"\x07g\x02\x02\xAF\xB0\x07y\x02\x02\xB0\xB1\x07k\x02\x02\xB1\xB2\x07v\x02" +
-		"\x02\xB2\xCB\x07j\x02\x02\xB3\xB4\x07{\x02\x02\xB4\xB5\x07k\x02\x02\xB5" +
-		"\xB6\x07g\x02\x02\xB6\xB7\x07n\x02\x02\xB7\xCB\x07f\x02\x02\xB8\xB9\x07" +
-		"c\x02\x02\xB9\xBA\x07u\x02\x02\xBA\xBB\x07{\x02\x02\xBB\xBC\x07p\x02\x02" +
-		"\xBC\xCB\x07e\x02\x02\xBD\xBE\x07c\x02\x02\xBE\xBF\x07y\x02\x02\xBF\xC0" +
-		"\x07c\x02\x02\xC0\xC1\x07k\x02\x02\xC1\xCB\x07v\x02\x02\xC2\xC3\x07p\x02" +
-		"\x02\xC3\xC4\x07q\x02\x02\xC4\xC5\x07p\x02\x02\xC5\xC6\x07n\x02\x02\xC6" +
-		"\xC7\x07q\x02\x02\xC7\xC8\x07e\x02\x02\xC8\xC9\x07c\x02\x02\xC9\xCB\x07" +
-		"n\x02\x02\xCA3\x03\x02\x02\x02\xCA6\x03\x02\x02\x02\xCA8\x03\x02\x02\x02" +
-		"\xCA>\x03\x02\x02\x02\xCAC\x03\x02\x02\x02\xCAH\x03\x02\x02\x02\xCAP\x03" +
-		"\x02\x02\x02\xCAS\x03\x02\x02\x02\xCAV\x03\x02\x02\x02\xCAZ\x03\x02\x02" +
-		"\x02\xCA^\x03\x02\x02\x02\xCAd\x03\x02\x02\x02\xCAh\x03\x02\x02\x02\xCA" +
-		"o\x03\x02\x02\x02\xCAr\x03\x02\x02\x02\xCAv\x03\x02\x02\x02\xCA|\x03\x02" +
-		"\x02\x02\xCA~\x03\x02\x02\x02\xCA\x84\x03\x02\x02\x02\xCA\x86\x03\x02" +
-		"\x02\x02\xCA\x88\x03\x02\x02\x02\xCA\x8E\x03\x02\x02\x02\xCA\x91\x03\x02" +
-		"\x02\x02\xCA\x93\x03\x02\x02\x02\xCA\x97\x03\x02\x02\x02\xCA\x9C\x03\x02" +
-		"\x02\x02\xCA\xA1\x03\x02\x02\x02\xCA\xA7\x03\x02\x02\x02\xCA\xAA\x03\x02" +
-		"\x02\x02\xCA\xAF\x03\x02\x02\x02\xCA\xB3\x03\x02\x02\x02\xCA\xB8\x03\x02" +
-		"\x02\x02\xCA\xBD\x03\x02\x02\x02\xCA\xC2\x03\x02\x02\x02\xCB\x04\x03\x02" +
-		"\x02\x02\xCC\xCD\x07V\x02\x02\xCD\xCE\x07t\x02\x02\xCE\xCF\x07w\x02\x02" +
-		"\xCF\xD6\x07g\x02\x02\xD0\xD1\x07H\x02\x02\xD1\xD2\x07c\x02\x02\xD2\xD3" +
-		"\x07n\x02\x02\xD3\xD4\x07u\x02\x02\xD4\xD6\x07g\x02\x02\xD5\xCC\x03\x02" +
-		"\x02\x02\xD5\xD0\x03\x02\x02\x02\xD6\x06\x03\x02\x02\x02\xD7\xD8\x07P" +
-		"\x02\x02\xD8\xD9\x07q\x02\x02\xD9\xDA\x07p\x02\x02\xDA\xDB\x07g\x02\x02" +
-		"\xDB\b\x03\x02\x02\x02\xDC\xE0\x07%\x02\x02\xDD\xDF\n\x02\x02\x02\xDE" +
-		"\xDD\x03\x02\x02\x02\xDF\xE2\x03\x02\x02\x02\xE0\xDE\x03\x02\x02\x02\xE0" +
-		"\xE1\x03\x02\x02\x02\xE1\n\x03\x02\x02\x02\xE2\xE0\x03\x02\x02\x02\xE3" +
-		"\xF6\t\x03\x02\x02\xE4\xE9\x07$\x02\x02\xE5\xE8\n\x04\x02\x02\xE6\xE8" +
-		"\x05/\x18\x02\xE7\xE5\x03\x02\x02\x02\xE7\xE6\x03\x02\x02\x02\xE8\xEB" +
-		"\x03\x02\x02\x02\xE9\xE7\x03\x02\x02\x02\xE9\xEA\x03\x02\x02\x02\xEA\xEC" +
-		"\x03\x02\x02\x02\xEB\xE9\x03\x02\x02\x02\xEC\xF7\x07$\x02\x02\xED\xF2" +
-		"\x07)\x02\x02\xEE\xF1\n\x05\x02\x02\xEF\xF1\x05/\x18\x02\xF0\xEE\x03\x02" +
-		"\x02\x02\xF0\xEF\x03\x02\x02\x02\xF1\xF4\x03\x02\x02\x02\xF2\xF0\x03\x02" +
-		"\x02\x02\xF2\xF3\x03\x02\x02\x02\xF3\xF5\x03\x02\x02\x02\xF4\xF2\x03\x02" +
-		"\x02\x02\xF5\xF7\x07)\x02\x02\xF6\xE4\x03\x02\x02\x02\xF6\xED\x03\x02" +
-		"\x02\x02\xF7\f\x03\x02\x02\x02\xF8\u010B\t\x06\x02\x02\xF9\xFE\x07$\x02" +
-		"\x02\xFA\xFD\n\x07\x02\x02\xFB\xFD\x05/\x18\x02\xFC\xFA\x03\x02\x02\x02" +
-		"\xFC\xFB\x03\x02\x02\x02\xFD\u0100\x03\x02\x02\x02\xFE\xFC\x03\x02\x02" +
-		"\x02\xFE\xFF\x03\x02\x02\x02\xFF\u0101\x03\x02\x02\x02\u0100\xFE\x03\x02" +
-		"\x02\x02\u0101\u010C\x07$\x02\x02\u0102\u0107\x07)\x02\x02\u0103\u0106" +
-		"\n\b\x02\x02\u0104\u0106\x05/\x18\x02\u0105\u0103\x03\x02\x02\x02\u0105" +
-		"\u0104\x03\x02\x02\x02\u0106\u0109\x03\x02\x02\x02\u0107\u0105\x03\x02" +
-		"\x02\x02\u0107\u0108\x03\x02\x02\x02\u0108\u010A\x03\x02\x02\x02\u0109" +
-		"\u0107\x03\x02\x02\x02\u010A\u010C\x07)\x02\x02\u010B\xF9\x03\x02\x02" +
-		"\x02\u010B\u0102\x03\x02\x02\x02\u010C\x0E\x03\x02\x02\x02\u010D\u010E" +
-		"\x07$\x02\x02\u010E\u010F\x07$\x02\x02\u010F\u0110\x07$\x02\x02\u0110" +
-		"\u0114\x03\x02\x02\x02\u0111\u0113\v\x02\x02\x02\u0112\u0111\x03\x02\x02" +
-		"\x02\u0113\u0116\x03\x02\x02\x02\u0114\u0115\x03\x02\x02\x02\u0114\u0112" +
-		"\x03\x02\x02\x02\u0115\u0117\x03\x02\x02\x02\u0116\u0114\x03\x02\x02\x02" +
-		"\u0117\u0118\x07$\x02\x02\u0118\u0119\x07$\x02\x02\u0119\u0128\x07$\x02" +
-		"\x02\u011A\u011B\x07)\x02\x02\u011B\u011C\x07)\x02\x02\u011C\u011D\x07" +
-		")\x02\x02\u011D\u0121\x03\x02\x02\x02\u011E\u0120\v\x02\x02\x02\u011F" +
-		"\u011E\x03\x02\x02\x02\u0120\u0123\x03\x02\x02\x02\u0121\u0122\x03\x02" +
-		"\x02\x02\u0121\u011F\x03\x02\x02\x02\u0122\u0124\x03\x02\x02\x02\u0123" +
-		"\u0121\x03\x02\x02\x02\u0124\u0125\x07)\x02\x02\u0125\u0126\x07)\x02\x02" +
-		"\u0126\u0128\x07)\x02\x02\u0127\u010D\x03\x02\x02\x02\u0127\u011A\x03" +
-		"\x02\x02\x02\u0128\x10\x03\x02\x02\x02\u0129\u012E\x07$\x02\x02\u012A" +
-		"\u012D\x05/\x18\x02\u012B\u012D\n\x07\x02\x02\u012C\u012A\x03\x02\x02" +
-		"\x02\u012C\u012B\x03\x02\x02\x02\u012D\u0130\x03\x02\x02\x02\u012E\u012C" +
-		"\x03\x02\x02\x02\u012E\u012F\x03\x02\x02\x02\u012F\u0131\x03\x02\x02\x02" +
-		"\u0130\u012E\x03\x02\x02\x02\u0131\u0132\x07$\x02\x02\u0132\x12\x03\x02" +
-		"\x02\x02\u0133\u0138\x07)\x02\x02\u0134\u0137\x05/\x18\x02\u0135\u0137" +
-		"\n\b\x02\x02\u0136\u0134\x03\x02\x02\x02\u0136\u0135\x03\x02\x02\x02\u0137" +
-		"\u013A\x03\x02\x02\x02\u0138\u0136\x03\x02\x02\x02\u0138\u0139\x03\x02" +
-		"\x02\x02\u0139\u013B\x03\x02\x02\x02\u013A\u0138\x03\x02\x02\x02\u013B" +
-		"\u013C\x07)\x02\x02\u013C\x14\x03\x02\x02\x02\u013D\u0143\x05\x17\f\x02" +
-		"\u013E\u0143\x05\x19\r\x02\u013F\u0143\x05\x1B\x0E\x02\u0140\u0143\x05" +
-		"\x1D\x0F\x02\u0141\u0143\x05\x1F\x10\x02\u0142\u013D\x03\x02\x02\x02\u0142" +
-		"\u013E\x03\x02\x02\x02\u0142\u013F\x03\x02\x02\x02\u0142\u0140\x03\x02" +
-		"\x02\x02\u0142\u0141\x03\x02\x02\x02\u0143\x16\x03\x02\x02\x02\u0144\u0145" +
-		"\x072\x02\x02\u0145\u0147\t\t\x02\x02\u0146\u0148\t\n\x02\x02\u0147\u0146" +
-		"\x03\x02\x02\x02\u0148\u0149\x03\x02\x02\x02\u0149\u0147\x03\x02\x02\x02" +
-		"\u0149\u014A\x03\x02\x02\x02\u014A\x18\x03\x02\x02\x02\u014B\u014C\x07" +
-		"2\x02\x02\u014C\u014E\t\v\x02\x02\u014D\u014F\t\f\x02\x02\u014E\u014D" +
-		"\x03\x02\x02\x02\u014F\u0150\x03\x02\x02\x02\u0150\u014E\x03\x02\x02\x02" +
-		"\u0150\u0151\x03\x02\x02\x02\u0151\x1A\x03\x02\x02\x02\u0152\u0153\x07" +
-		"2\x02\x02\u0153\u0155\t\r\x02\x02\u0154\u0156\t\x0E\x02\x02\u0155\u0154" +
-		"\x03\x02\x02\x02\u0156\u0157\x03\x02\x02\x02\u0157\u0155\x03\x02\x02\x02" +
-		"\u0157\u0158\x03\x02\x02\x02\u0158\x1C\x03\x02\x02\x02\u0159\u015B\x05" +
-		"-\x17\x02\u015A\u0159\x03\x02\x02\x02\u015B\u015C\x03\x02\x02\x02\u015C" +
-		"\u015A\x03\x02\x02\x02\u015C\u015D\x03\x02\x02\x02\u015D\u015E\x03\x02" +
-		"\x02\x02\u015E\u0162\x070\x02\x02\u015F\u0161\x05-\x17\x02\u0160\u015F" +
-		"\x03\x02\x02\x02\u0161\u0164\x03\x02\x02\x02\u0162\u0160\x03\x02\x02\x02" +
-		"\u0162\u0163\x03\x02\x02\x02\u0163\u0166\x03\x02\x02\x02\u0164\u0162\x03" +
-		"\x02\x02\x02\u0165\u0167\x051\x19\x02\u0166\u0165\x03\x02\x02\x02\u0166" +
-		"\u0167\x03\x02\x02\x02\u0167\u0179\x03\x02\x02\x02\u0168\u016A\x070\x02" +
-		"\x02\u0169\u016B\x05-\x17\x02\u016A\u0169\x03\x02\x02\x02\u016B\u016C" +
-		"\x03\x02\x02\x02\u016C\u016A\x03\x02\x02\x02\u016C\u016D\x03\x02\x02\x02" +
-		"\u016D\u016F\x03\x02\x02\x02\u016E\u0170\x051\x19\x02\u016F\u016E\x03" +
-		"\x02\x02\x02\u016F\u0170\x03\x02\x02\x02\u0170\u0179\x03\x02\x02\x02\u0171" +
-		"\u0173\x05-\x17\x02\u0172\u0171\x03\x02\x02\x02\u0173\u0174\x03\x02\x02" +
-		"\x02\u0174\u0172\x03\x02\x02\x02\u0174\u0175\x03\x02\x02\x02\u0175\u0176" +
-		"\x03\x02\x02\x02\u0176\u0177\x051\x19\x02\u0177\u0179\x03\x02\x02\x02" +
-		"\u0178\u015A\x03\x02\x02\x02\u0178\u0168\x03\x02\x02\x02\u0178\u0172\x03" +
-		"\x02\x02\x02\u0179\x1E\x03\x02\x02\x02\u017A\u017C\x05-\x17\x02\u017B" +
-		"\u017A\x03\x02\x02\x02\u017C\u017D\x03\x02\x02\x02\u017D\u017B\x03\x02" +
-		"\x02\x02\u017D\u017E\x03\x02\x02\x02\u017E \x03\x02\x02\x02\u017F\u0180" +
-		"\x07?\x02\x02\u0180\u01B0\x07?\x02\x02\u0181\u0182\x07#\x02\x02\u0182" +
-		"\u01B0\x07?\x02\x02\u0183\u0184\x07>\x02\x02\u0184\u01B0\x07?\x02\x02" +
-		"\u0185\u0186\x07@\x02\x02\u0186\u01B0\x07?\x02\x02\u0187\u0188\x07>\x02" +
-		"\x02\u0188\u01B0\x07>\x02\x02\u0189\u018A\x07@\x02\x02\u018A\u01B0\x07" +
-		"@\x02\x02\u018B\u018C\x071\x02\x02\u018C\u01B0\x071\x02\x02\u018D\u018E" +
-		"\x07,\x02\x02\u018E\u01B0\x07,\x02\x02\u018F\u0190\x07-\x02\x02\u0190" +
-		"\u01B0\x07?\x02\x02\u0191\u0192\x07/\x02\x02\u0192\u01B0\x07?\x02\x02" +
-		"\u0193\u0194\x07,\x02\x02\u0194\u01B0\x07?\x02\x02\u0195\u0196\x071\x02" +
-		"\x02\u0196\u01B0\x07?\x02\x02\u0197\u0198\x07\'\x02\x02\u0198\u01B0\x07" +
-		"?\x02\x02\u0199\u019A\x07(\x02\x02\u019A\u01B0\x07?\x02\x02\u019B\u019C" +
-		"\x07~\x02\x02\u019C\u01B0\x07?\x02\x02\u019D\u019E\x07`\x02\x02\u019E" +
-		"\u01B0\x07?\x02\x02\u019F\u01A0\x07@\x02\x02\u01A0\u01A1\x07@\x02\x02" +
-		"\u01A1\u01B0\x07?\x02\x02\u01A2\u01A3\x07>\x02\x02\u01A3\u01A4\x07>\x02" +
-		"\x02\u01A4\u01B0\x07?\x02\x02\u01A5\u01A6\x071\x02\x02\u01A6\u01A7\x07" +
-		"1\x02\x02\u01A7\u01B0\x07?\x02\x02\u01A8\u01A9\x07,\x02\x02\u01A9\u01AA" +
-		"\x07,\x02\x02\u01AA\u01B0\x07?\x02\x02\u01AB\u01AC\x07/\x02\x02\u01AC" +
-		"\u01B0\x07@\x02\x02\u01AD\u01AE\x07<\x02\x02\u01AE\u01B0\x07?\x02\x02" +
-		"\u01AF\u017F\x03\x02\x02\x02\u01AF\u0181\x03\x02\x02\x02\u01AF\u0183\x03" +
-		"\x02\x02\x02\u01AF\u0185\x03\x02\x02\x02\u01AF\u0187\x03\x02\x02\x02\u01AF" +
-		"\u0189\x03\x02\x02\x02\u01AF\u018B\x03\x02\x02\x02\u01AF\u018D\x03\x02" +
-		"\x02\x02\u01AF\u018F\x03\x02\x02\x02\u01AF\u0191\x03\x02\x02\x02\u01AF" +
-		"\u0193\x03\x02\x02\x02\u01AF\u0195\x03\x02\x02\x02\u01AF\u0197\x03\x02" +
-		"\x02\x02\u01AF\u0199\x03\x02\x02\x02\u01AF\u019B\x03\x02\x02\x02\u01AF" +
-		"\u019D\x03\x02\x02\x02\u01AF\u019F\x03\x02\x02\x02\u01AF\u01A2\x03\x02" +
-		"\x02\x02\u01AF\u01A5\x03\x02\x02\x02\u01AF\u01A8\x03\x02\x02\x02\u01AF" +
-		"\u01AB\x03\x02\x02\x02\u01AF\u01AD\x03\x02\x02\x02\u01B0\"\x03\x02\x02" +
-		"\x02\u01B1\u01B2\t\x0F\x02\x02\u01B2$\x03\x02\x02\x02\u01B3\u01B4\x07" +
-		"B\x02\x02\u01B4\u01B9\x05\'\x14\x02\u01B5\u01B6\x070\x02\x02\u01B6\u01B8" +
-		"\x05\'\x14\x02\u01B7\u01B5\x03\x02\x02\x02\u01B8\u01BB\x03\x02\x02\x02" +
-		"\u01B9\u01B7\x03\x02\x02\x02\u01B9\u01BA\x03\x02\x02\x02\u01BA&\x03\x02" +
-		"\x02\x02\u01BB\u01B9\x03\x02\x02\x02\u01BC\u01C0\t\x10\x02\x02\u01BD\u01BF" +
-		"\t\x11\x02\x02\u01BE\u01BD\x03\x02\x02\x02\u01BF\u01C2\x03\x02\x02\x02" +
-		"\u01C0\u01BE\x03\x02\x02\x02\u01C0\u01C1\x03\x02\x02\x02\u01C1(\x03\x02" +
-		"\x02\x02\u01C2\u01C0\x03\x02\x02\x02\u01C3\u01C5\x07\x0F\x02\x02\u01C4" +
-		"\u01C3\x03\x02\x02\x02\u01C4\u01C5\x03\x02\x02\x02\u01C5\u01C6\x03\x02" +
-		"\x02\x02\u01C6\u01C7\x07\f\x02\x02\u01C7*\x03\x02\x02\x02\u01C8\u01CA" +
-		"\t\x12\x02\x02\u01C9\u01C8\x03\x02\x02\x02\u01CA\u01CB\x03\x02\x02\x02" +
-		"\u01CB\u01C9\x03\x02\x02\x02\u01CB\u01CC\x03\x02\x02\x02\u01CC\u01CD\x03" +
-		"\x02\x02\x02\u01CD\u01CE\b\x16\x02\x02\u01CE,\x03\x02\x02\x02\u01CF\u01D0" +
-		"\t\x13\x02\x02\u01D0.\x03\x02\x02\x02\u01D1\u01D2\x07^\x02\x02\u01D2\u01D3" +
-		"\v\x02\x02\x02\u01D30\x03\x02\x02\x02\u01D4\u01D6\t\x14\x02\x02\u01D5" +
-		"\u01D7\t\x15\x02\x02\u01D6\u01D5\x03\x02\x02\x02\u01D6\u01D7\x03\x02\x02" +
-		"\x02\u01D7\u01D9\x03\x02\x02\x02\u01D8\u01DA\x05-\x17\x02\u01D9\u01D8" +
-		"\x03\x02\x02\x02\u01DA\u01DB\x03\x02\x02\x02\u01DB\u01D9\x03\x02\x02\x02" +
-		"\u01DB\u01DC\x03\x02\x02\x02\u01DC2\x03\x02\x02\x02*\x02\xCA\xD5\xE0\xE7" +
-		"\xE9\xF0\xF2\xF6\xFC\xFE\u0105\u0107\u010B\u0114\u0121\u0127\u012C\u012E" +
-		"\u0136\u0138\u0142\u0149\u0150\u0157\u015C\u0162\u0166\u016C\u016F\u0174" +
-		"\u0178\u017D\u01AF\u01B9\u01C0\u01C4\u01CB\u01D6\u01DB\x03\x02\x03\x02";
-	public static __ATN: ATN;
-	public static get _ATN(): ATN {
-		if (!PythonMini.__ATN) {
-			PythonMini.__ATN = new ATNDeserializer().deserialize(Utils.toCharArray(PythonMini._serializedATN));
-		}
-
-		return PythonMini.__ATN;
-	}
-
+export interface TokenLike {
+  type: number;
+  text: string;
 }
 
+export class SqlMini {
+  private input: string;
+  private pos: number = 0;
+  
+  // Token type constants - match ANTLR convention
+  static readonly SELECT = 1;
+  static readonly FROM = 2;
+  static readonly WHERE = 3;
+  static readonly INSERT = 4;
+  static readonly INTO = 5;
+  static readonly VALUES = 6;
+  static readonly UPDATE = 7;
+  static readonly SET = 8;
+  static readonly DELETE = 9;
+  static readonly CREATE = 10;
+  static readonly DROP = 11;
+  static readonly ALTER = 12;
+  static readonly TABLE = 13;
+  static readonly INDEX = 14;
+  static readonly VIEW = 15;
+  static readonly DATABASE = 16;
+  static readonly SCHEMA = 17;
+  static readonly JOIN = 18;
+  static readonly INNER = 19;
+  static readonly LEFT = 20;
+  static readonly RIGHT = 21;
+  static readonly FULL = 22;
+  static readonly OUTER = 23;
+  static readonly ON = 24;
+  static readonly AS = 25;
+  static readonly ORDER = 26;
+  static readonly BY = 27;
+  static readonly GROUP = 28;
+  static readonly HAVING = 29;
+  static readonly LIMIT = 30;
+  static readonly OFFSET = 31;
+  static readonly UNION = 32;
+  static readonly ALL = 33;
+  static readonly DISTINCT = 34;
+  static readonly ASC = 35;
+  static readonly DESC = 36;
+  static readonly AND = 37;
+  static readonly OR = 38;
+  static readonly NOT = 39;
+  static readonly IN = 40;
+  static readonly EXISTS = 41;
+  static readonly BETWEEN = 42;
+  static readonly LIKE = 43;
+  static readonly IS = 44;
+  static readonly NULL = 45;
+  static readonly TRUE = 46;
+  static readonly FALSE = 47;
+  static readonly COUNT = 48;
+  static readonly SUM = 49;
+  static readonly AVG = 50;
+  static readonly MIN = 51;
+  static readonly MAX = 52;
+  static readonly RANK = 53;
+  static readonly DENSE_RANK = 54;
+  static readonly ROW_NUMBER = 55;
+  static readonly OVER = 56;
+  static readonly PARTITION = 57;
+  static readonly USE = 58;
+  static readonly WITH = 59;
+  static readonly SHOW = 60;
+  static readonly IF = 61;
+  static readonly COLUMN = 62;
+  static readonly TABLES = 63;
+  static readonly DATABASES = 64;
+  static readonly DESCRIBE = 65;
+  static readonly CASE = 66;
+  static readonly WHEN = 67;
+  static readonly THEN = 68;
+  static readonly ELSE = 69;
+  static readonly END = 70;
+  static readonly INT = 71;
+  static readonly INTEGER = 72;
+  static readonly VARCHAR = 73;
+  static readonly CHAR = 74;
+  static readonly TEXT = 75;
+  static readonly BOOLEAN = 76;
+  static readonly DECIMAL = 77;
+  static readonly FLOAT = 78;
+  static readonly DOUBLE = 79;
+  static readonly DATE = 80;
+  static readonly TIME = 81;
+  static readonly TIMESTAMP = 82;
+  static readonly PRIMARY = 83;
+  static readonly KEY = 84;
+  static readonly FOREIGN = 85;
+  static readonly REFERENCES = 86;
+  static readonly UNIQUE = 87;
+  static readonly NOT_NULL = 88;
+  static readonly DEFAULT = 89;
+  static readonly AUTO_INCREMENT = 90;
+  static readonly CHECK = 91;
+  static readonly ADD = 92;
+  static readonly MODIFY = 93;
+  static readonly EQUALS = 94;
+  static readonly NOT_EQUALS = 95;
+  static readonly LESS_THAN = 96;
+  static readonly GREATER_THAN = 97;
+  static readonly LESS_EQUAL = 98;
+  static readonly GREATER_EQUAL = 99;
+  static readonly PLUS = 100;
+  static readonly MINUS = 101;
+  static readonly MULTIPLY = 102;
+  static readonly DIVIDE = 103;
+  static readonly MODULO = 104;
+  static readonly SEMICOLON = 105;
+  static readonly COMMA = 106;
+  static readonly DOT = 107;
+  static readonly LPAREN = 108;
+  static readonly RPAREN = 109;
+  static readonly STRING_LITERAL = 110;
+  static readonly DOUBLE_QUOTED_STRING = 111;
+  static readonly NUMBER = 112;
+  static readonly IDENTIFIER = 113;
+  static readonly LINE_COMMENT = 114;
+  static readonly BLOCK_COMMENT = 115;
+  static readonly WHITESPACE = 116;
+  
+  // SQL Keywords mapping
+  private static readonly KEYWORDS: Record<string, number> = {
+    'select': SqlMini.SELECT,
+    'from': SqlMini.FROM,
+    'where': SqlMini.WHERE,
+    'insert': SqlMini.INSERT,
+    'into': SqlMini.INTO,
+    'values': SqlMini.VALUES,
+    'update': SqlMini.UPDATE,
+    'set': SqlMini.SET,
+    'delete': SqlMini.DELETE,
+    'create': SqlMini.CREATE,
+    'drop': SqlMini.DROP,
+    'alter': SqlMini.ALTER,
+    'table': SqlMini.TABLE,
+    'index': SqlMini.INDEX,
+    'view': SqlMini.VIEW,
+    'database': SqlMini.DATABASE,
+    'schema': SqlMini.SCHEMA,
+    'join': SqlMini.JOIN,
+    'inner': SqlMini.INNER,
+    'left': SqlMini.LEFT,
+    'right': SqlMini.RIGHT,
+    'full': SqlMini.FULL,
+    'outer': SqlMini.OUTER,
+    'on': SqlMini.ON,
+    'as': SqlMini.AS,
+    'order': SqlMini.ORDER,
+    'by': SqlMini.BY,
+    'group': SqlMini.GROUP,
+    'having': SqlMini.HAVING,
+    'limit': SqlMini.LIMIT,
+    'offset': SqlMini.OFFSET,
+    'union': SqlMini.UNION,
+    'all': SqlMini.ALL,
+    'distinct': SqlMini.DISTINCT,
+    'asc': SqlMini.ASC,
+    'desc': SqlMini.DESC,
+    'and': SqlMini.AND,
+    'or': SqlMini.OR,
+    'not': SqlMini.NOT,
+    'in': SqlMini.IN,
+    'exists': SqlMini.EXISTS,
+    'between': SqlMini.BETWEEN,
+    'like': SqlMini.LIKE,
+    'is': SqlMini.IS,
+    'null': SqlMini.NULL,
+    'true': SqlMini.TRUE,
+    'false': SqlMini.FALSE,
+    'count': SqlMini.COUNT,
+    'sum': SqlMini.SUM,
+    'avg': SqlMini.AVG,
+    'min': SqlMini.MIN,
+    'max': SqlMini.MAX,
+    'rank': SqlMini.RANK,
+    'dense_rank': SqlMini.DENSE_RANK,
+    'row_number': SqlMini.ROW_NUMBER,
+    'over': SqlMini.OVER,
+    'partition': SqlMini.PARTITION,
+    'use': SqlMini.USE,
+    'with': SqlMini.WITH,
+    'show': SqlMini.SHOW,
+    'if': SqlMini.IF,
+    'column': SqlMini.COLUMN,
+    'tables': SqlMini.TABLES,
+    'databases': SqlMini.DATABASES,
+    'describe': SqlMini.DESCRIBE,
+    'case': SqlMini.CASE,
+    'when': SqlMini.WHEN,
+    'then': SqlMini.THEN,
+    'else': SqlMini.ELSE,
+    'end': SqlMini.END,
+    'int': SqlMini.INT,
+    'integer': SqlMini.INTEGER,
+    'varchar': SqlMini.VARCHAR,
+    'char': SqlMini.CHAR,
+    'text': SqlMini.TEXT,
+    'boolean': SqlMini.BOOLEAN,
+    'decimal': SqlMini.DECIMAL,
+    'float': SqlMini.FLOAT,
+    'double': SqlMini.DOUBLE,
+    'date': SqlMini.DATE,
+    'time': SqlMini.TIME,
+    'timestamp': SqlMini.TIMESTAMP,
+    'primary': SqlMini.PRIMARY,
+    'key': SqlMini.KEY,
+    'foreign': SqlMini.FOREIGN,
+    'references': SqlMini.REFERENCES,
+    'unique': SqlMini.UNIQUE,
+    'default': SqlMini.DEFAULT,
+    'check': SqlMini.CHECK,
+    'add': SqlMini.ADD,
+    'modify': SqlMini.MODIFY
+  };
+  
+  static readonly _SYMBOLIC_NAMES = [
+    null, // 0 is unused
+    'SELECT', 'FROM', 'WHERE', 'INSERT', 'INTO', 'VALUES', 'UPDATE', 'SET', 'DELETE',
+    'CREATE', 'DROP', 'ALTER', 'TABLE', 'INDEX', 'VIEW', 'DATABASE', 'SCHEMA',
+    'JOIN', 'INNER', 'LEFT', 'RIGHT', 'FULL', 'OUTER', 'ON', 'AS', 'ORDER', 'BY',
+    'GROUP', 'HAVING', 'LIMIT', 'OFFSET', 'UNION', 'ALL', 'DISTINCT', 'ASC', 'DESC',
+    'AND', 'OR', 'NOT', 'IN', 'EXISTS', 'BETWEEN', 'LIKE', 'IS', 'NULL', 'TRUE', 'FALSE',
+    'COUNT', 'SUM', 'AVG', 'MIN', 'MAX', 'RANK', 'DENSE_RANK', 'ROW_NUMBER', 'OVER', 'PARTITION', 'USE', 'WITH', 'SHOW', 'IF', 'COLUMN', 'TABLES', 'DATABASES', 'DESCRIBE', 'CASE', 'WHEN', 'THEN', 'ELSE', 'END',
+    'INT', 'INTEGER', 'VARCHAR', 'CHAR', 'TEXT', 'BOOLEAN', 'DECIMAL', 'FLOAT', 'DOUBLE',
+    'DATE', 'TIME', 'TIMESTAMP', 'PRIMARY', 'KEY', 'FOREIGN', 'REFERENCES', 'UNIQUE',
+    'NOT_NULL', 'DEFAULT', 'AUTO_INCREMENT', 'CHECK', 'ADD', 'MODIFY',
+    'EQUALS', 'NOT_EQUALS', 'LESS_THAN', 'GREATER_THAN', 'LESS_EQUAL', 'GREATER_EQUAL',
+    'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'MODULO',
+    'SEMICOLON', 'COMMA', 'DOT', 'LPAREN', 'RPAREN',
+    'STRING_LITERAL', 'DOUBLE_QUOTED_STRING', 'NUMBER', 'IDENTIFIER',
+    'LINE_COMMENT', 'BLOCK_COMMENT', 'WHITESPACE'
+  ];
+  
+  constructor(input: string) {
+    this.input = input;
+  }
+  
+  // Expose symbolic names for ANTLR adapter
+  get symbolicNames(): string[] {
+    return SqlMini._SYMBOLIC_NAMES.map(name => name || '');
+  }
+  
+  nextToken(): TokenLike {
+    // Don't skip whitespace automatically - handle it as tokens
+    
+    if (this.pos >= this.input.length) {
+      return { type: -1, text: '' }; // EOF
+    }
+    
+    const char = this.input[this.pos];
+    
+    // Handle whitespace as tokens to preserve formatting
+    if (/\s/.test(char)) {
+      return this.readWhitespace();
+    }
+    
+    // Comments
+    if (char === '-' && this.peek(1) === '-') {
+      return this.readLineComment();
+    }
+    if (char === '/' && this.peek(1) === '*') {
+      return this.readBlockComment();
+    }
+    
+    // String literals
+    if (char === "'") {
+      return this.readStringSingle();
+    }
+    if (char === '"') {
+      return this.readStringDouble();
+    }
+    
+    // Numbers
+    if (/\d/.test(char)) {
+      return this.readNumber();
+    }
+    
+    // Operators and punctuation
+    if (char === '=' ) return { type: SqlMini.EQUALS, text: this.consume() };
+    if (char === '!' && this.peek(1) === '=') return { type: SqlMini.NOT_EQUALS, text: this.consume() + this.consume() };
+    if (char === '<' && this.peek(1) === '>') return { type: SqlMini.NOT_EQUALS, text: this.consume() + this.consume() };
+    if (char === '<' && this.peek(1) === '=') return { type: SqlMini.LESS_EQUAL, text: this.consume() + this.consume() };
+    if (char === '>' && this.peek(1) === '=') return { type: SqlMini.GREATER_EQUAL, text: this.consume() + this.consume() };
+    if (char === '<') return { type: SqlMini.LESS_THAN, text: this.consume() };
+    if (char === '>') return { type: SqlMini.GREATER_THAN, text: this.consume() };
+    if (char === '+') return { type: SqlMini.PLUS, text: this.consume() };
+    if (char === '-') return { type: SqlMini.MINUS, text: this.consume() };
+    if (char === '*') return { type: SqlMini.MULTIPLY, text: this.consume() };
+    if (char === '/') return { type: SqlMini.DIVIDE, text: this.consume() };
+    if (char === '%') return { type: SqlMini.MODULO, text: this.consume() };
+    if (char === ';') return { type: SqlMini.SEMICOLON, text: this.consume() };
+    if (char === ',') return { type: SqlMini.COMMA, text: this.consume() };
+    if (char === '.') return { type: SqlMini.DOT, text: this.consume() };
+    if (char === '(') return { type: SqlMini.LPAREN, text: this.consume() };
+    if (char === ')') return { type: SqlMini.RPAREN, text: this.consume() };
+    
+    // Identifiers and keywords
+    if (/[a-zA-Z_]/.test(char)) {
+      return this.readIdentifierOrKeyword();
+    }
+    
+    // Unknown character - skip it
+    return { type: SqlMini.IDENTIFIER, text: this.consume() };
+  }
+  
+  private consume(): string {
+    return this.input[this.pos++];
+  }
+  
+  private peek(offset: number): string {
+    const pos = this.pos + offset;
+    return pos < this.input.length ? this.input[pos] : '';
+  }
+  
+  private skipWhitespace(): void {
+    while (this.pos < this.input.length && /\s/.test(this.input[this.pos])) {
+      this.pos++;
+    }
+  }
+  
+  private readWhitespace(): TokenLike {
+    const start = this.pos;
+    while (this.pos < this.input.length && /\s/.test(this.input[this.pos])) {
+      this.pos++;
+    }
+    return { type: SqlMini.WHITESPACE, text: this.input.slice(start, this.pos) };
+  }
+  
+  private readLineComment(): TokenLike {
+    const start = this.pos;
+    this.pos += 2; // skip '--'
+    while (this.pos < this.input.length && this.input[this.pos] !== '\n') {
+      this.pos++;
+    }
+    return { type: SqlMini.LINE_COMMENT, text: this.input.slice(start, this.pos) };
+  }
+  
+  private readBlockComment(): TokenLike {
+    const start = this.pos;
+    this.pos += 2; // skip '/*'
+    while (this.pos < this.input.length - 1) {
+      if (this.input[this.pos] === '*' && this.input[this.pos + 1] === '/') {
+        this.pos += 2;
+        break;
+      }
+      this.pos++;
+    }
+    return { type: SqlMini.BLOCK_COMMENT, text: this.input.slice(start, this.pos) };
+  }
+  
+  private readStringSingle(): TokenLike {
+    const start = this.pos;
+    this.pos++; // skip opening quote
+    while (this.pos < this.input.length) {
+      if (this.input[this.pos] === "'") {
+        if (this.peek(1) === "'") {
+          this.pos += 2; // skip escaped quote
+        } else {
+          this.pos++; // skip closing quote
+          break;
+        }
+      } else {
+        this.pos++;
+      }
+    }
+    return { type: SqlMini.STRING_LITERAL, text: this.input.slice(start, this.pos) };
+  }
+  
+  private readStringDouble(): TokenLike {
+    const start = this.pos;
+    this.pos++; // skip opening quote
+    while (this.pos < this.input.length) {
+      if (this.input[this.pos] === '"') {
+        if (this.peek(1) === '"') {
+          this.pos += 2; // skip escaped quote
+        } else {
+          this.pos++; // skip closing quote
+          break;
+        }
+      } else {
+        this.pos++;
+      }
+    }
+    return { type: SqlMini.DOUBLE_QUOTED_STRING, text: this.input.slice(start, this.pos) };
+  }
+  
+  private readNumber(): TokenLike {
+    const start = this.pos;
+    while (this.pos < this.input.length && /\d/.test(this.input[this.pos])) {
+      this.pos++;
+    }
+    if (this.pos < this.input.length && this.input[this.pos] === '.') {
+      this.pos++; // decimal point
+      while (this.pos < this.input.length && /\d/.test(this.input[this.pos])) {
+        this.pos++;
+      }
+    }
+    return { type: SqlMini.NUMBER, text: this.input.slice(start, this.pos) };
+  }
+  
+  private readIdentifierOrKeyword(): TokenLike {
+    const start = this.pos;
+    while (this.pos < this.input.length && /[a-zA-Z0-9_]/.test(this.input[this.pos])) {
+      this.pos++;
+    }
+    const text = this.input.slice(start, this.pos);
+    const lowerText = text.toLowerCase();
+    const keywordType = SqlMini.KEYWORDS[lowerText];
+    return {
+      type: keywordType || SqlMini.IDENTIFIER,
+      text: text
+    };
+  }
+}
