@@ -107,6 +107,23 @@
         { "type": "punctuation", "regex": "[();,.]" },
         { "type": "whitespace", "regex": "\\s+" }
       ]
+    },
+    {
+      "name": "java",
+      "patterns": [
+        { "type": "comment", "regex": "//.*$|/\\*[\\s\\S]*?\\*/|/\\*\\*[\\s\\S]*?\\*/" },
+        { "type": "string", "regex": "\"(?:\\\\.|[^\"\\\\])*\"|'(?:\\\\.|[^'\\\\])'" },
+        { "type": "number", "regex": "0[xX][0-9a-fA-F]+[lL]?|0[bB][01]+[lL]?|0[0-7]+[lL]?|\\b\\d+(?:\\.\\d+)?(?:[eE][+-]?\\d+)?[fFdDlL]?\\b" },
+        { "type": "keyword", "regex": "\\b(?:abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|native|new|package|private|protected|public|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|try|void|volatile|while)\\b" },
+        { "type": "type", "regex": "\\b(?:boolean|byte|char|double|float|int|long|short|void)\\b" },
+        { "type": "boolean", "regex": "\\b(?:true|false)\\b" },
+        { "type": "null", "regex": "\\bnull\\b" },
+        { "type": "annotation", "regex": "@[A-Za-z_][A-Za-z0-9_]*" },
+        { "type": "operator", "regex": "==|!=|<=|>=|<<|>>|>>>|\\+\\+|--|&&|\\|\\||\\+=|-=|\\*=|/=|%=|&=|\\|=|\\^=|<<=|>>=|>>>=|->|::|\\+|-|\\*|/|%|&|\\||\\^|!|~|=|<|>|\\?" },
+        { "type": "identifier", "regex": "[A-Za-z_$][A-Za-z0-9_$]*" },
+        { "type": "punctuation", "regex": "[{}()\\[\\].,;:]" },
+        { "type": "whitespace", "regex": "\\s+" }
+      ]
     }
   ]
 }

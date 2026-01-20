@@ -8,7 +8,7 @@ export interface TokenLike {
   text: string;
 }
 
-export class PythonMini {
+export class PythonMiniManual {
   // Token constants
   static readonly KEYWORD = 1;
   static readonly BOOLEAN = 2;
@@ -147,10 +147,10 @@ export class PythonMini {
     }
 
     // Punctuation
-    if (PythonMini.PUNCTUATION.has(char)) {
+    if (PythonMiniManual.PUNCTUATION.has(char)) {
       this.pos++;
       return {
-        type: PythonMini.PUNCT,
+        type: PythonMiniManual.PUNCT,
         text: char
       };
     }
@@ -163,7 +163,7 @@ export class PythonMini {
     // Unknown character - consume and continue
     this.pos++;
     return {
-      type: PythonMini.IDENTIFIER, // Default to identifier for unknown
+      type: PythonMiniManual.IDENTIFIER, // Default to identifier for unknown
       text: char
     };
   }
@@ -177,7 +177,7 @@ export class PythonMini {
     }
     
     return {
-      type: PythonMini.COMMENT,
+      type: PythonMiniManual.COMMENT,
       text: this.input.substring(start, this.pos)
     };
   }
@@ -191,7 +191,7 @@ export class PythonMini {
     }
     
     return {
-      type: PythonMini.NEWLINE,
+      type: PythonMiniManual.NEWLINE,
       text: this.input.substring(start, this.pos)
     };
   }
@@ -216,7 +216,7 @@ export class PythonMini {
     }
     
     return {
-      type: quote === '"' ? PythonMini.STRING_DOUBLE : PythonMini.STRING_SINGLE,
+      type: quote === '"' ? PythonMiniManual.STRING_DOUBLE : PythonMiniManual.STRING_SINGLE,
       text: this.input.substring(start, this.pos)
     };
   }
@@ -234,7 +234,7 @@ export class PythonMini {
     }
     
     return {
-      type: PythonMini.TRIPLE_STRING,
+      type: PythonMiniManual.TRIPLE_STRING,
       text: this.input.substring(start, this.pos)
     };
   }
@@ -245,7 +245,7 @@ export class PythonMini {
     const stringToken = this.readString(this.pos - 1);
     
     return {
-      type: prefix === 'f' ? PythonMini.F_STRING : PythonMini.RAW_STRING,
+      type: prefix === 'f' ? PythonMiniManual.F_STRING : PythonMiniManual.RAW_STRING,
       text: this.input.substring(start, this.pos)
     };
   }
@@ -274,10 +274,10 @@ export class PythonMini {
       }
     }
     
-    let type = PythonMini.INT_NUMBER;
+    let type = PythonMiniManual.INT_NUMBER;
     
     if (hasDecimal || hasExponent) {
-      type = PythonMini.FLOAT_NUMBER;
+      type = PythonMiniManual.FLOAT_NUMBER;
     }
     
     return {
@@ -302,8 +302,8 @@ export class PythonMini {
       }
     }
     
-    const type = base === 'x' ? PythonMini.HEX_NUMBER : 
-                 base === 'b' ? PythonMini.BIN_NUMBER : PythonMini.OCT_NUMBER;
+    const type = base === 'x' ? PythonMiniManual.HEX_NUMBER : 
+                 base === 'b' ? PythonMiniManual.BIN_NUMBER : PythonMiniManual.OCT_NUMBER;
     
     return {
       type,
@@ -330,20 +330,20 @@ export class PythonMini {
     }
     
     return {
-      type: PythonMini.DECORATOR,
+      type: PythonMiniManual.DECORATOR,
       text: this.input.substring(start, this.pos)
     };
   }
 
   private readOperator(start: number): TokenLike | null {
     // Sort operators by length (longest first) to match multi-character operators
-    const sortedOps = [...PythonMini.OPERATORS].sort((a, b) => b.length - a.length);
+    const sortedOps = [...PythonMiniManual.OPERATORS].sort((a, b) => b.length - a.length);
     
     for (const op of sortedOps) {
       if (this.input.substring(this.pos, this.pos + op.length) === op) {
         this.pos += op.length;
         return {
-          type: PythonMini.OPERATOR,
+          type: PythonMiniManual.OPERATOR,
           text: op
         };
       }
@@ -362,16 +362,16 @@ export class PythonMini {
     
     // Determine token type
     let type: number;
-    if (PythonMini.KEYWORDS.has(text)) {
-      type = PythonMini.KEYWORD;
-    } else if (PythonMini.BOOLEAN_LITERALS.has(text)) {
-      type = PythonMini.BOOLEAN;
+    if (PythonMiniManual.KEYWORDS.has(text)) {
+      type = PythonMiniManual.KEYWORD;
+    } else if (PythonMiniManual.BOOLEAN_LITERALS.has(text)) {
+      type = PythonMiniManual.BOOLEAN;
     } else if (text === 'None') {
-      type = PythonMini.NONE;
-    } else if (PythonMini.BUILTIN_FUNCTIONS.has(text)) {
-      type = PythonMini.FUNCTION;  // This is the key fix!
+      type = PythonMiniManual.NONE;
+    } else if (PythonMiniManual.BUILTIN_FUNCTIONS.has(text)) {
+      type = PythonMiniManual.FUNCTION;  // This is the key fix!
     } else {
-      type = PythonMini.IDENTIFIER;
+      type = PythonMiniManual.IDENTIFIER;
     }
     
     return {

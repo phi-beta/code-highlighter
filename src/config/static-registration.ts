@@ -29,6 +29,12 @@ async function registerAllAntlrLanguages() {
         aliases: [] 
       },
       { 
+        name: 'java', 
+        module: (process as any).pkg ? '/snapshot/code-highlight-linux/dist-cjs/src/generated/antlr/JavaMiniManual.js' : '../generated/antlr/JavaMiniManual.js',
+        lexerName: 'JavaMiniManual',
+        aliases: [] 
+      },
+      { 
         name: 'markdown', 
         module: (process as any).pkg ? '/snapshot/code-highlight-linux/dist-cjs/src/generated/antlr/MarkdownMini.js' : '../generated/antlr/MarkdownMini.js',
         lexerName: 'MarkdownMiniLexer',
@@ -36,8 +42,8 @@ async function registerAllAntlrLanguages() {
       },
       { 
         name: 'python', 
-        module: (process as any).pkg ? '/snapshot/code-highlight-linux/dist-cjs/src/generated/antlr/PythonMini.js' : '../generated/antlr/PythonMini.js',
-        lexerName: 'PythonMiniLexer',
+        module: (process as any).pkg ? '/snapshot/code-highlight-linux/dist-cjs/src/generated/antlr/PythonMiniManual.js' : '../generated/antlr/PythonMiniManual.js',
+        lexerName: 'PythonMiniManual',
         aliases: ['py'] 
       },
       { 
