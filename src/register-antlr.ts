@@ -74,8 +74,91 @@ function mapSymbolicToType(symbolic: string): string | undefined {
   if (raw === 'REDIRECT') return 'operator';
   if (raw === 'PIPE') return 'operator';
   if (raw === 'LOGICAL') return 'operator';
+    // PlantUML token mappings
+  if (raw === 'START_UML' || raw === 'END_UML') return 'keyword';
+  if (raw === 'START_SALT' || raw === 'END_SALT') return 'keyword';
+  if (raw === 'START_DITAA' || raw === 'END_DITAA') return 'keyword';
+  if (raw === 'START_DOT' || raw === 'END_DOT') return 'keyword';
+  if (raw === 'START_MINDMAP' || raw === 'END_MINDMAP') return 'keyword';
+  if (raw === 'START_WBS' || raw === 'END_WBS') return 'keyword';
+  if (raw === 'START_GANTT' || raw === 'END_GANTT') return 'keyword';
+  if (raw === 'START_JSON' || raw === 'END_JSON') return 'keyword';
+  if (raw === 'START_YAML' || raw === 'END_YAML') return 'keyword';
+  if (raw === 'PARTICIPANT' || raw === 'ACTOR' || raw === 'BOUNDARY') return 'keyword';
+  if (raw === 'CONTROL' || raw === 'ENTITY' || raw === 'DATABASE') return 'keyword';
+  if (raw === 'COLLECTIONS' || raw === 'QUEUE') return 'keyword';
+  if (raw === 'ACTIVATE' || raw === 'DEACTIVATE' || raw === 'AUTONUMBER') return 'keyword';
+  if (raw === 'CLASS' || raw === 'INTERFACE' || raw === 'ABSTRACT') return 'keyword';
+  if (raw === 'ENUM' || raw === 'PACKAGE' || raw === 'NAMESPACE') return 'keyword';
+  if (raw === 'EXTENDS' || raw === 'IMPLEMENTS') return 'keyword';
+  if (raw === 'COMPONENT' || raw === 'NODE' || raw === 'CLOUD') return 'keyword';
+  if (raw === 'FRAME' || raw === 'RECTANGLE' || raw === 'STORAGE') return 'keyword';
+  if (raw === 'ARTIFACT' || raw === 'STATE' || raw === 'USECASE') return 'keyword';
+  if (raw === 'START' || raw === 'STOP' || raw === 'END') return 'keyword';
+  if (raw === 'IF' || raw === 'THEN' || raw === 'ELSE' || raw === 'ELSEIF' || raw === 'ENDIF') return 'keyword';
+  if (raw === 'WHILE' || raw === 'ENDWHILE' || raw === 'REPEAT' || raw === 'BACKWARD') return 'keyword';
+  if (raw === 'FORK_AGAIN' || raw === 'END_FORK') return 'keyword';
+  if (raw === 'STEREOTYPE') return 'type';
+  if (raw === 'VISIBILITY') return 'operator';
+  if (raw === 'ARROW_RIGHT' || raw === 'ARROW_LEFT' || raw === 'ARROW_BOTH') return 'operator';
+  if (raw === 'ARROW_ASYNC' || raw === 'ARROW_RETURN' || raw === 'ARROW_LOST') return 'operator';
+  if (raw === 'ARROW_SHORT' || raw === 'ARROW_DOTTED') return 'operator';
+  if (raw === 'EXTENSION' || raw === 'COMPOSITION' || raw === 'AGGREGATION') return 'operator';
+  if (raw === 'DEPENDENCY' || raw === 'REALIZATION' || raw === 'ASSOCIATION') return 'operator';
+  if (raw === 'SKINPARAM' || raw === 'STYLE' || raw === 'TITLE') return 'keyword';
+  if (raw === 'HEADER' || raw === 'FOOTER' || raw === 'LEGEND' || raw === 'END_LEGEND') return 'keyword';
+  if (raw === 'NOTE' || raw === 'AS' || raw === 'OVER') return 'keyword';
+  if (raw === 'LEFT' || raw === 'RIGHT' || raw === 'TOP' || raw === 'BOTTOM') return 'keyword';
+  if (raw === 'COLOR_NAME') return 'color';
+  if (raw === 'COMMENT_LINE') return 'comment';
+  if (raw === 'COMMENT_BLOCK' || raw === 'COMMENT_MULTILINE') return 'comment';
   
-  // XML token mappings (MUST come before general fallback patterns)
+  // Mermaid token mappings
+  if (raw === 'GRAPH' || raw === 'FLOWCHART') return 'keyword';
+  if (raw === 'GRAPH_TD' || raw === 'GRAPH_BT' || raw === 'GRAPH_LR' || raw === 'GRAPH_RL') return 'keyword';
+  if (raw === 'SEQUENCE_DIAGRAM') return 'keyword';
+  if (raw === 'CLASS_DIAGRAM') return 'keyword';
+  if (raw === 'STATE_DIAGRAM') return 'keyword';
+  if (raw === 'ER_DIAGRAM') return 'keyword';
+  if (raw === 'GANTT') return 'keyword';
+  if (raw === 'PIE') return 'keyword';
+  if (raw === 'JOURNEY') return 'keyword';
+  if (raw === 'GIT_GRAPH') return 'keyword';
+  if (raw === 'REQUIREMENT_DIAGRAM') return 'keyword';
+  if (raw === 'LOOP' || raw === 'ALT' || raw === 'OPT' || raw === 'PAR') return 'keyword';
+  if (raw === 'CRITICAL' || raw === 'BREAK') return 'keyword';
+  if (raw === 'START_STATE' || raw === 'CHOICE' || raw === 'FORK' || raw === 'JOIN') return 'keyword';
+  if (raw === 'TITLE' || raw === 'DATE_FORMAT' || raw === 'SECTION') return 'keyword';
+  if (raw === 'EXCLUDES' || raw === 'INCLUDES' || raw === 'TODAYMARKER') return 'keyword';
+  if (raw === 'SHOW_DATA' || raw === 'TASK') return 'keyword';
+  if (raw === 'COMMIT' || raw === 'BRANCH' || raw === 'CHECKOUT' || raw === 'MERGE') return 'keyword';
+  if (raw === 'CHERRY_PICK') return 'keyword';
+  if (raw === 'REQUIREMENT' || raw === 'ELEMENT') return 'keyword';
+  if (raw === 'FUNCTIONAL_REQUIREMENT' || raw === 'INTERFACE_REQUIREMENT') return 'keyword';
+  if (raw === 'PERFORMANCE_REQUIREMENT' || raw === 'PHYSICAL_REQUIREMENT') return 'keyword';
+  if (raw === 'DESIGN_CONSTRAINT') return 'keyword';
+  if (raw === 'ARROW_SOLID' || raw === 'ARROW_DOTTED' || raw === 'ARROW_THICK') return 'operator';
+  if (raw === 'ARROW_OPEN' || raw === 'ARROW_DOTTED_OPEN' || raw === 'ARROW_THICK_OPEN') return 'operator';
+  if (raw === 'ARROW_CIRCLE' || raw === 'ARROW_CROSS' || raw === 'ARROW_BIDIRECTIONAL') return 'operator';
+  if (raw === 'SEQ_SOLID_ARROW' || raw === 'SEQ_DOTTED_ARROW') return 'operator';
+  if (raw === 'SEQ_SOLID_LINE' || raw === 'SEQ_DOTTED_LINE') return 'operator';
+  if (raw === 'SEQ_SOLID_CROSS' || raw === 'SEQ_DOTTED_CROSS') return 'operator';
+  if (raw === 'SEQ_SOLID_OPEN' || raw === 'SEQ_DOTTED_OPEN') return 'operator';
+  if (raw === 'INHERITANCE' || raw === 'COMPOSITION' || raw === 'AGGREGATION') return 'operator';
+  if (raw === 'ASSOCIATION' || raw === 'DEPENDENCY' || raw === 'REALIZATION' || raw === 'LINK') return 'operator';
+  if (raw === 'ER_ZERO_OR_ONE' || raw === 'ER_EXACTLY_ONE') return 'operator';
+  if (raw === 'ER_ZERO_OR_MORE' || raw === 'ER_ONE_OR_MORE') return 'operator';
+  if (raw === 'STYLE' || raw === 'CLASS_DEF' || raw === 'CLASS_ASSIGN') return 'keyword';
+  if (raw === 'LINK_STYLE' || raw === 'CLICK' || raw === 'CALLBACK' || raw === 'CALL') return 'keyword';
+  if (raw === 'HREF' || raw === 'DIRECTION') return 'keyword';
+  if (raw === 'TB' || raw === 'BT' || raw === 'LR' || raw === 'RL') return 'keyword';
+  if (raw === 'LEFT_OF' || raw === 'RIGHT_OF' || raw === 'OVER_OF') return 'keyword';
+  if (raw === 'PUBLIC' || raw === 'PRIVATE' || raw === 'PROTECTED' || raw === 'INTERNAL') return 'operator';
+  if (raw === 'SUBGRAPH' || raw === 'END_SUBGRAPH') return 'keyword';
+  if (raw === 'DATE') return 'number';
+  if (raw === 'STRING_BACKTICK') return 'string';
+  if (raw === 'COMMENT') return 'comment';
+    // XML token mappings (MUST come before general fallback patterns)
   if (raw === 'XML_COMMENT') return 'comment';
   if (raw === 'XML_DECLARATION') return 'keyword';
   if (raw === 'PROCESSING_INSTRUCTION') return 'keyword';
@@ -357,13 +440,24 @@ export interface AutoRegisterOptions {
 
 export async function registerGeneratedAntlrLanguages(opts: AutoRegisterOptions = {}) {
   // Use explicit path relative to this module's directory
-  const currentDir = getDirname();
+  const currentDir = path.dirname(fileURLToPath(import.meta.url));
   let baseDir = opts.dir || path.join(currentDir, 'generated/antlr');
   
-  // If the compiled version doesn't exist, try the source version
+  // If the compiled version doesn't exist, try multiple fallback paths
   if (!fs.existsSync(baseDir)) {
-    // We're probably in a built environment; try the source directory
-    baseDir = path.join(currentDir, '../../src/generated/antlr');
+    // FIRST: Try the source directory relative to current module (for source .ts files during tests)
+    const sourcePath = path.join(currentDir, '../../src/generated/antlr');
+    if (fs.existsSync(sourcePath)) {
+      baseDir = sourcePath;
+    } else {
+      // FALLBACK: Try from current working directory (when running from project root)
+      const cwdPath = path.join(process.cwd(), 'src/generated/antlr');
+      if (fs.existsSync(cwdPath)) {
+        baseDir = cwdPath;
+      } else {
+        baseDir = sourcePath; // Keep for error message
+      }
+    }
   }
   
   // In pkg, also try the snapshot path directly
@@ -374,8 +468,9 @@ export async function registerGeneratedAntlrLanguages(opts: AutoRegisterOptions 
     }
   }
   // If antlr4ts CLI nested structure is present, descend into it
-  const nested = path.join(baseDir, 'src', 'grammars', 'antlr');
-  if (fs.existsSync(nested)) baseDir = nested;
+  // DISABLED: This causes issues when running from compiled dist/ because .ts files can't be imported
+  // const nested = path.join(baseDir, 'src', 'grammars', 'antlr');
+  // if (fs.existsSync(nested)) baseDir = nested;
   if (!fs.existsSync(baseDir)) {
     if (opts.verbose) console.warn('[register-antlr] No generated ANTLR directory found at', baseDir);
     return;

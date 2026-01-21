@@ -1,0 +1,59 @@
+@startuml
+' Class Diagram Example
+
+package "E-Commerce System" {
+  abstract class Product {
+    - id: int
+    - name: string
+    - price: decimal
+    + getPrice(): decimal
+    + setPrice(price: decimal): void
+  }
+  
+  class Book extends Product {
+    - author: string
+    - isbn: string
+    + getAuthor(): string
+  }
+  
+  class Electronics extends Product {
+    - warranty: int
+    - brand: string
+    + getWarranty(): int
+  }
+  
+  interface PaymentMethod {
+    + processPayment(amount: decimal): boolean
+  }
+  
+  class CreditCard implements PaymentMethod {
+    - cardNumber: string
+    - expiryDate: string
+    + processPayment(amount: decimal): boolean
+  }
+  
+  class ShoppingCart {
+    - items: Product[]
+    + addItem(product: Product): void
+    + removeItem(product: Product): void
+    + calculateTotal(): decimal
+  }
+  
+  ShoppingCart "1" *-- "many" Product
+  ShoppingCart --> PaymentMethod : uses
+}
+
+note right of Product
+  Base class for all products
+  in the e-commerce system
+end note
+
+skinparam classAttributeIconSize 0
+skinparam backgroundColor #FEFECE
+skinparam class {
+  BackgroundColor PaleGreen
+  ArrowColor SeaGreen
+  BorderColor SpringGreen
+}
+
+@enduml

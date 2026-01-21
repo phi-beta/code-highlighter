@@ -25,7 +25,7 @@
     }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json && node scripts/build-antlr-lexers.js",
     "build:executables": "npm run build && npm run build:cjs && npm run package:executables",
     "build:cjs": "tsc -p tsconfig.cjs.json && cp -r src/handlers dist-cjs/src/ && cp -r src/themes dist-cjs/src/ && cp -r src/grammars dist-cjs/src/ && cp -r src/generated dist-cjs/src/ && cp src/cli-cjs.js dist-cjs/src/cli-cjs.cjs",
     "package:executables": "pkg dist-cjs/src/cli-cjs.cjs --targets node18-linux-x64,node18-win-x64 --out-path bin && mv bin/cli-cjs-linux bin/code-highlight-linux && mv bin/cli-cjs-win.exe bin/code-highlight-win.exe",

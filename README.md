@@ -13,6 +13,7 @@ Lightweight TypeScript syntax highlighting library + CLI.
 - Vitest unit tests
 - CLI `code-highlight` with language + theme selection
 - Rainbow bracket/brace/paren depth coloring (enabled by default, configurable)
+- **14 Supported Languages**: Bash, CSS, CSV, HTML, JavaScript, JSON, Markdown, Mermaid, PlantUML, Python, SQL, TypeScript, XML, YAML
 
 ## Install
 ```

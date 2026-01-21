@@ -15,7 +15,7 @@ async function autoRegister() {
 }
 
 function parseArgs(argv: string[]) {
-  const opts: { file?: string; html?: boolean; lang?: string; themePath?: string; list?: boolean; noBlock?: boolean; full?: boolean; title?: string; output?: string; handlerConfigPath?: string; generateSamples?: boolean; exportJson?: boolean; compact?: boolean } = {};
+  const opts: { file?: string; html?: boolean; lang?: string; themePath?: string; list?: boolean; noBlock?: boolean; full?: boolean; title?: string; output?: string; handlerConfigPath?: string; generateSamples?: boolean; exportJson?: boolean; compact?: boolean; help?: boolean } = {};
   for (let i = 2; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--html') opts.html = true;
@@ -30,13 +30,56 @@ function parseArgs(argv: string[]) {
     else if (a === '--generate-samples') opts.generateSamples = true;
     else if (a === '--export-json') opts.exportJson = true;
     else if (a === '--compact') opts.compact = true;
+    else if (a === '--help' || a === '-h') opts.help = true;
     else if (!opts.file) opts.file = a;
   }
   return opts;
 }
 
+function printHelp() {
+  console.log(`
+code-highlight - Syntax highlighter with ANSI and HTML output
+
+USAGE:
+  code-highlight [OPTIONS] <file>
+
+OPTIONS:
+  -h, --help              Show this help message
+  --list-languages        List all supported languages
+  --lang <name>           Specify language for highlighting
+  --output <ansi|html>    Output format (default: ansi)
+  --html                  Shorthand for --output html
+  --theme <file.json>     Custom theme JSON file
+  --handler-config <file> Handler configuration JSON
+  --no-block              HTML: skip <pre><code> wrapper
+  --full                  HTML: generate complete HTML document
+  --title <text>          HTML: set document title (with --full)
+  --export-json           Export tokens as JSON
+  --compact               Compact JSON output (with --export-json)
+
+SUPPORTED LANGUAGES (14):
+  bash, css, csv, html, javascript, json, markdown,
+  mermaid, plantuml, python, sql, typescript, xml, yaml
+
+EXAMPLES:
+  code-highlight --lang javascript file.js
+  code-highlight --output html --lang python script.py > output.html
+  code-highlight --output html --full --title "My Code" file.js > page.html
+  code-highlight --export-json --lang typescript src/index.ts
+  code-highlight --lang mermaid diagram.mmd
+
+For more information, visit: https://github.com/yourusername/code-highlighter
+`);
+}
+
 async function main() {
   const args = parseArgs(process.argv);
+  
+  if (args.help) {
+    printHelp();
+    return;
+  }
+  
   await autoRegister();
   if (args.generateSamples) {
     try {
@@ -64,7 +107,9 @@ async function main() {
     return;
   }
   if (!args.file) {
-    console.error('Usage: code-highlight [--output ansi|html] [--html] [--lang <name>] [--theme theme.json] [--handler-config cfg.json] [--no-block] [--full] [--title Title] [--export-json] [--compact] [--list-languages] <file>');
+    console.error('Error: No input file specified.\n');
+    console.error('Usage: code-highlight [OPTIONS] <file>');
+    console.error('Try "code-highlight --help" for more information.');
     process.exit(1);
   }
   const code = readFileSync(args.file, 'utf8');

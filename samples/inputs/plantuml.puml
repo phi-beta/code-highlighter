@@ -1,0 +1,28 @@
+@startuml
+title Authentication Sequence Diagram
+
+actor User
+participant "Web App" as App
+participant "Auth Service" as Auth
+database "User DB" as DB
+
+User -> App: Login Request
+activate App
+
+App -> Auth: Validate Credentials
+activate Auth
+
+Auth -> DB: Query User
+activate DB
+DB --> Auth: User Data
+deactivate DB
+
+Auth --> App: Auth Token
+deactivate Auth
+
+App --> User: Login Success
+deactivate App
+
+note right of User: User is now authenticated
+
+@enduml

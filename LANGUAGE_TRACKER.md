@@ -7,7 +7,7 @@
 
 ## Implementation Status
 
-### ✅ Complete (12 languages)
+### ✅ Complete (14 languages)
 | Language | Status | Features | Tests | Notes |
 |----------|--------|----------|-------|-------|
 | **Bash** | ✅ | Shell expansions, parameters, command substitution | ✅ | Enhanced grammar with advanced shell features |
@@ -17,6 +17,8 @@
 | **JavaScript** | ✅ | ES6+, boolean literals, scientific notation | ✅ | Modern JS features, comprehensive coverage |
 | **JSON** | ✅ | Complete JSON syntax, nested structures | ✅ | Full JSON specification support |
 | **Markdown** | ✅ | CommonMark, tables, tasks, footnotes | ✅ 10/10 | Most comprehensive implementation |
+| **Mermaid** | ✅ | Flowcharts, sequence diagrams, class diagrams, state diagrams, ER diagrams | ✅ 7/7 | Comprehensive diagram-as-code support with all major diagram types |
+| **PlantUML** | ✅ | Sequence, class, component, state, activity diagrams | ✅ 5/5 | Full UML diagram support with skinparam styling |
 | **Python** | ✅ | Decorators, f-strings, async/await, all number formats | ✅ | Modern Python 3.x features |
 | **SQL** | ✅ | DDL, DML, queries, joins, functions, constraints | ✅ | Complete manual lexer with comprehensive SQL keyword support |
 | **TypeScript** | ✅ | Type annotations, generics, decorators, utilities | ✅ | Complete implementation with fixed bracket matching |
@@ -105,6 +107,10 @@
 - Plaintext
 - Diff
 
+#### Diagrams & Visualization (2)
+- PlantUML
+- Mermaid
+
 ## Priority Recommendations
 
 ### High Priority (Web Development Stack)
@@ -144,12 +150,13 @@
 5. **Erlang/Elixir** - Concurrent systems
 
 ## Implementation Statistics
-- **Total Languages**: 76
-- **Completed**: 12 (15.8%)
+- **Total Languages**: 78
+- **Completed**: 14 (17.9%)
 - **Partial**: 0 (0%)
-- **Not Started**: 64 (84.2%)
+- **Not Started**: 64 (82.1%)
 
 ## Recent Progress
+- ✅ **PlantUML & Mermaid** - Complete implementation with ANTLR grammars, comprehensive diagram support (sequence, class, flowchart, state, ER diagrams), full test coverage (Jan 2026)
 - ✅ **SQL Sample Regeneration** - Successfully regenerated SQL sample outputs with proper keyword highlighting (red keywords, blue data types, proper comment styling) after fixing ANTLR lexer integration issues with manual lexer implementation (Aug 2025)
 - ✅ **SQL** - Complete manual lexer implementation with comprehensive DDL/DML/query support, SQL keyword/type/operator classification, and proper syntax highlighting (Aug 2025)
 - ✅ **YAML Tag Semantic Improvement** - Changed YAML tags from 'function' to 'type' highlighting for better semantic accuracy (Aug 2025)
