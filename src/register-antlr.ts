@@ -324,6 +324,47 @@ function mapSymbolicToType(symbolic: string): string | undefined {
   if (raw === 'BACKTICK_IDENTIFIER') return 'identifier';
   if (raw === 'UNDERSCORE') return 'identifier';
   
+  // Swift token mappings
+  if (raw === 'INT_TYPE' || raw === 'INT8_TYPE' || raw === 'INT16_TYPE' || raw === 'INT32_TYPE' || raw === 'INT64_TYPE') return 'type';
+  if (raw === 'UINT_TYPE' || raw === 'UINT8_TYPE' || raw === 'UINT16_TYPE' || raw === 'UINT32_TYPE' || raw === 'UINT64_TYPE') return 'type';
+  if (raw === 'FLOAT_TYPE' || raw === 'DOUBLE_TYPE' || raw === 'BOOL_TYPE') return 'type';
+  if (raw === 'STRING_TYPE' || raw === 'CHARACTER_TYPE' || raw === 'VOID_TYPE') return 'type';
+  if (raw === 'ARRAY_TYPE' || raw === 'DICTIONARY_TYPE' || raw === 'SET_TYPE' || raw === 'OPTIONAL_TYPE') return 'type';
+  if (raw === 'STRING_MULTI' || raw === 'STRING_LITERAL') return 'string';
+  if (raw === 'NUMBER_FLOAT' || raw === 'NUMBER_HEX' || raw === 'NUMBER_OCTAL' || raw === 'NUMBER_BINARY' || raw === 'NUMBER_INT') return 'number';
+  if (raw === 'COMMENT_DOC' || raw === 'COMMENT_BLOCK') return 'comment';
+  if (raw === 'ATTRIBUTE') return 'decorator';
+  if (raw === 'QUESTION_QUESTION' || raw === 'QUESTION_DOT') return 'operator';
+  if (raw === 'ARROW') return 'operator';
+  if (raw === 'RANGE_CLOSED' || raw === 'RANGE_HALF_OPEN') return 'operator';
+  if (raw === 'TRIPLE_EQUAL' || raw === 'NOT_TRIPLE_EQUAL') return 'operator';
+  if (raw === 'BACKTICK_IDENTIFIER') return 'identifier';
+  if (raw === 'UNDERSCORE') return 'identifier';
+  
+  // Ruby token mappings
+  if (raw === 'FILE_CONSTANT' || raw === 'LINE_CONSTANT' || raw === 'ENCODING_CONSTANT') return 'keyword';
+  if (raw === 'SYMBOL' || raw === 'SYMBOL_QUOTED' || raw === 'SYMBOL_SINGLE_QUOTED') return 'string';
+  if (raw === 'STRING_DOUBLE' || raw === 'STRING_SINGLE' || raw === 'STRING_HEREDOC') return 'string';
+  if (raw === 'REGEX') return 'string';
+  if (raw === 'PERCENT_W' || raw === 'PERCENT_I' || raw === 'PERCENT_Q' || raw === 'PERCENT_UPPER_Q') return 'string';
+  if (raw === 'PERCENT_R' || raw === 'PERCENT_X') return 'string';
+  if (raw === 'NUMBER_FLOAT' || raw === 'NUMBER_HEX' || raw === 'NUMBER_OCTAL' || raw === 'NUMBER_BINARY' || raw === 'NUMBER_INT') return 'number';
+  if (raw === 'GLOBAL_VAR' || raw === 'GLOBAL_SPECIAL') return 'variable';
+  if (raw === 'CLASS_VAR' || raw === 'INSTANCE_VAR') return 'variable';
+  if (raw === 'COMMENT_BLOCK') return 'comment';
+  if (raw === 'SPACESHIP' || raw === 'MATCH' || raw === 'NOT_MATCH' || raw === 'CASE_EQUAL') return 'operator';
+  if (raw === 'POWER' || raw === 'POWER_EQUAL') return 'operator';
+  if (raw === 'RANGE_INCLUSIVE' || raw === 'RANGE_EXCLUSIVE') return 'operator';
+  if (raw === 'ARROW' || raw === 'DOUBLE_COLON' || raw === 'SAFE_NAVIGATION') return 'operator';
+  if (raw === 'CONSTANT') return 'type';
+  
+  // Lua token mappings
+  if (raw === 'STRING_DOUBLE' || raw === 'STRING_SINGLE' || raw === 'STRING_LONG' || raw === 'STRING_LONG_BRACKET') return 'string';
+  if (raw === 'NUMBER_HEX' || raw === 'NUMBER_SCIENTIFIC' || raw === 'NUMBER_FLOAT' || raw === 'NUMBER_INT') return 'number';
+  if (raw === 'COMMENT_LINE' || raw === 'COMMENT_BLOCK') return 'comment';
+  if (raw === 'CONCAT' || raw === 'VARARGS') return 'operator';
+  if (raw === 'DOUBLE_SLASH') return 'operator';
+  
     // XML token mappings (MUST come before general fallback patterns)
   if (raw === 'XML_COMMENT') return 'comment';
   if (raw === 'XML_DECLARATION') return 'keyword';
