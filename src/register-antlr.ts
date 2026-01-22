@@ -286,6 +286,44 @@ function mapSymbolicToType(symbolic: string): string | undefined {
   if (raw === 'STRING_TEMPLATE') return 'string';
   if (raw === 'LABEL') return 'type';
   
+  // Dart token mappings
+  if (raw === 'INT_TYPE' || raw === 'DOUBLE_TYPE' || raw === 'NUM_TYPE' || raw === 'BOOL_TYPE') return 'type';
+  if (raw === 'STRING_TYPE' || raw === 'OBJECT_TYPE' || raw === 'DYNAMIC_TYPE' || raw === 'NEVER_TYPE') return 'type';
+  if (raw === 'LIST_TYPE' || raw === 'SET_TYPE' || raw === 'MAP_TYPE' || raw === 'ITERABLE_TYPE') return 'type';
+  if (raw === 'FUTURE_TYPE' || raw === 'STREAM_TYPE' || raw === 'FUNCTION_TYPE') return 'type';
+  if (raw === 'SYMBOL_TYPE' || raw === 'TYPE_TYPE') return 'type';
+  if (raw === 'RAW_STRING_SINGLE' || raw === 'RAW_STRING_DOUBLE') return 'string';
+  if (raw === 'STRING_TRIPLE_SINGLE' || raw === 'STRING_TRIPLE_DOUBLE') return 'string';
+  if (raw === 'STRING_SINGLE' || raw === 'STRING_DOUBLE') return 'string';
+  if (raw === 'NUMBER_HEX' || raw === 'NUMBER_SCIENTIFIC' || raw === 'NUMBER_FLOAT' || raw === 'NUMBER_INT') return 'number';
+  if (raw === 'COMMENT_DOC') return 'comment';
+  if (raw === 'ANNOTATION') return 'decorator';
+  if (raw === 'QUESTION_QUESTION' || raw === 'QUESTION_QUESTION_EQUAL' || raw === 'QUESTION_DOT') return 'operator';
+  if (raw === 'CASCADE' || raw === 'CASCADE_NULLABLE') return 'operator';
+  if (raw === 'SPREAD' || raw === 'SPREAD_NULLABLE') return 'operator';
+  if (raw === 'ARROW') return 'operator';
+  if (raw === 'TILDE_SLASH' || raw === 'TILDE_SLASH_EQ') return 'operator';
+  
+  // Scala token mappings
+  if (raw === 'INT_TYPE' || raw === 'LONG_TYPE' || raw === 'SHORT_TYPE' || raw === 'BYTE_TYPE') return 'type';
+  if (raw === 'DOUBLE_TYPE' || raw === 'FLOAT_TYPE' || raw === 'CHAR_TYPE' || raw === 'BOOLEAN_TYPE') return 'type';
+  if (raw === 'STRING_TYPE' || raw === 'UNIT_TYPE' || raw === 'ANY_TYPE' || raw === 'ANYREF_TYPE') return 'type';
+  if (raw === 'ANYVAL_TYPE' || raw === 'NOTHING_TYPE' || raw === 'NULL_TYPE') return 'type';
+  if (raw === 'OPTION_TYPE' || raw === 'SOME_TYPE' || raw === 'NONE_TYPE') return 'type';
+  if (raw === 'LIST_TYPE' || raw === 'SEQ_TYPE' || raw === 'SET_TYPE' || raw === 'MAP_TYPE') return 'type';
+  if (raw === 'VECTOR_TYPE' || raw === 'ARRAY_TYPE') return 'type';
+  if (raw === 'STRING_INTERPOLATED_S' || raw === 'STRING_INTERPOLATED_F' || raw === 'STRING_INTERPOLATED_RAW') return 'string';
+  if (raw === 'STRING_TRIPLE' || raw === 'STRING_DOUBLE' || raw === 'CHAR_LITERAL') return 'string';
+  if (raw === 'SYMBOL') return 'string';
+  if (raw === 'NUMBER_FLOAT' || raw === 'NUMBER_HEX' || raw === 'NUMBER_LONG' || raw === 'NUMBER_INT') return 'number';
+  if (raw === 'COMMENT_DOC' || raw === 'COMMENT_BLOCK') return 'comment';
+  if (raw === 'ANNOTATION') return 'decorator';
+  if (raw === 'ARROW' || raw === 'LEFT_ARROW' || raw === 'COLON_COLON' || raw === 'TRIPLE_COLON') return 'operator';
+  if (raw === 'DOUBLE_PLUS' || raw === 'COLON_EQUAL' || raw === 'HASH_HASH') return 'operator';
+  if (raw === 'UPPER_BOUND' || raw === 'LOWER_BOUND' || raw === 'VIEW_BOUND') return 'operator';
+  if (raw === 'BACKTICK_IDENTIFIER') return 'identifier';
+  if (raw === 'UNDERSCORE') return 'identifier';
+  
     // XML token mappings (MUST come before general fallback patterns)
   if (raw === 'XML_COMMENT') return 'comment';
   if (raw === 'XML_DECLARATION') return 'keyword';
