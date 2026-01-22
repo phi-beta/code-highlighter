@@ -76,10 +76,11 @@ export interface AntlrLanguageRegistrationOptions extends AntlrAdapterOptions {
   name: string;
   createLexer: (code: string) => AntlrLexerLike;
   createParser?: (lexer: AntlrLexerLike) => AntlrParserLike; // optional for parser grammars
+  aliasOf?: string; // if this is an alias, specify the primary language name
 }
 
 // Dynamically require registerLanguage to avoid circular ESM import cost.
 export async function registerAntlrLanguage(opts: AntlrLanguageRegistrationOptions) {
   const mod = await import('../index.js');
-  mod.registerLanguage(opts.name, (code: string) => tokenizeWithAntlr(opts.createLexer, code, opts));
+  mod.registerLanguage(opts.name, (code: string) => tokenizeWithAntlr(opts.createLexer, code, opts), opts.aliasOf);
 }

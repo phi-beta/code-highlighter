@@ -107,7 +107,16 @@ const ansiBaseTheme: ThemeDefinition = ansiTheme as ThemeDefinition;
 // --- Language registry ----------------------------------------------------
 export type Tokenizer = (code: string) => Token[];
 const languages: Map<string, Tokenizer> = new Map();
-export function registerLanguage(name: string, tokenizer: Tokenizer) { languages.set(name.toLowerCase(), tokenizer); }
+// Track which language name is an alias to which primary name
+const languageAliases: Map<string, string> = new Map();
+
+export function registerLanguage(name: string, tokenizer: Tokenizer, aliasOf?: string) { 
+  const key = name.toLowerCase();
+  languages.set(key, tokenizer);
+  if (aliasOf) {
+    languageAliases.set(key, aliasOf.toLowerCase());
+  }
+}
 // Safer idempotent variant (internal use): only replace if different reference
 function ensureLanguage(name: string, tokenizer: Tokenizer) {
   const k = name.toLowerCase();
@@ -115,9 +124,25 @@ function ensureLanguage(name: string, tokenizer: Tokenizer) {
   if (!existing || existing !== tokenizer) languages.set(k, tokenizer);
 }
 export function getLanguage(name: string): Tokenizer | undefined { return languages.get(name.toLowerCase()); }
-export function listLanguages(): string[] { return [...languages.keys()].sort(); }
+export function listLanguages(): string[] { 
+  // Build a set of primary languages (not aliases)
+  const primaryLanguages = new Set<string>();
+  const aliasesSet = new Set(languageAliases.keys());
+  
+  for (const lang of languages.keys()) {
+    if (!aliasesSet.has(lang)) {
+      primaryLanguages.add(lang);
+    }
+  }
+  
+  return [...primaryLanguages].sort();
+}
 // Test/maintenance helper: allow removal in case a test needs a clean slate.
-export function unregisterLanguage(name: string) { languages.delete(name.toLowerCase()); }
+export function unregisterLanguage(name: string) { 
+  const key = name.toLowerCase();
+  languages.delete(key);
+  languageAliases.delete(key);
+}
 
 // ANSI helpers (theme already stores ANSI escape codes in color field)
 function applyAnsi(style: ThemeStyle, text: string): string {

@@ -25,7 +25,7 @@
     }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json && node scripts/build-antlr-lexers.js",
+    "build": "tsc -p tsconfig.json && node scripts/build-antlr-lexers.js && node scripts/verify-cli.js",
     "build:executables": "npm run build && npm run build:cjs && npm run package:executables",
     "build:cjs": "tsc -p tsconfig.cjs.json && cp -r src/handlers dist-cjs/src/ && cp -r src/themes dist-cjs/src/ && cp -r src/grammars dist-cjs/src/ && cp -r src/generated dist-cjs/src/ && cp src/cli-cjs.js dist-cjs/src/cli-cjs.cjs",
     "package:executables": "pkg dist-cjs/src/cli-cjs.cjs --targets node18-linux-x64,node18-win-x64 --out-path bin && mv bin/cli-cjs-linux bin/code-highlight-linux && mv bin/cli-cjs-win.exe bin/code-highlight-win.exe",
@@ -36,7 +36,7 @@
     "clean:cache": "rimraf dist node_modules/.vitest",
     "clean:artifacts": "rimraf dist node_modules/.vitest tsconfig.tsbuildinfo",
     "test": "vitest run",
-    "pretest": "npm run clean:cache",
+    "pretest": "npm run build",
     "test:full": "npm run clean:artifacts && npm run build && vitest run --clearCache",
     "test:fresh": "npm run clean:cache && npm run build && vitest run --clearCache",
     "dev": "vitest",

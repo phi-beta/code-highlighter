@@ -26,6 +26,15 @@ function mapSymbolicToType(symbolic: string): string | undefined {
   if (s === 'punct' || s === 'punctuation') return 'punctuation';
   if (s === 'identifier' || s === 'id') return 'identifier';
   if (s === 'ws' || s === 'whitespace') return 'whitespace';
+  
+  // C token mappings - MUST be before generic patterns
+  if (raw === 'KEYWORD_CONTROL') return 'keyword';
+  if (raw === 'KEYWORD_TYPE') return 'type';
+  if (raw === 'KEYWORD_MODIFIER') return 'keyword';
+  if (raw === 'KEYWORD_OTHER') return 'keyword';
+  if (raw === 'PREPROCESSOR') return 'preprocessor';
+  if (raw === 'OPERATOR') return 'operator';
+  
   if (s.includes('comment')) return 'comment';
   if (s.includes('string') || s.includes('template')) return 'string';
   if (s === 'number' || /^(num|int|float|double|digit)$/.test(s)) return 'number';
@@ -158,6 +167,125 @@ function mapSymbolicToType(symbolic: string): string | undefined {
   if (raw === 'DATE') return 'number';
   if (raw === 'STRING_BACKTICK') return 'string';
   if (raw === 'COMMENT') return 'comment';
+  
+  // Rust token mappings
+  if (raw === 'TRUE' || raw === 'FALSE') return 'keyword';
+  
+  // Rust control flow keywords
+  if (raw === 'IF' || raw === 'ELSE' || raw === 'MATCH' || raw === 'LOOP') return 'keyword';
+  if (raw === 'WHILE' || raw === 'FOR' || raw === 'BREAK' || raw === 'CONTINUE' || raw === 'RETURN') return 'keyword';
+  
+  // Rust declaration keywords
+  if (raw === 'FN' || raw === 'LET' || raw === 'MUT' || raw === 'CONST' || raw === 'STATIC') return 'keyword';
+  
+  // Rust module system
+  if (raw === 'MOD' || raw === 'USE' || raw === 'PUB' || raw === 'CRATE' || raw === 'SUPER' || raw === 'SELF' || raw === 'EXTERN') return 'keyword';
+  
+  // Rust type keywords
+  if (raw === 'STRUCT' || raw === 'ENUM' || raw === 'UNION' || raw === 'TRAIT' || raw === 'IMPL' || raw === 'TYPE') return 'keyword';
+  if (raw === 'AS' || raw === 'WHERE' || raw === 'DYN' || raw === 'REF' || raw === 'MOVE') return 'keyword';
+  
+  // Rust async/ownership/safety
+  if (raw === 'ASYNC' || raw === 'AWAIT' || raw === 'UNSAFE' || raw === 'BOX' || raw === 'IN') return 'keyword';
+  
+  if (raw === 'CHAR_LITERAL' || raw === 'STRING_LITERAL' || raw === 'RAW_STRING_LITERAL') return 'string';
+  if (raw === 'BYTE_STRING' || raw === 'BYTE_LITERAL') return 'string';
+  if (raw === 'HEX_NUMBER' || raw === 'BIN_NUMBER' || raw === 'OCT_NUMBER') return 'number';
+  if (raw === 'FLOAT_NUMBER' || raw === 'INT_NUMBER') return 'number';
+  if (raw === 'I8' || raw === 'I16' || raw === 'I32' || raw === 'I64' || raw === 'I128' || raw === 'ISIZE') return 'type';
+  if (raw === 'U8' || raw === 'U16' || raw === 'U32' || raw === 'U64' || raw === 'U128' || raw === 'USIZE') return 'type';
+  if (raw === 'F32' || raw === 'F64' || raw === 'BOOL_TYPE' || raw === 'CHAR_TYPE' || raw === 'STR_TYPE') return 'type';
+  if (raw === 'FAT_ARROW' || raw === 'THIN_ARROW' || raw === 'PATH_SEP') return 'operator';
+  if (raw === 'RANGE_INCLUSIVE' || raw === 'RANGE_EXCLUSIVE') return 'operator';
+  if (raw === 'AND_AND' || raw === 'OR_OR' || raw === 'EQ_EQ' || raw === 'NOT_EQ') return 'operator';
+  if (raw === 'LE' || raw === 'GE' || raw === 'SHL' || raw === 'SHR') return 'operator';
+  if (raw === 'PLUS_EQ' || raw === 'MINUS_EQ' || raw === 'STAR_EQ' || raw === 'SLASH_EQ') return 'operator';
+  if (raw === 'PERCENT_EQ' || raw === 'AND_EQ' || raw === 'OR_EQ' || raw === 'CARET_EQ') return 'operator';
+  if (raw === 'SHL_EQ' || raw === 'SHR_EQ') return 'operator';
+  if (raw === 'LT' || raw === 'GT' || raw === 'PLUS' || raw === 'MINUS' || raw === 'STAR') return 'operator';
+  if (raw === 'SLASH' || raw === 'PERCENT' || raw === 'CARET' || raw === 'NOT') return 'operator';
+  if (raw === 'AND' || raw === 'OR' || raw === 'EQ') return 'operator';
+  if (raw === 'LIFETIME') return 'type';
+  if (raw === 'ATTRIBUTE') return 'decorator';
+  if (raw === 'MACRO_INVOCATION') return 'function';
+  if (raw === 'LINE_COMMENT' || raw === 'BLOCK_COMMENT') return 'comment';
+  if (raw === 'DOC_COMMENT_LINE' || raw === 'DOC_COMMENT_BLOCK') return 'comment';
+  
+  // Go token mappings
+  // Go keywords
+  if (raw === 'PACKAGE' || raw === 'IMPORT') return 'keyword';
+  if (raw === 'FUNC' || raw === 'VAR' || raw === 'CONST' || raw === 'TYPE') return 'keyword';
+  if (raw === 'STRUCT' || raw === 'INTERFACE' || raw === 'MAP' || raw === 'CHAN') return 'keyword';
+  if (raw === 'IF' || raw === 'ELSE' || raw === 'FOR' || raw === 'RANGE') return 'keyword';
+  if (raw === 'SWITCH' || raw === 'CASE' || raw === 'DEFAULT' || raw === 'SELECT') return 'keyword';
+  if (raw === 'BREAK' || raw === 'CONTINUE' || raw === 'GOTO' || raw === 'FALLTHROUGH' || raw === 'RETURN') return 'keyword';
+  if (raw === 'GO' || raw === 'DEFER') return 'keyword';
+  if (raw === 'TRUE' || raw === 'FALSE' || raw === 'NIL') return 'keyword';
+  
+  // Go built-in types
+  if (raw === 'INT' || raw === 'INT8' || raw === 'INT16' || raw === 'INT32' || raw === 'INT64') return 'type';
+  if (raw === 'UINT' || raw === 'UINT8' || raw === 'UINT16' || raw === 'UINT32' || raw === 'UINT64' || raw === 'UINTPTR') return 'type';
+  if (raw === 'FLOAT32' || raw === 'FLOAT64') return 'type';
+  if (raw === 'COMPLEX64' || raw === 'COMPLEX128') return 'type';
+  if (raw === 'BOOL' || raw === 'BYTE' || raw === 'RUNE' || raw === 'STRING_TYPE' || raw === 'ERROR') return 'type';
+  
+  // Go built-in functions
+  if (raw === 'MAKE' || raw === 'NEW' || raw === 'LEN' || raw === 'CAP') return 'function';
+  if (raw === 'APPEND' || raw === 'COPY' || raw === 'DELETE' || raw === 'CLOSE') return 'function';
+  if (raw === 'PANIC' || raw === 'RECOVER' || raw === 'PRINT' || raw === 'PRINTLN') return 'function';
+  
+  // Go operators
+  if (raw === 'COLON_ASSIGN' || raw === 'ELLIPSIS' || raw === 'ARROW') return 'operator';
+  if (raw === 'PLUS_PLUS' || raw === 'MINUS_MINUS') return 'operator';
+  if (raw === 'AND_AND' || raw === 'OR_OR') return 'operator';
+  if (raw === 'EQ_EQ' || raw === 'NOT_EQ' || raw === 'LE' || raw === 'GE') return 'operator';
+  if (raw === 'SHL' || raw === 'SHR' || raw === 'AND_NOT') return 'operator';
+  if (raw === 'PLUS_EQ' || raw === 'MINUS_EQ' || raw === 'STAR_EQ' || raw === 'SLASH_EQ') return 'operator';
+  if (raw === 'PERCENT_EQ' || raw === 'AND_EQ' || raw === 'OR_EQ' || raw === 'CARET_EQ') return 'operator';
+  if (raw === 'SHL_EQ' || raw === 'SHR_EQ' || raw === 'AND_NOT_EQ') return 'operator';
+  if (raw === 'LT' || raw === 'GT' || raw === 'PLUS' || raw === 'MINUS' || raw === 'STAR') return 'operator';
+  if (raw === 'SLASH' || raw === 'PERCENT' || raw === 'CARET' || raw === 'NOT') return 'operator';
+  if (raw === 'AND' || raw === 'OR' || raw === 'EQ') return 'operator';
+  
+  // Go literals
+  if (raw === 'RUNE_LITERAL') return 'string';
+  if (raw === 'RAW_STRING') return 'string';
+  if (raw === 'STRING_LITERAL') return 'string';
+  if (raw === 'HEX_NUMBER' || raw === 'OCTAL_NUMBER' || raw === 'BINARY_NUMBER') return 'number';
+  if (raw === 'FLOAT_NUMBER' || raw === 'INT_NUMBER') return 'number';
+  if (raw === 'IMAGINARY') return 'number';
+  
+  // Java token mappings (for manual lexer)
+  if (raw === 'KEYWORD') return 'keyword';
+  if (raw === 'TYPE') return 'type';
+  if (raw === 'BOOLEAN') return 'keyword';
+  if (raw === 'NULL') return 'keyword';
+  if (raw === 'COMMENT_LINE' || raw === 'COMMENT_BLOCK' || raw === 'COMMENT_DOC') return 'comment';
+  if (raw === 'ANNOTATION') return 'decorator';
+  if (raw === 'STRING' || raw === 'CHARACTER') return 'string';
+  if (raw === 'NUMBER_HEX' || raw === 'NUMBER_BINARY' || raw === 'NUMBER_OCTAL') return 'number';
+  if (raw === 'NUMBER_DECIMAL' || raw === 'NUMBER_FLOAT') return 'number';
+  if (raw === 'OPERATOR') return 'operator';
+  if (raw === 'PUNCT') return 'punctuation';
+  
+  // C++ token mappings
+  if (raw === 'NULL_PTR') return 'keyword';
+  if (raw === 'PREPROCESSOR') return 'preprocessor';
+  if (raw === 'RAW_STRING') return 'string';
+  
+  // C# token mappings
+  if (raw === 'ATTRIBUTE') return 'decorator';
+  if (raw === 'STRING_VERBATIM') return 'string';
+  if (raw === 'STRING_INTERPOLATED') return 'string';
+  if (raw === 'STRING_RAW') return 'string';
+  if (raw === 'COMMENT_DOC_BLOCK') return 'comment';
+  
+  // Kotlin token mappings
+  if (raw === 'SOFT_KEYWORD') return 'keyword';
+  if (raw === 'STRING_MULTILINE') return 'string';
+  if (raw === 'STRING_TEMPLATE') return 'string';
+  if (raw === 'LABEL') return 'type';
+  
     // XML token mappings (MUST come before general fallback patterns)
   if (raw === 'XML_COMMENT') return 'comment';
   if (raw === 'XML_DECLARATION') return 'keyword';
@@ -478,21 +606,39 @@ export async function registerGeneratedAntlrLanguages(opts: AutoRegisterOptions 
   // Accept either .js (built) or .ts (stub/ts-node) files
   const all = fs.readdirSync(baseDir).filter(f => /\.(js|ts)$/.test(f) && !/\.d\.ts$/.test(f));
   
-  // Prioritize .ts files over .js files for each base name
+  // Prioritize Manual files over regular files, and .ts files over .js files
+  // JavaMiniManual.ts should take priority over JavaMini.ts
   const filesMap = new Map<string, string>();
   for (const file of all) {
     const base = file.replace(/\.(js|ts)$/, '');
     const isTs = file.endsWith('.ts');
+    const isManual = /Manual$/.test(base);
     
-    if (!filesMap.has(base) || isTs) {
-      filesMap.set(base, file);
+    // For manual files, the key is the base without "Manual" suffix
+    // For regular files, the key is just the base
+    const mapKey = isManual ? base.replace(/Manual$/, '') : base;
+    const existing = filesMap.get(mapKey);
+    
+    if (!existing) {
+      filesMap.set(mapKey, file);
+    } else {
+      const existingIsManual = /Manual\.(js|ts)$/.test(existing);
+      const existingIsTs = existing.endsWith('.ts');
+      
+      // Prefer: Manual > ANTLR .ts > .js
+      // Manual lexers are more reliable, ANTLR is fallback
+      if (isManual && !existingIsManual) {
+        filesMap.set(mapKey, file);
+      } else if (!existingIsManual && !isManual && isTs && !existingIsTs) {
+        filesMap.set(mapKey, file);
+      }
     }
   }
   const prioritizedFiles = Array.from(filesMap.values());
   
   // Classify candidates - for parser grammars, we want *Lexer.ts files
   const stubLexerFiles = new Set(prioritizedFiles.filter(f => /Lexer\.(js|ts)$/.test(f) && /(Bash|CSS|CSV|Html|JavaScript|Json|Markdown|Python|TypeScript)MiniLexer/.test(f)));
-  const realGeneratedFiles = new Set(prioritizedFiles.filter(f => /Mini\.(js|ts)$/.test(f) && !/Lexer\.(js|ts)$/.test(f)));
+  const realGeneratedFiles = new Set(prioritizedFiles.filter(f => /Mini(Manual)?\.(js|ts)$/.test(f) && !/Lexer\.(js|ts)$/.test(f)));
   // For parser grammars, also include the generated lexer files
   const parserLexerFiles = new Set(prioritizedFiles.filter(f => /MiniLexer\.(js|ts)$/.test(f)));
   
@@ -510,12 +656,15 @@ export async function registerGeneratedAntlrLanguages(opts: AutoRegisterOptions 
   for (const file of files) {
     const isStub = /Lexer\.(js|ts)$/.test(file) && !/(Bash|CSS|CSV|Html|JavaScript|Json|Markdown|Python|TypeScript)MiniLexer/.test(file);
     const isParserLexer = /MiniLexer\.(js|ts)$/.test(file);
+    const isManual = file.includes('Manual');
     let langBase: string;
     
     if (isParserLexer) {
       langBase = file.replace(/MiniLexer\.(js|ts)$/, '');
     } else if (isStub) {
       langBase = file.replace(/Lexer\.(js|ts)$/, '');
+    } else if (isManual) {
+      langBase = file.replace(/MiniManual\.(js|ts)$/, '');
     } else {
       langBase = file.replace(/Mini\.(js|ts)$/, '');
     }
@@ -530,6 +679,9 @@ export async function registerGeneratedAntlrLanguages(opts: AutoRegisterOptions 
       if (isParserLexer) {
         // For parser grammars, look for MarkdownMiniLexer class
         LexerClass = (mod as any)[langBase + 'MiniLexer'] || (mod as any)[langBase + 'Lexer'] || (mod as any).default;
+      } else if (isManual) {
+        // For manual lexers, look for *MiniManual class
+        LexerClass = (mod as any)[langBase + 'MiniManual'] || (mod as any)[langBase + 'Manual'] || (mod as any).default;
       } else if (isStub) {
         LexerClass = (mod as any)[langBase + 'Lexer'] || (mod as any)[langBase];
       } else {
@@ -552,7 +704,8 @@ export async function registerGeneratedAntlrLanguages(opts: AutoRegisterOptions 
       // Distinguish between real antlr4ts generated lexers and stub "Mini" lexers.
       // Real generated lexers expose serializedATN/ruleNames and require a CharStream.
       // Stubs expect a plain source string; passing a CharStream caused empty token output intermittently.
-      const isRealAntlr = !isStub && ('serializedATN' in LexerClass || 'ruleNames' in (LexerClass.prototype || {}));
+      // Manual lexers also expect a plain string and have a tokenize() method.
+      const isRealAntlr = !isStub && !isManual && ('serializedATN' in LexerClass || 'ruleNames' in (LexerClass.prototype || {}));
       const createLexer = (code: string) => isRealAntlr
         ? new LexerClass(CharStreams.fromString(code))
         : new LexerClass(code);
@@ -614,11 +767,11 @@ export async function registerGeneratedAntlrLanguages(opts: AutoRegisterOptions 
         });
       }
       
-      if (langName === 'javascript') await registerAntlrLanguage({ name: 'js', createLexer, tokenMap });
-      if (langName === 'python') await registerAntlrLanguage({ name: 'py', createLexer, tokenMap });
-      if (langName === 'bash') await registerAntlrLanguage({ name: 'sh', createLexer, tokenMap });
-      if (langName === 'markdown') await registerAntlrLanguage({ name: 'md', createLexer, tokenMap });
-      if (langName === 'typescript') await registerAntlrLanguage({ name: 'ts', createLexer, tokenMap });
+      if (langName === 'javascript') await registerAntlrLanguage({ name: 'js', createLexer, tokenMap, aliasOf: 'javascript' });
+      if (langName === 'python') await registerAntlrLanguage({ name: 'py', createLexer, tokenMap, aliasOf: 'python' });
+      if (langName === 'bash') await registerAntlrLanguage({ name: 'sh', createLexer, tokenMap, aliasOf: 'bash' });
+      if (langName === 'markdown') await registerAntlrLanguage({ name: 'md', createLexer, tokenMap, aliasOf: 'markdown' });
+      if (langName === 'typescript') await registerAntlrLanguage({ name: 'ts', createLexer, tokenMap, aliasOf: 'typescript' });
       // CSS has no common aliases but register main name
   if (opts.verbose) console.log(`[register-antlr] Registered ${langName}`);
     } catch (e) {

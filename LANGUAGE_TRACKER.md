@@ -7,19 +7,23 @@
 
 ## Implementation Status
 
-### ✅ Complete (14 languages)
+### ✅ Complete (18 languages)
 | Language | Status | Features | Tests | Notes |
 |----------|--------|----------|-------|-------|
 | **Bash** | ✅ | Shell expansions, parameters, command substitution | ✅ | Enhanced grammar with advanced shell features |
+| **C** | ✅ | Pointers, structs, unions, enums, preprocessor directives | ✅ 13/13 | C89/C99/C11 with full operator support including ->, ++, --, *, & |
 | **CSS** | ✅ | Selectors, properties, colors, functions, at-rules | ✅ 6/6 | Complete styling support with hex/named colors |
 | **CSV** | ✅ | Quoted fields, escaped quotes, multiple delimiters | ✅ | RFC 4180 compliant with comma/semicolon/tab/pipe support |
+| **Go** | ✅ | Goroutines, channels, interfaces, generics, defer | ✅ 12/12 | Complete Go 1.21+ with modern features |
 | **HTML** | ✅ | Tags, attributes, CSS/JS delegation, color rendering | ✅ | Multi-pass tokenization with embedded language support |
+| **Java** | ✅ | Classes, interfaces, generics, lambdas, annotations | ✅ 13/13 | Manual lexer (JavaMiniManual) + ANTLR grammar (JavaMini.g4) both available |
 | **JavaScript** | ✅ | ES6+, boolean literals, scientific notation | ✅ | Modern JS features, comprehensive coverage |
 | **JSON** | ✅ | Complete JSON syntax, nested structures | ✅ | Full JSON specification support |
 | **Markdown** | ✅ | CommonMark, tables, tasks, footnotes | ✅ 10/10 | Most comprehensive implementation |
 | **Mermaid** | ✅ | Flowcharts, sequence diagrams, class diagrams, state diagrams, ER diagrams | ✅ 7/7 | Comprehensive diagram-as-code support with all major diagram types |
 | **PlantUML** | ✅ | Sequence, class, component, state, activity diagrams | ✅ 5/5 | Full UML diagram support with skinparam styling |
 | **Python** | ✅ | Decorators, f-strings, async/await, all number formats | ✅ | Modern Python 3.x features |
+| **Rust** | ✅ | Lifetimes, async/await, macros, ownership, pattern matching | ✅ 12/12 | Complete Rust 2021 edition with modern features |
 | **SQL** | ✅ | DDL, DML, queries, joins, functions, constraints | ✅ | Complete manual lexer with comprehensive SQL keyword support |
 | **TypeScript** | ✅ | Type annotations, generics, decorators, utilities | ✅ | Complete implementation with fixed bracket matching |
 | **XML** | ✅ | Elements, attributes, CDATA, processing instructions, namespaces | ✅ | Complete XML 1.0 support with universal bracket tokens |
@@ -30,12 +34,11 @@
 |----------|--------|----------|---------|------------|
 | *(None currently)* | - | - | - | - |
 
-### ❌ Not Started (67 languages)
+### ❌ Not Started (63 languages)
 
-#### Programming Languages (35)
+#### Programming Languages (31)
 - ActionScript
 - Arduino
-- C
 - C++
 - C#
 - Clojure
@@ -44,10 +47,8 @@
 - Elixir
 - Erlang
 - F#
-- Go
 - Groovy
 - Haskell
-- Java
 - Kotlin
 - Lisp
 - Lua
@@ -57,7 +58,6 @@
 - PowerShell
 - R
 - Ruby
-- Rust
 - SAS
 - Scala
 - Scheme

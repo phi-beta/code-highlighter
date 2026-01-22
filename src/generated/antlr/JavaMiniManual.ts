@@ -73,14 +73,13 @@ export class JavaMiniManual {
       return { type: -1, text: '' }; // EOF
     }
 
-    this.skipWhitespace();
-    
-    if (this.pos >= this.input.length) {
-      return { type: -1, text: '' }; // EOF
-    }
-
     const start = this.pos;
     const char = this.input[this.pos];
+
+    // Whitespace
+    if (char === ' ' || char === '\t' || char === '\n' || char === '\r') {
+      return this.readWhitespace(start);
+    }
 
     // Comments
     if (char === '/' && this.pos + 1 < this.input.length) {
@@ -399,6 +398,22 @@ export class JavaMiniManual {
         break;
       }
     }
+  }
+
+  private readWhitespace(start: number): TokenLike {
+    while (this.pos < this.input.length) {
+      const char = this.input[this.pos];
+      if (char === ' ' || char === '\t' || char === '\n' || char === '\r') {
+        this.pos++;
+      } else {
+        break;
+      }
+    }
+    
+    return {
+      type: JavaMiniManual.WS,
+      text: this.input.substring(start, this.pos)
+    };
   }
 
   private isDigit(char: string): boolean {

@@ -37,6 +37,10 @@ function parseArgs(argv: string[]) {
 }
 
 function printHelp() {
+  const langs = listLanguages();
+  const langCount = langs.length;
+  const langList = langs.join(', ');
+  
   console.log(`
 code-highlight - Syntax highlighter with ANSI and HTML output
 
@@ -57,9 +61,8 @@ OPTIONS:
   --export-json           Export tokens as JSON
   --compact               Compact JSON output (with --export-json)
 
-SUPPORTED LANGUAGES (14):
-  bash, css, csv, html, javascript, json, markdown,
-  mermaid, plantuml, python, sql, typescript, xml, yaml
+SUPPORTED LANGUAGES (${langCount}):
+  ${langList}
 
 EXAMPLES:
   code-highlight --lang javascript file.js
@@ -76,6 +79,7 @@ async function main() {
   const args = parseArgs(process.argv);
   
   if (args.help) {
+    await autoRegister();
     printHelp();
     return;
   }

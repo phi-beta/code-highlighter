@@ -1,0 +1,15 @@
+<pre class="ch-pre"><code class="ch-code lang-plantuml"><span class="tok-keyword" style="color: #d73a49;font-weight:600">@startuml</span>
+<span class="tok-keyword" style="color: #d73a49;font-weight:600">actor</span> <span class="tok-identifier" style="color: #24292e">User</span>
+<span class="tok-keyword" style="color: #d73a49;font-weight:600">participant</span> <span class="tok-string" style="color: #032f62">&quot;Web Server&quot;</span> <span class="tok-keyword" style="color: #d73a49;font-weight:600">as</span> <span class="tok-identifier" style="color: #24292e">WS</span>
+<span class="tok-keyword" style="color: #d73a49;font-weight:600">database</span> <span class="tok-string" style="color: #032f62">&quot;Database&quot;</span> <span class="tok-keyword" style="color: #d73a49;font-weight:600">as</span> <span class="tok-identifier" style="color: #24292e">DB</span>
+
+<span class="tok-identifier" style="color: #24292e">User</span> <span class="tok-operator" style="color: #d73a49;font-weight:600">-&gt;</span> <span class="tok-identifier" style="color: #24292e">WS</span><span class="tok-punctuation" style="color: #24292e">:</span> <span class="tok-identifier" style="color: #24292e">Login</span> <span class="tok-identifier" style="color: #24292e">Request</span>
+<span class="tok-keyword" style="color: #d73a49;font-weight:600">activate</span> <span class="tok-identifier" style="color: #24292e">WS</span>
+<span class="tok-identifier" style="color: #24292e">WS</span> <span class="tok-operator" style="color: #d73a49;font-weight:600">-&gt;</span> <span class="tok-identifier" style="color: #24292e">DB</span><span class="tok-punctuation" style="color: #24292e">:</span> <span class="tok-identifier" style="color: #24292e">Query</span> <span class="tok-identifier" style="color: #24292e">User</span>
+<span class="tok-keyword" style="color: #d73a49;font-weight:600">activate</span> <span class="tok-identifier" style="color: #24292e">DB</span>
+<span class="tok-identifier" style="color: #24292e">DB</span> <span class="tok-operator" style="color: #d73a49;font-weight:600">--&gt;</span> <span class="tok-identifier" style="color: #24292e">WS</span><span class="tok-punctuation" style="color: #24292e">:</span> <span class="tok-identifier" style="color: #24292e">User</span> <span class="tok-identifier" style="color: #24292e">Data</span>
+<span class="tok-keyword" style="color: #d73a49;font-weight:600">deactivate</span> <span class="tok-identifier" style="color: #24292e">DB</span>
+<span class="tok-identifier" style="color: #24292e">WS</span> <span class="tok-operator" style="color: #d73a49;font-weight:600">--&gt;</span> <span class="tok-identifier" style="color: #24292e">User</span><span class="tok-punctuation" style="color: #24292e">:</span> <span class="tok-identifier" style="color: #24292e">Login</span> <span class="tok-identifier" style="color: #24292e">Response</span>
+<span class="tok-keyword" style="color: #d73a49;font-weight:600">deactivate</span> <span class="tok-identifier" style="color: #24292e">WS</span>
+<span class="tok-keyword" style="color: #d73a49;font-weight:600">@enduml</span>
+</code></pre>
