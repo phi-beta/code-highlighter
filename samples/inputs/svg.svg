@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<!-- SVG Comprehensive Sample -->
+<!-- Demonstrating all major SVG features and elements -->
+
+<svg xmlns="http://www.w3.org/2000/svg" 
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1" 
+     viewBox="0 0 800 600" 
+     width="800" 
+     height="600">
+  
+  <title>SVG Feature Showcase</title>
+  <desc>A comprehensive demonstration of SVG elements and attributes</desc>
+  
+  <!-- ============================================= -->
+  <!-- 1. Basic Shapes -->
+  <!-- ============================================= -->
+  
+  <rect x="10" y="10" width="100" height="80" 
+        fill="#3498db" stroke="#2c3e50" stroke-width="2"/>
+  
+  <circle cx="200" cy="50" r="40" 
+          fill="#e74c3c" stroke="#c0392b" stroke-width="2"/>
+  
+  <ellipse cx="320" cy="50" rx="50" ry="30" 
+           fill="#9b59b6" stroke="#8e44ad" stroke-width="2"/>
+  
+  <line x1="400" y1="10" x2="480" y2="90" 
+        stroke="#16a085" stroke-width="3" stroke-linecap="round"/>
+  
+  <polyline points="500,10 520,40 540,20 560,50 580,10" 
+            fill="none" stroke="#f39c12" stroke-width="2"/>
+  
+  <polygon points="620,10 650,80 590,80" 
+           fill="#27ae60" stroke="#229954" stroke-width="2"/>
+  
+  <!-- ============================================= -->
+  <!-- 2. Path Element - Complex Shapes -->
+  <!-- ============================================= -->
+  
+  <path d="M 10 120 L 50 180 L 10 240 Z" 
+        fill="#1abc9c" stroke="#16a085" stroke-width="2"/>
+  
+  <path d="M 80 120 Q 120 150 80 180 T 80 240" 
+        fill="none" stroke="#3498db" stroke-width="2"/>
+  
+  <path d="M 150 120 C 180 100, 220 100, 250 120 S 290 160, 250 180" 
+        fill="none" stroke="#9b59b6" stroke-width="2"/>
+  
+  <path d="M 300 150 A 30 30 0 0 1 360 150 A 30 30 0 0 1 300 150 Z" 
+        fill="#e67e22" stroke="#d35400" stroke-width="2"/>
+  
+  <path d="M 400 120 h 50 v 50 h -50 z M 415 135 h 20 v 20 h -20 z" 
+        fill="#e74c3c" fill-rule="evenodd"/>
+  
+  <!-- ============================================= -->
+  <!-- 3. Text Elements -->
+  <!-- ============================================= -->
+  
+  <text x="10" y="280" font-family="Arial, sans-serif" font-size="20" fill="#2c3e50">
+    Basic SVG Text
+  </text>
+  
+  <text x="10" y="310" font-family="Georgia, serif" font-size="16" 
+        fill="#e74c3c" font-weight="bold" font-style="italic">
+    Styled Text with <tspan fill="#3498db">colored</tspan> spans
+  </text>
+  
+  <text x="10" y="340" font-size="14">
+    <tspan x="10" dy="0">Multiple lines</tspan>
+    <tspan x="10" dy="20">using tspan</tspan>
+    <tspan x="10" dy="20" fill="#16a085" font-weight="bold">with styling</tspan>
+  </text>
+  
+  <path id="textPath1" d="M 400 280 Q 500 250 600 280" fill="none" stroke="#bdc3c7" stroke-width="1"/>
+  <text font-size="14" fill="#2c3e50">
+    <textPath href="#textPath1" startOffset="10%">
+      Text following a curved path!
+    </textPath>
+  </text>
+  
+  <!-- ============================================= -->
+  <!-- 4. Grouping and Transforms -->
+  <!-- ============================================= -->
+  
+  <g id="group1" transform="translate(10, 400)">
+    <rect x="0" y="0" width="40" height="40" fill="#3498db"/>
+    <circle cx="20" cy="20" r="15" fill="#ecf0f1"/>
+  </g>
+  
+  <g id="group2" transform="translate(70, 400) rotate(45 20 20)">
+    <rect x="0" y="0" width="40" height="40" fill="#e74c3c"/>
+  </g>
+  
+  <g id="group3" transform="translate(130, 400) scale(1.2)">
+    <rect x="0" y="0" width="40" height="40" fill="#9b59b6"/>
+  </g>
+  
+  <g id="group4" transform="translate(200, 400) skewX(20)">
+    <rect x="0" y="0" width="40" height="40" fill="#f39c12"/>
+  </g>
+  
+  <g id="group5" transform="translate(270, 420) rotate(-30) scale(0.8)">
+    <rect x="0" y="0" width="40" height="40" fill="#27ae60"/>
+  </g>
+  
+  <!-- ============================================= -->
+  <!-- 5. Gradients -->
+  <!-- ============================================= -->
+  
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3498db;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#9b59b6;stop-opacity:1"/>
+    </linearGradient>
+    
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#e74c3c" stop-opacity="1"/>
+      <stop offset="50%" stop-color="#f39c12" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#f1c40f" stop-opacity="1"/>
+    </linearGradient>
+    
+    <radialGradient id="grad3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ecf0f1" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#34495e" stop-opacity="1"/>
+    </radialGradient>
+    
+    <radialGradient id="grad4" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#f39c12" stop-opacity="1"/>
+      <stop offset="50%" stop-color="#e67e22" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#d35400" stop-opacity="0.6"/>
+    </radialGradient>
+  </defs>
+  
+  <rect x="350" y="400" width="80" height="60" fill="url(#grad1)"/>
+  <rect x="450" y="400" width="80" height="60" fill="url(#grad2)"/>
+  <circle cx="580" cy="430" r="30" fill="url(#grad3)"/>
+  <ellipse cx="660" cy="430" rx="40" ry="30" fill="url(#grad4)"/>
+  
+  <!-- ============================================= -->
+  <!-- 6. Patterns -->
+  <!-- ============================================= -->
+  
+  <defs>
+    <pattern id="pattern1" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+      <rect x="0" y="0" width="10" height="10" fill="#3498db"/>
+      <rect x="10" y="10" width="10" height="10" fill="#3498db"/>
+    </pattern>
+    
+    <pattern id="pattern2" x="0" y="0" width="15" height="15" patternUnits="userSpaceOnUse">
+      <circle cx="7.5" cy="7.5" r="3" fill="#e74c3c"/>
+    </pattern>
+  </defs>
+  
+  <rect x="10" y="480" width="80" height="60" fill="url(#pattern1)"/>
+  <rect x="110" y="480" width="80" height="60" fill="url(#pattern2)"/>
+  
+  <!-- ============================================= -->
+  <!-- 7. Clipping and Masking -->
+  <!-- ============================================= -->
+  
+  <defs>
+    <clipPath id="clip1">
+      <circle cx="280" cy="510" r="30"/>
+    </clipPath>
+    
+    <mask id="mask1">
+      <rect x="0" y="0" width="100%" height="100%" fill="white"/>
+      <circle cx="400" cy="510" r="15" fill="black"/>
+    </mask>
+  </defs>
+  
+  <rect x="250" y="480" width="60" height="60" fill="#9b59b6" clip-path="url(#clip1)"/>
+  <rect x="370" y="480" width="60" height="60" fill="#16a085" mask="url(#mask1)"/>
+  
+  <!-- ============================================= -->
+  <!-- 8. Filters -->
+  <!-- ============================================= -->
+  
+  <defs>
+    <filter id="blur1">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3"/>
+    </filter>
+    
+    <filter id="shadow1">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="5" dy="5" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.5"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <filter id="glow1">
+      <feGaussianBlur stdDeviation="5" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <filter id="colormatrix1">
+      <feColorMatrix type="saturate" values="3"/>
+    </filter>
+  </defs>
+  
+  <rect x="450" y="480" width="50" height="50" fill="#3498db" filter="url(#blur1)"/>
+  <rect x="520" y="480" width="50" height="50" fill="#e74c3c" filter="url(#shadow1)"/>
+  <circle cx="620" cy="505" r="25" fill="#f39c12" filter="url(#glow1)"/>
+  <rect x="670" y="480" width="50" height="50" fill="#27ae60" filter="url(#colormatrix1)"/>
+  
+  <!-- ============================================= -->
+  <!-- 9. Symbol and Use (Reusable Elements) -->
+  <!-- ============================================= -->
+  
+  <defs>
+    <symbol id="icon1" viewBox="0 0 50 50">
+      <circle cx="25" cy="25" r="20" fill="#3498db"/>
+      <path d="M 25 15 L 25 35 M 15 25 L 35 25" stroke="white" stroke-width="3" stroke-linecap="round"/>
+    </symbol>
+    
+    <symbol id="star" viewBox="0 0 100 100">
+      <polygon points="50,10 61,40 95,40 68,60 79,90 50,70 21,90 32,60 5,40 39,40" fill="#f39c12"/>
+    </symbol>
+  </defs>
+  
+  <use href="#icon1" x="500" y="300" width="30" height="30"/>
+  <use href="#icon1" x="550" y="300" width="40" height="40" opacity="0.7"/>
+  <use href="#star" x="600" y="300" width="50" height="50"/>
+  <use href="#star" x="670" y="310" width="30" height="30" fill="#e74c3c"/>
+  
+  <!-- ============================================= -->
+  <!-- 10. Markers (Arrow heads, etc.) -->
+  <!-- ============================================= -->
+  
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2c3e50"/>
+    </marker>
+    
+    <marker id="dot" viewBox="0 0 10 10" refX="5" refY="5"
+            markerWidth="5" markerHeight="5">
+      <circle cx="5" cy="5" r="5" fill="#e74c3c"/>
+    </marker>
+  </defs>
+  
+  <line x1="500" y1="350" x2="600" y2="350" stroke="#2c3e50" stroke-width="2" 
+        marker-start="url(#dot)" marker-end="url(#arrow)"/>
+  
+  <polyline points="500,370 550,380 600,365" fill="none" stroke="#2c3e50" stroke-width="2"
+            marker-start="url(#arrow)" marker-mid="url(#dot)" marker-end="url(#arrow)"/>
+  
+  <!-- ============================================= -->
+  <!-- 11. Hyperlinks -->
+  <!-- ============================================= -->
+  
+  <a href="https://www.w3.org/Graphics/SVG/" target="_blank">
+    <rect x="650" y="350" width="120" height="30" fill="#3498db" rx="5"/>
+    <text x="710" y="370" text-anchor="middle" fill="white" font-size="14">SVG Docs</text>
+  </a>
+  
+  <!-- ============================================= -->
+  <!-- 12. Opacity and Blend Modes -->
+  <!-- ============================================= -->
+  
+  <rect x="10" y="560" width="40" height="30" fill="#e74c3c"/>
+  <rect x="30" y="560" width="40" height="30" fill="#3498db" opacity="0.5"/>
+  
+  <circle cx="110" cy="575" r="20" fill="#f39c12" opacity="0.8"/>
+  <circle cx="130" cy="575" r="20" fill="#9b59b6" opacity="0.6"/>
+  
+  <!-- ============================================= -->
+  <!-- 13. Stroke Properties -->
+  <!-- ============================================= -->
+  
+  <line x1="180" y1="560" x2="280" y2="560" stroke="#2c3e50" stroke-width="8" stroke-linecap="butt"/>
+  <line x1="180" y1="575" x2="280" y2="575" stroke="#2c3e50" stroke-width="8" stroke-linecap="round"/>
+  <line x1="180" y1="590" x2="280" y2="590" stroke="#2c3e50" stroke-width="8" stroke-linecap="square"/>
+  
+  <polyline points="300,560 320,575 340,560 360,575 380,560" fill="none" 
+            stroke="#16a085" stroke-width="4" stroke-linejoin="miter"/>
+  <polyline points="300,580 320,595 340,580 360,595 380,580" fill="none" 
+            stroke="#16a085" stroke-width="4" stroke-linejoin="round"/>
+  
+  <line x1="400" y1="560" x2="500" y2="560" stroke="#e74c3c" stroke-width="3" 
+        stroke-dasharray="5,5"/>
+  <line x1="400" y1="575" x2="500" y2="575" stroke="#3498db" stroke-width="3" 
+        stroke-dasharray="10,5,2,5"/>
+  <line x1="400" y1="590" x2="500" y2="590" stroke="#9b59b6" stroke-width="3" 
+        stroke-dasharray="20,10"/>
+  
+  <!-- ============================================= -->
+  <!-- 14. Animation Elements -->
+  <!-- ============================================= -->
+  
+  <rect x="520" y="560" width="40" height="40" fill="#3498db">
+    <animate attributeName="x" from="520" to="660" dur="3s" repeatCount="indefinite"/>
+  </rect>
+  
+  <circle cx="550" cy="590" r="15" fill="#e74c3c">
+    <animate attributeName="r" from="15" to="25" dur="2s" repeatCount="indefinite" 
+             begin="0s" direction="alternate"/>
+    <animate attributeName="fill" from="#e74c3c" to="#f39c12" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  
+  <rect x="720" y="560" width="30" height="30" fill="#27ae60">
+    <animateTransform attributeName="transform" type="rotate" 
+                      from="0 735 575" to="360 735 575" 
+                      dur="4s" repeatCount="indefinite"/>
+  </rect>
+  
+  <circle cx="770" cy="575" r="10" fill="#9b59b6">
+    <animateTransform attributeName="transform" type="scale"
+                      from="1" to="2"
+                      dur="1.5s" repeatCount="indefinite" 
+                      additive="sum"/>
+  </circle>
+  
+  <!-- ============================================= -->
+  <!-- 15. Embedded Image -->
+  <!-- ============================================= -->
+  
+  <!-- Commented out to avoid external dependencies -->
+  <!-- <image href="example.png" x="600" y="100" width="150" height="100"/> -->
+  
+  <!-- ============================================= -->
+  <!-- 16. Foreign Object (Embed HTML) -->
+  <!-- ============================================= -->
+  
+  <foreignObject x="600" y="100" width="180" height="120">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="background: #ecf0f1; padding: 10px; border-radius: 5px;">
+      <h3 style="margin: 0 0 10px 0; color: #2c3e50;">HTML in SVG</h3>
+      <p style="margin: 0; color: #34495e; font-size: 12px;">
+        This is HTML content embedded within an SVG using foreignObject.
+      </p>
+    </div>
+  </foreignObject>
+  
+  <!-- ============================================= -->
+  <!-- 17. Style Element -->
+  <!-- ============================================= -->
+  
+  <style type="text/css">
+    <![CDATA[
+      .styled-rect {
+        fill: #3498db;
+        stroke: #2c3e50;
+        stroke-width: 2;
+      }
+      .styled-rect:hover {
+        fill: #e74c3c;
+      }
+      .styled-text {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        fill: #2c3e50;
+      }
+    ]]>
+  </style>
+  
+  <rect class="styled-rect" x="700" y="240" width="60" height="40"/>
+  <text class="styled-text" x="730" y="265" text-anchor="middle">Styled</text>
+  
+  <!-- ============================================= -->
+  <!-- 18. Metadata -->
+  <!-- ============================================= -->
+  
+  <metadata>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+             xmlns:dc="http://purl.org/dc/elements/1.1/">
+      <rdf:Description>
+        <dc:title>SVG Feature Showcase</dc:title>
+        <dc:creator>Code Highlighter</dc:creator>
+        <dc:date>2026-01-22</dc:date>
+      </rdf:Description>
+    </rdf:RDF>
+  </metadata>
+  
+</svg>

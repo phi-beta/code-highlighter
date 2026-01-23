@@ -224,7 +224,11 @@ function ensureBuiltInHandlers() {
     render(tokens, theme, ctx) {
       const { config, language } = ctx;
       const body = tokens.map(t => {
-        if (t.type === 'whitespace') return escapeHtml(t.value);
+        // Preserve whitespace including newlines
+        if (t.type === 'whitespace') {
+          // Keep newlines as-is for <pre> blocks, escape other whitespace
+          return t.value.split('').map(ch => ch === '\n' ? '\n' : escapeHtml(ch)).join('');
+        }
         const style = theme[t.type] || {};
         const css: string[] = [];
         if (style.color) css.push(`color: ${style.color}`);

@@ -359,11 +359,91 @@ function mapSymbolicToType(symbolic: string): string | undefined {
   if (raw === 'CONSTANT') return 'type';
   
   // Lua token mappings
-  if (raw === 'STRING_DOUBLE' || raw === 'STRING_SINGLE' || raw === 'STRING_LONG' || raw === 'STRING_LONG_BRACKET') return 'string';
-  if (raw === 'NUMBER_HEX' || raw === 'NUMBER_SCIENTIFIC' || raw === 'NUMBER_FLOAT' || raw === 'NUMBER_INT') return 'number';
-  if (raw === 'COMMENT_LINE' || raw === 'COMMENT_BLOCK') return 'comment';
-  if (raw === 'CONCAT' || raw === 'VARARGS') return 'operator';
+  if (raw === 'STRING_LONG' || raw === 'STRING_LONG_BRACKET') return 'string';
+  if (raw === 'NUMBER_SCIENTIFIC') return 'number';
+  if (raw === 'VARARGS') return 'operator';
   if (raw === 'DOUBLE_SLASH') return 'operator';
+  
+  // PHP token mappings
+  if (raw === 'PHP_OPEN' || raw === 'PHP_CLOSE') return 'keyword';
+  if (raw === 'STRING_DOUBLE' || raw === 'STRING_SINGLE' || raw === 'STRING_HEREDOC' || raw === 'STRING_NOWDOC' || raw === 'STRING_BACKTICK') return 'string';
+  if (raw === 'NUMBER_HEX' || raw === 'NUMBER_OCTAL' || raw === 'NUMBER_BINARY' || raw === 'NUMBER_FLOAT' || raw === 'NUMBER_INT') return 'number';
+  if (raw === 'VARIABLE' || raw === 'SUPERGLOBAL') return 'variable';
+  if (raw === 'COMMENT_LINE' || raw === 'COMMENT_LINE_HASH' || raw === 'COMMENT_BLOCK') return 'comment';
+  if (raw === 'ARROW' || raw === 'DOUBLE_ARROW' || raw === 'NULLSAFE' || raw === 'SCOPE') return 'operator';
+  if (raw === 'ELLIPSIS' || raw === 'SPACESHIP' || raw === 'COALESCE' || raw === 'COALESCE_EQUAL') return 'operator';
+  if (raw === 'POW' || raw === 'POW_EQUAL') return 'operator';
+  if (raw === 'CONCAT' || raw === 'CONCAT_EQUAL') return 'operator';
+  if (raw === 'IDENTICAL' || raw === 'NOT_IDENTICAL') return 'operator';
+  if (raw === 'BOOL' || raw === 'INT' || raw === 'FLOAT' || raw === 'STRING' || raw === 'OBJECT') return 'type';
+  if (raw === 'VOID' || raw === 'NEVER' || raw === 'MIXED' || raw === 'ITERABLE' || raw === 'CALLABLE' || raw === 'ARRAY') return 'type';
+  
+  // R token mappings
+  if (raw === 'IF' || raw === 'ELSE' || raw === 'FOR' || raw === 'IN' || raw === 'WHILE' || raw === 'REPEAT') return 'keyword';
+  if (raw === 'FUNCTION' || raw === 'RETURN' || raw === 'BREAK' || raw === 'NEXT') return 'keyword';
+  if (raw === 'TRUE' || raw === 'FALSE' || raw === 'NULL' || raw === 'NA' || raw === 'NAN' || raw === 'INF') return 'keyword';
+  if (raw === 'COMMENT') return 'comment';
+  if (raw === 'STRING_DOUBLE' || raw === 'STRING_SINGLE') return 'string';
+  if (raw === 'NUMBER_SCIENTIFIC' || raw === 'NUMBER_HEX' || raw === 'NUMBER_FLOAT' || raw === 'NUMBER_INT') return 'number';
+  if (raw === 'LEFT_ASSIGN' || raw === 'RIGHT_ASSIGN' || raw === 'LEFT_SUPER_ASSIGN' || raw === 'RIGHT_SUPER_ASSIGN' || raw === 'EQUAL_ASSIGN') return 'operator';
+  if (raw === 'PIPE_BASE' || raw === 'PIPE_MAGRITTR') return 'operator';
+  if (raw === 'NAMESPACE' || raw === 'NAMESPACE_INTERNAL') return 'operator';
+  if (raw === 'TILDE' || raw === 'SPECIAL_OP') return 'operator';
+  if (raw === 'PLUS' || raw === 'MINUS' || raw === 'MULT' || raw === 'DIV' || raw === 'POWER') return 'operator';
+  if (raw === 'MOD' || raw === 'INT_DIV' || raw === 'MATRIX_MULT' || raw === 'OUTER_PROD' || raw === 'KRONECKER') return 'operator';
+  if (raw === 'LT' || raw === 'GT' || raw === 'LE' || raw === 'GE' || raw === 'EQ' || raw === 'NE') return 'operator';
+  if (raw === 'AND' || raw === 'OR' || raw === 'NOT') return 'operator';
+  if (raw === 'DOLLAR' || raw === 'AT' || raw === 'COLON') return 'operator';
+  if (raw === 'ELLIPSIS') return 'keyword';
+  if (raw === 'BACKTICK_ID') return 'identifier';
+  
+  // SVG token mappings (MUST come before XML generic patterns)
+  if (raw === 'XML_DECLARATION' || raw === 'DOCTYPE') return 'keyword';
+  if (raw === 'COMMENT') return 'comment';
+  if (raw === 'CDATA') return 'string';
+  if (raw === 'PROCESSING_INSTRUCTION') return 'keyword';
+  // SVG shape elements
+  if (raw === 'TAG_OPEN_SVG' || raw === 'TAG_OPEN_RECT' || raw === 'TAG_OPEN_CIRCLE' || raw === 'TAG_OPEN_ELLIPSE') return 'keyword';
+  if (raw === 'TAG_OPEN_LINE' || raw === 'TAG_OPEN_POLYLINE' || raw === 'TAG_OPEN_POLYGON' || raw === 'TAG_OPEN_PATH') return 'keyword';
+  // SVG text elements
+  if (raw === 'TAG_OPEN_TEXT' || raw === 'TAG_OPEN_TSPAN' || raw === 'TAG_OPEN_TEXTPATH') return 'keyword';
+  // SVG container elements
+  if (raw === 'TAG_OPEN_G' || raw === 'TAG_OPEN_DEFS' || raw === 'TAG_OPEN_SYMBOL' || raw === 'TAG_OPEN_USE' || raw === 'TAG_OPEN_MARKER') return 'keyword';
+  // SVG gradient and pattern elements
+  if (raw === 'TAG_OPEN_LINEAR_GRADIENT' || raw === 'TAG_OPEN_RADIAL_GRADIENT' || raw === 'TAG_OPEN_STOP' || raw === 'TAG_OPEN_PATTERN') return 'keyword';
+  // SVG filter elements
+  if (raw === 'TAG_OPEN_FILTER' || raw === 'TAG_OPEN_FE_GAUSSIAN_BLUR' || raw === 'TAG_OPEN_FE_OFFSET' || raw === 'TAG_OPEN_FE_BLEND') return 'keyword';
+  if (raw === 'TAG_OPEN_FE_COLOR_MATRIX' || raw === 'TAG_OPEN_FE_COMPONENT_TRANSFER' || raw === 'TAG_OPEN_FE_COMPOSITE') return 'keyword';
+  if (raw === 'TAG_OPEN_FE_MORPH' || raw === 'TAG_OPEN_FE_FLOOD' || raw === 'TAG_OPEN_FE_MERGE' || raw === 'TAG_OPEN_FE_MERGE_NODE') return 'keyword';
+  // SVG clipping and masking
+  if (raw === 'TAG_OPEN_CLIPPATH' || raw === 'TAG_OPEN_MASK') return 'keyword';
+  // SVG animation elements
+  if (raw === 'TAG_OPEN_ANIMATE' || raw === 'TAG_OPEN_ANIMATE_TRANSFORM' || raw === 'TAG_OPEN_ANIMATE_MOTION' || raw === 'TAG_OPEN_SET') return 'keyword';
+  // SVG other elements
+  if (raw === 'TAG_OPEN_IMAGE' || raw === 'TAG_OPEN_A' || raw === 'TAG_OPEN_TITLE' || raw === 'TAG_OPEN_DESC') return 'keyword';
+  if (raw === 'TAG_OPEN_STYLE' || raw === 'TAG_OPEN_SCRIPT' || raw === 'TAG_OPEN_METADATA' || raw === 'TAG_OPEN_FOREIGN_OBJECT') return 'keyword';
+  // Generic opening tag (for namespace tags like rdf:RDF, dc:title, etc.)
+  if (raw === 'TAG_OPEN_GENERIC') return 'keyword';
+  // SVG closing tags and tag endings (all match tag color)
+  if (raw === 'TAG_CLOSE' || raw === 'TAG_END' || raw === 'SELF_CLOSING') return 'keyword';
+  // SVG attributes - all map to 'property'
+  if (raw === 'ATTR_X' || raw === 'ATTR_Y' || raw === 'ATTR_WIDTH' || raw === 'ATTR_HEIGHT') return 'property';
+  if (raw === 'ATTR_CX' || raw === 'ATTR_CY' || raw === 'ATTR_R' || raw === 'ATTR_RX' || raw === 'ATTR_RY') return 'property';
+  if (raw === 'ATTR_X1' || raw === 'ATTR_Y1' || raw === 'ATTR_X2' || raw === 'ATTR_Y2') return 'property';
+  if (raw === 'ATTR_POINTS' || raw === 'ATTR_D') return 'property';
+  if (raw === 'ATTR_FILL' || raw === 'ATTR_STROKE' || raw === 'ATTR_STROKE_WIDTH' || raw === 'ATTR_STROKE_LINECAP') return 'property';
+  if (raw === 'ATTR_STROKE_LINEJOIN' || raw === 'ATTR_STROKE_DASHARRAY' || raw === 'ATTR_OPACITY') return 'property';
+  if (raw === 'ATTR_FILL_OPACITY' || raw === 'ATTR_STROKE_OPACITY') return 'property';
+  if (raw === 'ATTR_TRANSFORM' || raw === 'ATTR_VIEWBOX' || raw === 'ATTR_PRESERVE_ASPECT_RATIO') return 'property';
+  if (raw === 'ATTR_ID' || raw === 'ATTR_CLASS' || raw === 'ATTR_STYLE' || raw === 'ATTR_HREF') return 'property';
+  if (raw === 'ATTR_OFFSET' || raw === 'ATTR_STOP_COLOR' || raw === 'ATTR_STOP_OPACITY') return 'property';
+  if (raw === 'ATTR_FILTER' || raw === 'ATTR_STD_DEVIATION' || raw === 'ATTR_IN' || raw === 'ATTR_RESULT') return 'property';
+  if (raw === 'ATTR_DUR' || raw === 'ATTR_BEGIN' || raw === 'ATTR_END' || raw === 'ATTR_REPEAT_COUNT') return 'property';
+  if (raw === 'ATTR_FROM' || raw === 'ATTR_TO' || raw === 'ATTR_VALUES' || raw === 'ATTR_TYPE') return 'property';
+  if (raw === 'ATTRIBUTE_NAME') return 'property';
+  if (raw === 'STRING_DOUBLE' || raw === 'STRING_SINGLE') return 'string';
+  if (raw === 'NUMBER') return 'number';
+  if (raw === 'TEXT_CONTENT') return 'identifier';
   
     // XML token mappings (MUST come before general fallback patterns)
   if (raw === 'XML_COMMENT') return 'comment';
